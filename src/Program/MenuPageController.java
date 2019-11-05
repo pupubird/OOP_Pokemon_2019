@@ -2,12 +2,8 @@ package Program;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class MenuPageController {
     @FXML

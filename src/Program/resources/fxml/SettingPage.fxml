@@ -11,30 +11,22 @@
       spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1"
       xmlns:fx="http://javafx.com/fxml/1" fx:id="SettingPagePane"
 >
-    <children>
-        <ImageView fx:id="menuLogo" preserveRatio="true">
-            <image>
-                <Image url="@assets/pokemonLogo.png" />
-            </image>
+    <ImageView fx:id="menuLogo" preserveRatio="true">
+            <Image url="@assets/pokemonLogo.png" />
+    </ImageView>
+    <HBox alignment="CENTER">
+        <Button fx:id="returnButton" mnemonicParsing="false"
+                style="-fx-background-color: linear-gradient(orange,darkorange); -fx-translate-x: 18;"
+                text="Return to menu" textFill="WHITE"
+                onMouseClicked="#navigateToMenuPage"
+        >
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+        <ImageView  fx:id="returnButtonImage" preserveRatio="true">
+                <Image url="@assets/pokemon3.png" />
         </ImageView>
-        <HBox alignment="CENTER">
-            <children>
-                <Button fx:id="returnButton" mnemonicParsing="false"
-                        style="-fx-background-color: linear-gradient(orange,darkorange); -fx-translate-x: 18;"
-                        text="Return to menu" textFill="WHITE"
-                        onMouseClicked="#navigateToMenuPage"
-                >
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Button>
-                <ImageView  fx:id="returnButtonImage" preserveRatio="true">
-                    <image>
-                        <Image url="@assets/pokemon3.png" />
-                    </image>
-                </ImageView>
-            </children>
-        </HBox>
-        <HBox prefHeight="100.0" prefWidth="200.0" />
-    </children>
+    </HBox>
+    <HBox prefHeight="100.0" prefWidth="200.0" />
 </VBox>
