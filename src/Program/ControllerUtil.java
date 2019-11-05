@@ -45,7 +45,7 @@ class ControllerUtil {
         Media media = new Media(location.toString());
         audioplayer = new MediaPlayer(media);
         audioplayer.setAutoPlay(true);
-        audioplayer.setVolume(0.3);
+        audioplayer.setVolume(0.5);
         audioplayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 

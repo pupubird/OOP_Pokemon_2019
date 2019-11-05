@@ -7,8 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
-import java.net.URI;
-import java.net.URL;
 
 public class MenuPageController {
     @FXML
@@ -31,28 +29,26 @@ public class MenuPageController {
     @FXML
     public ImageView exitButtonImage;
 
-    static int vibratePixel = 10;
-    static long lastSecond = -1;
+    private int vibratePixel = 10;
+    private long lastSecond = -1;
 
-
-    private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
     @FXML
     public void navigateToSettingPage(){
-        ControllerUtil.playEffect(clickingEffect);
+        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
     }
     @FXML
     public void navigateToGamePage(){
-        ControllerUtil.playEffect(clickingEffect);
-        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GamePage.fxml"));
+        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameConfigPage.fxml"));
     }
 
     @FXML
-    public void exitProgram() throws InterruptedException {
+    public void exitProgram() {
         System.exit(0);
     }
 
-    void vibrateEffect() {
+    private void vibrateEffect() {
         new AnimationTimer() {
             @Override
             public void handle(long now) {

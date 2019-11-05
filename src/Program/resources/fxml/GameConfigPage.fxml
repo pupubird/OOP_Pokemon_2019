@@ -5,9 +5,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Program.GamePageController"
+            fx:controller="Program.GameConfigPageController"
             prefHeight="400.0" prefWidth="600.0"
-            fx:id="GamePagePane"
+            fx:id="GameConfigPagePane"
 >
     <Button onMouseClicked="#returnToMenu">Return</Button>
 </AnchorPane>
