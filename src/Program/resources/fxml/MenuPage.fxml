@@ -9,7 +9,8 @@
 <?import javafx.scene.text.Font?>
 <VBox alignment="CENTER" fx:controller="Program.MenuPageController"
       spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:id="MenuPagePane">
+      xmlns:fx="http://javafx.com/fxml/1" fx:id="MenuPagePane"
+>
   <children>
       <ImageView fx:id="menuLogo" preserveRatio="true">
          <image>
@@ -20,7 +21,7 @@
           <HBox alignment="CENTER">
              <children>
                 <Button fx:id="startButton" mnemonicParsing="false"
-                        style="-fx-background-color: green; -fx-cursor: pointer; -fx-translate-x: 18;"
+                        style="-fx-background-color: linear-gradient(green,darkgreen); -fx-cursor: pointer; -fx-translate-x: 18;"
                         text="Start" textFill="WHITE" >
                     <font>
                         <Font name="System Bold" size="18.0" />
@@ -36,7 +37,7 @@
           <HBox alignment="CENTER" >
              <children>
                 <Button fx:id="settingButton" mnemonicParsing="false"
-                        style="-fx-background-color: darkblue; -fx-translate-x: 18;"
+                        style="-fx-background-color: linear-gradient(blue,darkblue); -fx-translate-x: 18;"
                         text="Setting" textFill="WHITE" >
                     <font>
                         <Font name="System Bold" size="18.0" />
@@ -52,7 +53,7 @@
           <HBox alignment="CENTER">
              <children>
                 <Button fx:id="exitButton" mnemonicParsing="false"
-                        style="-fx-background-color: orange; -fx-translate-x: 18;"
+                        style="-fx-background-color: linear-gradient(orange,darkorange); -fx-translate-x: 18;"
                         text="Exit" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="18.0" />
