@@ -27,11 +27,11 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // For switch scene purpose
+        // initialize
         ControllerUtil.stage = primaryStage;
 
         // play music
-        ControllerUtil.playMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
+        ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
     }
 
     public static void main(String[] args) {
