@@ -32,10 +32,9 @@ public class MenuPageController {
 
     @FXML
     public void initialize() throws FileNotFoundException {
-        int widthRatio = 10;
-        int heightRatio = 24;
-        int imageWidthRatio = 5;
-        int imageHeightRatio = 1;
+        double widthRatio = 10;
+        double heightRatio = 24;
+        double imageWidthRatio = 3.25;
 
         double width = ControllerUtil.getScreenWidth();
         double height = ControllerUtil.getScreenHeight();
@@ -52,7 +51,6 @@ public class MenuPageController {
         );
 
         menuLogo.setFitWidth(width/imageWidthRatio);
-        menuLogo.setFitHeight(height/imageHeightRatio);
 
         startButton.setPrefWidth(width/widthRatio);
         settingButton.setPrefWidth(width/widthRatio);
