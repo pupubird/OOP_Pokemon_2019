@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Program.SettingPageController"
+            prefHeight="400.0" prefWidth="1000.0"
+            alignment="CENTER">
+    <Button fx:id="button1" onMouseClicked="#button1Handler" GridPane.rowIndex="1">Click me to see changes</Button>
+    <Button fx:id="button2" onMouseClicked="#button2Handler" GridPane.rowIndex="2">Click me to navigate back to Landing Page</Button>
+</GridPane>

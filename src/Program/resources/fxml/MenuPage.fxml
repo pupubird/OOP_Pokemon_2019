@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.text.Font?>
+<VBox alignment="CENTER" fx:controller="Program.MenuPageController"
+      spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:id="MenuPagePane">
+  <children>
+      <ImageView fx:id="menuLogo" preserveRatio="true">
+         <image>
+            <Image url="@assets/pokemonLogo.png" />
+         </image>
+      </ImageView>
+      <VBox spacing="1.0">
+          <HBox alignment="CENTER">
+             <children>
+                <Button fx:id="startButton" mnemonicParsing="false"
+                        style="-fx-background-color: green; -fx-cursor: pointer; -fx-translate-x: 18;"
+                        text="Start" textFill="WHITE" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Button>
+                <ImageView fx:id="startButtonImage" preserveRatio="true">
+                   <image>
+                      <Image url="@assets/pokemon4.png" />
+                   </image>
+                </ImageView>
+             </children>
+          </HBox>
+          <HBox alignment="CENTER" >
+             <children>
+                <Button fx:id="settingButton" mnemonicParsing="false"
+                        style="-fx-background-color: darkblue; -fx-translate-x: 18;"
+                        text="Setting" textFill="WHITE" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Button>
+                <ImageView fx:id="settingButtonImage" preserveRatio="true">
+                   <image>
+                      <Image url="@assets/pokemon2.png" />
+                   </image>
+                </ImageView>
+             </children>
+          </HBox>
+          <HBox alignment="CENTER">
+             <children>
+                <Button fx:id="exitButton" mnemonicParsing="false"
+                        style="-fx-background-color: orange; -fx-translate-x: 18;"
+                        text="Exit" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Button>
+                <ImageView  fx:id="exitButtonImage" preserveRatio="true">
+                   <image>
+                      <Image url="@assets/pokemon3.png" />
+                   </image>
+                </ImageView>
+             </children>
+          </HBox>
+      </VBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" />
+  </children>
+</VBox>
