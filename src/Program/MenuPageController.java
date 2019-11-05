@@ -31,7 +31,16 @@ public class MenuPageController {
     public ImageView exitButtonImage;
 
     @FXML
-    public void initialize() throws FileNotFoundException {
+    public void navigateToSettingPage(){
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
+    }
+
+    @FXML
+    public void exitProgram(){
+        System.exit(0);
+    }
+    @FXML
+    public void initialize() {
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;

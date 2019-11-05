@@ -36,7 +36,7 @@
           </HBox>
           <HBox alignment="CENTER" >
              <children>
-                <Button fx:id="settingButton" mnemonicParsing="false"
+                <Button onMouseClicked="#navigateToSettingPage" fx:id="settingButton" mnemonicParsing="false"
                         style="-fx-background-color: linear-gradient(blue,darkblue); -fx-translate-x: 18;"
                         text="Setting" textFill="WHITE" >
                     <font>
@@ -54,7 +54,9 @@
              <children>
                 <Button fx:id="exitButton" mnemonicParsing="false"
                         style="-fx-background-color: linear-gradient(orange,darkorange); -fx-translate-x: 18;"
-                        text="Exit" textFill="WHITE">
+                        text="Exit" textFill="WHITE"
+                        onMouseClicked="#exitProgram"
+                >
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>

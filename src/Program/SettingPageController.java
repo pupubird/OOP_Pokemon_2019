@@ -2,17 +2,48 @@ package Program;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 
 public class SettingPageController {
     @FXML
-    public Button button1;
+    public VBox SettingPagePane;
     @FXML
-    public void button1Handler(){
-        button1.setText("I am clicked!");
+    public ImageView menuLogo;
+    @FXML
+    public ImageView returnButtonImage;
+    @FXML
+    public Button returnButton;
+
+    @FXML
+    public void navigateToMenuPage(){
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
-    @FXML
-    public void button2Handler(){
-        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/LandingPage.fxml"));
+
+    public void initialize(){
+        double widthRatio = 10;
+        double heightRatio = 24;
+        double imageWidthRatio = 3.25;
+
+        double width = ControllerUtil.getScreenWidth();
+        double height = ControllerUtil.getScreenHeight();
+
+        SettingPagePane.setMinWidth(width);
+        SettingPagePane.setMinHeight(height);
+        SettingPagePane.setMaxWidth(width);
+        SettingPagePane.setMaxHeight(height);
+
+        SettingPagePane.setStyle(
+                "-fx-background-image:url("+getClass().getResource("resources/fxml/assets/background.jpg")+");" +
+                        "-fx-background-repeat:no-repeat;" +
+                        "-fx-background-size:cover;"
+        );
+
+        menuLogo.setFitWidth(width/imageWidthRatio);
+
+        returnButton.setPrefWidth(width/widthRatio);
+        returnButton.setPrefHeight(height/heightRatio);
+        returnButtonImage.setFitHeight(returnButton.getPrefHeight()*2);
     }
 }
