@@ -2,8 +2,12 @@ package Program;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class MenuPageController {
     @FXML
@@ -27,11 +31,19 @@ public class MenuPageController {
     public ImageView exitButtonImage;
 
     @FXML
-    public void initialize(){
-        int widthRatio = 10;
-        int heightRatio = 24;
-        int imageWidthRatio = 5;
-        int imageHeightRatio = 1;
+    public void navigateToSettingPage(){
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
+    }
+
+    @FXML
+    public void exitProgram(){
+        System.exit(0);
+    }
+    @FXML
+    public void initialize() {
+        double widthRatio = 10;
+        double heightRatio = 24;
+        double imageWidthRatio = 3.25;
 
         double width = ControllerUtil.getScreenWidth();
         double height = ControllerUtil.getScreenHeight();
@@ -41,8 +53,13 @@ public class MenuPageController {
         MenuPagePane.setMaxWidth(width);
         MenuPagePane.setMaxHeight(height);
 
+        MenuPagePane.setStyle(
+                "-fx-background-image:url("+getClass().getResource("resources/fxml/assets/background.jpg")+");" +
+                        "-fx-background-repeat:no-repeat;" +
+                        "-fx-background-size:cover;"
+        );
+
         menuLogo.setFitWidth(width/imageWidthRatio);
-        menuLogo.setFitHeight(height/imageHeightRatio);
 
         startButton.setPrefWidth(width/widthRatio);
         settingButton.setPrefWidth(width/widthRatio);
