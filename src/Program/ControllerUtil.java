@@ -35,11 +35,26 @@ class ControllerUtil {
 
     }
 
-    static void playMusic(URL location){
+    static void playBackgroundMusic(URL location){
         // play music
+        try {
+            audioplayer.stop();
+        }catch (NullPointerException e){
+            System.out.println("No media is playing");
+        }
         Media media = new Media(location.toString());
         audioplayer = new MediaPlayer(media);
         audioplayer.setAutoPlay(true);
+        audioplayer.setVolume(0.3);
         audioplayer.setCycleCount(MediaPlayer.INDEFINITE);
+    }
+
+    static void playEffect(URL location){
+        new Thread(() -> {
+            Media effect = new Media(location.toString());
+            MediaPlayer effectPlayer = new MediaPlayer(effect);
+            effectPlayer.setAutoPlay(true);
+            effectPlayer.setCycleCount(1);
+        }).start();
     }
 }

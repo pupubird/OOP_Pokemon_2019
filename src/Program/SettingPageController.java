@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.net.URL;
+
 
 public class SettingPageController {
     @FXML
@@ -16,8 +18,12 @@ public class SettingPageController {
     @FXML
     public Button returnButton;
 
+    private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
+
     @FXML
     public void navigateToMenuPage(){
+        ControllerUtil.playEffect(clickingEffect);
+        new MenuPageController();
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
 

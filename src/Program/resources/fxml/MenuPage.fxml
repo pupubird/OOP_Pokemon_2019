@@ -18,7 +18,9 @@
       <HBox alignment="CENTER">
         <Button fx:id="startButton" mnemonicParsing="false"
                 style="-fx-background-color: linear-gradient(green,darkgreen); -fx-cursor: pointer; -fx-translate-x: 18;"
-                text="Start" textFill="WHITE" >
+                text="Start" textFill="WHITE"
+                onMouseClicked="#navigateToGamePage"
+        >
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
