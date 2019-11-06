@@ -1,13 +1,12 @@
 package Program;
 
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class MenuPageController {
     @FXML
@@ -30,15 +29,52 @@ public class MenuPageController {
     @FXML
     public ImageView exitButtonImage;
 
+    private int vibratePixel = 10;
+    private long lastSecond = -1;
+
     @FXML
     public void navigateToSettingPage(){
+        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
+    }
+    @FXML
+    public void navigateToGamePage(){
+        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameConfigPage.fxml"));
     }
 
     @FXML
-    public void exitProgram(){
+    public void exitProgram() {
         System.exit(0);
     }
+
+    private void vibrateEffect() {
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (vibratePixel > 5) {
+                            vibratePixel = -5;
+                        }
+                        if (lastSecond == -1) {
+                            lastSecond = now;
+                        }
+                        // update every 0.5s
+                        if (now - lastSecond >= 500000000) {
+                            startButtonImage.setTranslateY(startButtonImage.getTranslateY() + vibratePixel);
+                            settingButtonImage.setTranslateY(settingButtonImage.getTranslateY() + vibratePixel);
+                            exitButtonImage.setTranslateY(exitButtonImage.getTranslateY() + vibratePixel);
+                            vibratePixel += 10;
+                            lastSecond = now;
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
+
     @FXML
     public void initialize() {
         double widthRatio = 10;
@@ -72,6 +108,10 @@ public class MenuPageController {
         startButtonImage.setFitHeight(startButton.getPrefHeight()*2);
         settingButtonImage.setFitHeight(settingButton.getPrefHeight()*2);
         exitButtonImage.setFitHeight(exitButton.getPrefHeight()*2);
+
+        vibrateEffect();
     }
+
+
 
 }
