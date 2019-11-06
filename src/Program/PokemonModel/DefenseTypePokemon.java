@@ -1,16 +1,16 @@
 package Program.PokemonModel;
 
 public class DefenseTypePokemon extends PokemonBase {
-    private int defenseAttribute;
+    private int resistancePoints;
 
     public DefenseTypePokemon(String name) {
         super(name);
-        this.defenseAttribute = this.generateInt(1,3);
+        this.resistancePoints = this.generateInt(1,3);
     }
 
     @Override
     public void defense(int receivedAttackPoint) {
-        int resistance = this.flipCoinIsHead()?this.defenseAttribute:0;
+        int resistance = this.flipCoinIsHead()?this.resistancePoints :0;
         receivedAttackPoint -= resistance;
 
         super.defense(receivedAttackPoint);
@@ -21,11 +21,8 @@ public class DefenseTypePokemon extends PokemonBase {
         super.stageIncrease();
     }
 
-    public int getDefenseAttribute() {
-        return defenseAttribute;
-    }
-
-    public void setDefenseAttribute(int defenseAttribute) {
-        this.defenseAttribute = defenseAttribute;
+    @Override
+    public int getResistancePoints() {
+        return resistancePoints;
     }
 }

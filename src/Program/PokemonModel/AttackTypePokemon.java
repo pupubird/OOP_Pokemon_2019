@@ -19,11 +19,9 @@ public class AttackTypePokemon extends PokemonBase{
         super.stageIncrease();
     }
 
-    public int getAttackAttribute() {
+    @Override
+    public int getAttackPoint() {
         return attackAttribute;
     }
 
-    public void setAttackAttribute(int attackAttribute) {
-        this.attackAttribute = attackAttribute;
-    }
 }
