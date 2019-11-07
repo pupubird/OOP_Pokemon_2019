@@ -28,6 +28,11 @@
     <!--Gameplay pane-->
     <VBox alignment="CENTER" spacing="15" fx:id="gameplayZonePane">
         <HBox fx:id="player2groupPane" alignment="CENTER" spacing="10.0">
+            <Label text="Player 2" textFill="white">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
             <AnchorPane>
             <VBox fx:id="player2card1" alignment="CENTER" styleClass="pokemonCard">
                 <ImageView fx:id="player2card1Image" fitWidth="100" fitHeight="100"/>
@@ -113,7 +118,13 @@
             </AnchorPane>
         </HBox>
 
+        <!--player 1-->
         <HBox fx:id="player1groupPane" alignment="CENTER" spacing="10.0" >
+            <Label text="Player 1" textFill="white">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
             <AnchorPane>
             <VBox fx:id="player1card1" alignment="CENTER" styleClass="pokemonCard">
                 <ImageView fx:id="player1card1Image" fitWidth="100" fitHeight="100"/>

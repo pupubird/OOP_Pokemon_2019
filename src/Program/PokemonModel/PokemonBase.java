@@ -32,6 +32,7 @@ public class PokemonBase {
         return target.getName();
     }
     public String launchAttack(PokemonBase target, int attackPoint){
+        attackPoint = flipCoinIsHead()?attackPoint:1;
         int energyConsume = 1;
         // check if there is enough energy for critical damage (same type)
         if(this.energy - energyConsume > 2) {
