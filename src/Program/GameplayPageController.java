@@ -12,11 +12,23 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class GameplayPageController {
+    public static boolean continueSaveGame = false;
+
+    private long lastSecond = -1;
+    private VBox[][] playersCards;
+    private PokemonBase[][] playersPokemons;
+    private ImageView[][] playersCardImages;
+    private Label[] pokemonDetailsPaneLabels;
+    private Label[][] pokemonHpCardLabels;
+    private Button[] buttons;
+    private String currentButtonState;
+
     @FXML
     public SplitPane GameplayPagePane;
     @FXML
@@ -35,6 +47,8 @@ public class GameplayPageController {
 
     @FXML
     public VBox ActionButtonPane;
+    @FXML
+    public AnchorPane anchorPanePivot;
 
     @FXML
     public Button AttackButton;
@@ -142,29 +156,27 @@ public class GameplayPageController {
     @FXML
     public ImageView player1card6Image;
 
-    private long lastSecond = -1;
-    private VBox[][] playersCards;
-    private PokemonBase[][] playersPokemons;
-    private ImageView[][] playersCardImages;
-    private Label[] pokemonDetailsPaneLabels;
-    private Label[][] pokemonHpCardLabels;
-    private Button[] buttons;
-    private String currentButtonState;
 
 
-    private void playerCardClicked(int[] cardIndex){
+    private void playerCardClickedEventHandler(int[] cardIndex){
         switch (currentButtonState){
             case "normal":
                 showPokemonDetailOnPane(cardIndex);
                 break;
             case "attack":
-
+                // do attack first
+                // show attack effect ( ... attack!)
                 break;
             case "recharge":
+                // do recharge first
+                // show recharge effect
                 break;
             case "saveExit":
+                // prompt to confirm, if yes next page
                 break;
         }
+        // update pokemon details
+        updatePokemonDetailsOnCard();
     }
 
     private void showPokemonDetailOnPane(int[] cardIndex){
@@ -197,7 +209,7 @@ public class GameplayPageController {
 
     }
 
-    private void showPokemonDetailsOnCard(){
+    private void updatePokemonDetailsOnCard(){
 
         // get every pokemon Hp and set to the respective card Label
         for(int i = 0; i < pokemonHpCardLabels.length; i++){
@@ -222,6 +234,32 @@ public class GameplayPageController {
         }
         playerCard[1]=Integer.parseInt(playerCardIndex[1])-1;
         return playerCard;
+    }
+
+    private void initializePokemonCardImage(){
+        // if no input is specify, generate it
+        for(ImageView[] playersCard: playersCardImages){
+            for(ImageView cardImage: playersCard){
+                int imageIndex = playersPokemons[0][0].generateInt(1,12);
+                cardImage.setImage(
+                        new Image(getClass().getResource("resources/fxml/assets/pokemon"+imageIndex+".png").toString())
+                );
+
+            }
+        }
+    }
+    private void initializePokemonCardImage(String[][] playersCardImagesString){
+        // input is specified = game is load from previous game
+        for(int i = 0; i < playersCardImages.length; i++){
+            for(int j = 0; j < playersCardImages[i].length;j++){
+                playersCardImages[i][j].setImage(
+                        new Image(getClass().getResource("resources/fxml/assets/pokemon"
+                                +playersCardImagesString[i][j]+".png").toString())
+                );
+
+            }
+        }
+
     }
 
     private void revealEffect() {
@@ -257,12 +295,28 @@ public class GameplayPageController {
                     player2card1.setVisible(true);
 
                     //clean up for animations
-                    energy.setText("To view a pokemon status, click on the pokemon!");
+                    clearText();
                     for(Button button: buttons){
                         button.setDisable(false);
                     }
+                    lastSecond = -1;
+
+                    // testing attack effect
+                    attackEffect(
+                            getCardIndex(player1card1.getId()),
+                            getCardIndex(player2card5.getId())
+                    );
                     this.stop();
                 }
+            }
+        }.start();
+    }
+    private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo){
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double positionY, positionX;
+
             }
         }.start();
     }
@@ -274,35 +328,15 @@ public class GameplayPageController {
         //if there is any promptText
         energy.setText(promptText);
     }
-
-    private void setPokemonCardImage(){
-        // if no input is specify, generate it
-        for(ImageView[] playersCard: playersCardImages){
-            for(ImageView cardImage: playersCard){
-                int imageIndex = playersPokemons[0][0].generateInt(1,12);
-                cardImage.setImage(
-                        new Image(getClass().getResource("resources/fxml/assets/pokemon"+imageIndex+".png").toString())
-                );
-
-            }
+    private void clearText(){
+        for(Label label: pokemonDetailsPaneLabels){
+            label.setText("");
         }
-    }
-    private void setPokemonCardImage(String[][] playersCardImagesString){
-        // input is specified = game is load from previous game
-        for(int i = 0; i < playersCardImages.length; i++){
-            for(int j = 0; j < playersCardImages[i].length;j++){
-                playersCardImages[i][j].setImage(
-                        new Image(getClass().getResource("resources/fxml/assets/pokemon"
-                                +playersCardImagesString[i][j]+".png").toString())
-                );
-
-            }
-        }
-
+        //if there is any promptText
+        energy.setText("Click any pokemon to see their stats!");
     }
 
-    public void initialize(){
-
+    private void intializePlayersPokemons(){
         // generate pokemon if not load saved game
         playersPokemons = new PokemonBase[][]{{
                 new FairyTypePokemon("gugubird"),
@@ -319,42 +353,69 @@ public class GameplayPageController {
                 new DefenseTypePokemon("gugubird4"),
                 new DefenseTypePokemon("gugubird5"),
         }};
+    }
+    private void initializePlayersCardVBox(){
+
+        double width = ControllerUtil.getScreenWidth();
+        double height = ControllerUtil.getScreenHeight();
+        double pokemonCardWidthRatio = 0.142;
+        double pokemonCardHeightRatio = 0.3;
 
         playersCards = new VBox[][]{
                 {
-                    player1card1,player1card2,player1card3, player1card4,player1card5,player1card6
+                        player1card1,player1card2,player1card3, player1card4,player1card5,player1card6
                 },
                 {
-                    player2card1,player2card2,player2card3,player2card4,player2card5,player2card6
+                        player2card1,player2card2,player2card3,player2card4,player2card5,player2card6
                 }
         };
-
-        playersCardImages = new ImageView[][]{
-                {
-                    player1card1Image,
-                    player1card2Image,
-                    player1card3Image,
-                    player1card4Image,
-                    player1card5Image,
-                    player1card6Image,
-                },{
-                    player2card1Image,
-                    player2card2Image,
-                    player2card3Image,
-                    player2card4Image,
-                    player2card5Image,
-                    player2card6Image,
-                }
-        };
-        currentButtonState = "normal";
 
         for(VBox[] player: playersCards){
             for(VBox card: player){
                 card.addEventHandler(MouseEvent.MOUSE_CLICKED,event -> {
-                    playerCardClicked(getCardIndex(card.getId()));
+                    playerCardClickedEventHandler(getCardIndex(card.getId()));
                 });
+                card.setMinWidth(width*pokemonCardWidthRatio);
+                card.setMinHeight(height*pokemonCardHeightRatio);
+                card.setVisible(false);
             }
         }
+
+        for(int i = 0; i < playersPokemons.length; i++){
+            for(int j = 0; j < playersPokemons[i].length; j++){
+                // show different color on border base on the pokemon color
+                if(!playersPokemons[i][j].getColor().equals("colorless")){
+                    playersCards[i][j].setStyle("-fx-border-radius:10;-fx-border-color:"+playersPokemons[i][j].getColor()+";"
+                            +"-fx-border-width:5;"
+                    );
+                }else{
+                    playersCards[i][j].setStyle("-fx-border-radius:10;");
+                }
+            }
+        }
+        // set for all pokemon card width and height
+        for(VBox[] player: playersCards){
+            for(VBox card: player){
+                card.setMinWidth(width*pokemonCardWidthRatio);
+                card.setMinHeight(height*pokemonCardHeightRatio);
+                card.setVisible(false);
+            }
+        }
+    }
+    private void initializePlayersCardVBoxImage(){
+        playersCardImages = new ImageView[][]{
+                {
+                        player1card1Image,player1card2Image,
+                        player1card3Image,player1card4Image,
+                        player1card5Image,player1card6Image,
+                },{
+                player2card1Image,player2card2Image,
+                player2card3Image,player2card4Image,
+                player2card5Image,player2card6Image,
+        }
+        };
+    }
+    private void initializeLabels(){
         pokemonDetailsPaneLabels = new Label[]{
                 pokemonName,type,stage,
                 experience,energy,energyColor,
@@ -372,9 +433,9 @@ public class GameplayPageController {
                 player2card5Hp,player2card6Hp
         }
         };
+    }
 
-
-        buttons = new Button[]{AttackButton,RechargeButton,TrainButton,SaveExitButton};
+    private void initializeButtons(){
 
         double width = ControllerUtil.getScreenWidth();
         double height = ControllerUtil.getScreenHeight();
@@ -382,8 +443,34 @@ public class GameplayPageController {
         double bottomPaneHeightRatio = 0.3;
         double PokemonPropertiesPaneWidthRatio = 0.7;
 
-        double pokemonCardWidthRatio = 0.142;
-        double pokemonCardHeightRatio = 0.3;
+        buttons = new Button[]{AttackButton,RechargeButton,TrainButton,SaveExitButton};
+        // disable button, enable when all cards are revealed.
+        for(Button button: buttons){
+            button.setDisable(true);
+        }
+
+        ActionButtonPane.setStyle("-fx-background-color: #4eb9f7;");
+
+        ButtonHBox.setMinHeight(height*bottomPaneHeightRatio*0.5);
+        ButtonHBox.setSpacing(width*(1-PokemonPropertiesPaneWidthRatio)*0.125);
+        ButtonHBox2.setMinHeight(height*bottomPaneHeightRatio*0.5);
+        ButtonHBox2.setSpacing(width*(1-PokemonPropertiesPaneWidthRatio)*0.125);
+
+        AttackButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
+        RechargeButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
+        TrainButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
+        SaveExitButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
+    }
+
+    private void initializePane(){
+
+
+        double width = ControllerUtil.getScreenWidth();
+        double height = ControllerUtil.getScreenHeight();
+
+        double bottomPaneHeightRatio = 0.3;
+        double PokemonPropertiesPaneWidthRatio = 0.7;
+
 
         GameplayPagePane.setMinWidth(width);
         GameplayPagePane.setMinHeight(height);
@@ -401,53 +488,31 @@ public class GameplayPageController {
                 "-fx-background-color: #38b3fb;"
         );
 
-        ActionButtonPane.setStyle("-fx-background-color: #4eb9f7;");
-
-        ButtonHBox.setMinHeight(height*bottomPaneHeightRatio*0.5);
-        ButtonHBox.setSpacing(width*(1-PokemonPropertiesPaneWidthRatio)*0.125);
-        ButtonHBox2.setMinHeight(height*bottomPaneHeightRatio*0.5);
-        ButtonHBox2.setSpacing(width*(1-PokemonPropertiesPaneWidthRatio)*0.125);
-
-        AttackButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
-        RechargeButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
-        TrainButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
-        SaveExitButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
-
         player1groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
         player2groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
+    }
 
-        for(int i = 0; i < playersPokemons.length; i++){
-            for(int j = 0; j < playersPokemons[i].length; j++){
-                // show different color on border base on the pokemon color
-                if(!playersPokemons[i][j].getColor().equals("colorless")){
-                    playersCards[i][j].setStyle("-fx-border-radius:10;-fx-border-color:"+playersPokemons[i][j].getColor()+";"
-                        +"-fx-border-width:5;"
-                    );
-                }else{
-                    playersCards[i][j].setStyle("-fx-border-radius:10;");
-                }
-            }
-        }
+    public void initialize(){
+        currentButtonState = "normal";
 
-        // disable button, enable when all cards are revealed.
-        for(Button button: buttons){
-            button.setDisable(true);
-        }
+        this.intializePlayersPokemons();
+        this.initializePlayersCardVBox();
+        this.initializePlayersCardVBoxImage();
+        this.initializeLabels();
+        this.initializeButtons();
+        this.initializePane();
 
-        // set for all pokemon card width and height
-        for(VBox[] player: playersCards){
-            for(VBox card: player){
-                card.setMinWidth(width*pokemonCardWidthRatio);
-                card.setMinHeight(height*pokemonCardHeightRatio);
-                card.setVisible(false);
-            }
-        }
         clearText("Generating your pokemons!");
-        setPokemonCardImage();
-
+        if(continueSaveGame) {
+            // pass the information of the pokemon inside
+            initializePokemonCardImage();
+        }else{
+            // generate it instead
+            initializePokemonCardImage();
+        }
         // play music
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/battle.mp3"));
-        showPokemonDetailsOnCard();
+        updatePokemonDetailsOnCard();
         revealEffect();
     }
 }
