@@ -12,6 +12,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.effect.DropShadow?>
 <?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <SplitPane dividerPositions="0.7" maxHeight="-Infinity"
            maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
            orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0"
@@ -24,39 +26,45 @@
     </stylesheets>
 
     <!--Gameplay pane-->
-    <VBox alignment="CENTER" spacing="15">
+    <VBox alignment="CENTER" spacing="15" fx:id="gameplayZonePane">
         <HBox fx:id="player2groupPane" alignment="CENTER" spacing="10.0">
             <VBox fx:id="player2card1" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card1Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player2card1Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player2card2" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card2Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player2card2Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player2card3" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card3Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player2card3Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player2card4" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card4Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player2card4Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player2card5" alignment="CENTER" styleClass="pokemonCard" >
+                <ImageView fx:id="player2card5Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player2card5Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player2card6" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card6Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player2card6Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
@@ -66,36 +74,42 @@
 
         <HBox fx:id="player1groupPane" alignment="CENTER" spacing="10.0" >
             <VBox fx:id="player1card1" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card1Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player1card1Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player1card2" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card2Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player1card2Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player1card3" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card3Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player1card3Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player1card4" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card4Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player1card4Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player1card5" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card5Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player1card5Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />
                 </effect>
             </VBox>
             <VBox fx:id="player1card6" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card6Image" fitWidth="100" fitHeight="100"/>
                 <Label fx:id="player1card6Hp" text="HP: 100" />
                 <effect>
                     <DropShadow color="#5c5c5c" />

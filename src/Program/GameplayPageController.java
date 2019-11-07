@@ -5,20 +5,22 @@ import Program.PokemonModel.DefenseTypePokemon;
 import Program.PokemonModel.FairyTypePokemon;
 import Program.PokemonModel.PokemonBase;
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class GameplayPageController {
     @FXML
     public SplitPane GameplayPagePane;
+    @FXML
+    public VBox gameplayZonePane;
     @FXML
     public HBox player1groupPane;
     @FXML
@@ -114,9 +116,36 @@ public class GameplayPageController {
     @FXML
     public Label player2card6Hp;
 
+    @FXML
+    public ImageView player2card1Image;
+    @FXML
+    public ImageView player2card2Image;
+    @FXML
+    public ImageView player2card3Image;
+    @FXML
+    public ImageView player2card4Image;
+    @FXML
+    public ImageView player2card5Image;
+    @FXML
+    public ImageView player2card6Image;
+
+    @FXML
+    public ImageView player1card1Image;
+    @FXML
+    public ImageView player1card2Image;
+    @FXML
+    public ImageView player1card3Image;
+    @FXML
+    public ImageView player1card4Image;
+    @FXML
+    public ImageView player1card5Image;
+    @FXML
+    public ImageView player1card6Image;
+
     private long lastSecond = -1;
     private VBox[][] playersCards;
     private PokemonBase[][] playersPokemons;
+    private ImageView[][] playersCardImages;
     private Label[] pokemonDetailsPaneLabels;
     private Label[][] pokemonHpCardLabels;
     private Button[] buttons;
@@ -154,9 +183,8 @@ public class GameplayPageController {
                 Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getAttackPoint())
                 :"-";
         String resistancePoints = classType.equals("Defense")?
-                Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getAttackPoint())
+                Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getResistancePoints())
                 :"-";
-
         pokemonDetailsPaneLabels[0].setText("Name: "+playersPokemons[cardIndex[0]][cardIndex[1]].getName());
         pokemonDetailsPaneLabels[1].setText("Type: "+classType);
         pokemonDetailsPaneLabels[2].setText("Stage: "+Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getStage()));
@@ -183,7 +211,7 @@ public class GameplayPageController {
     }
 
     private int[] getCardIndex(String cardID){
-        int[] playerCard = new int[2];
+        int[] playerCard = new int[3];
         String[] playerCardIndex;
         // getting card index based on the id
         if(cardID.contains("player1")){
@@ -239,11 +267,94 @@ public class GameplayPageController {
         }.start();
     }
 
-    public void initialize(){
-        currentButtonState = "normal";
-        playersCards = new VBox[][]{{player1card1,player1card2,player1card3,player1card4,player1card5,player1card6},
-                {player2card1,player2card2,player2card3,player2card4,player2card5,player2card6}};
+    private void clearText(String promptText){
+        for(Label label: pokemonDetailsPaneLabels){
+            label.setText("");
+        }
+        //if there is any promptText
+        energy.setText(promptText);
+    }
 
+    private void setPokemonCardImage(){
+        // if no input is specify, generate it
+        for(ImageView[] playersCard: playersCardImages){
+            for(ImageView cardImage: playersCard){
+                int imageIndex = playersPokemons[0][0].generateInt(1,12);
+                cardImage.setImage(
+                        new Image(getClass().getResource("resources/fxml/assets/pokemon"+imageIndex+".png").toString())
+                );
+
+            }
+        }
+    }
+    private void setPokemonCardImage(String[][] playersCardImagesString){
+        // input is specified = game is load from previous game
+        for(int i = 0; i < playersCardImages.length; i++){
+            for(int j = 0; j < playersCardImages[i].length;j++){
+                playersCardImages[i][j].setImage(
+                        new Image(getClass().getResource("resources/fxml/assets/pokemon"
+                                +playersCardImagesString[i][j]+".png").toString())
+                );
+
+            }
+        }
+
+    }
+
+    public void initialize(){
+
+        // generate pokemon if not load saved game
+        playersPokemons = new PokemonBase[][]{{
+                new FairyTypePokemon("gugubird"),
+                new AttackTypePokemon("gugubird1"),
+                new DefenseTypePokemon("gugubird2"),
+                new AttackTypePokemon("gugubird3"),
+                new DefenseTypePokemon("gugubird4"),
+                new DefenseTypePokemon("gugubird5"),
+        },{
+                new FairyTypePokemon("gugubird"),
+                new AttackTypePokemon("gugubird1"),
+                new DefenseTypePokemon("gugubird2"),
+                new AttackTypePokemon("gugubird3"),
+                new DefenseTypePokemon("gugubird4"),
+                new DefenseTypePokemon("gugubird5"),
+        }};
+
+        playersCards = new VBox[][]{
+                {
+                    player1card1,player1card2,player1card3, player1card4,player1card5,player1card6
+                },
+                {
+                    player2card1,player2card2,player2card3,player2card4,player2card5,player2card6
+                }
+        };
+
+        playersCardImages = new ImageView[][]{
+                {
+                    player1card1Image,
+                    player1card2Image,
+                    player1card3Image,
+                    player1card4Image,
+                    player1card5Image,
+                    player1card6Image,
+                },{
+                    player2card1Image,
+                    player2card2Image,
+                    player2card3Image,
+                    player2card4Image,
+                    player2card5Image,
+                    player2card6Image,
+                }
+        };
+        currentButtonState = "normal";
+
+        for(VBox[] player: playersCards){
+            for(VBox card: player){
+                card.addEventHandler(MouseEvent.MOUSE_CLICKED,event -> {
+                    playerCardClicked(getCardIndex(card.getId()));
+                });
+            }
+        }
         pokemonDetailsPaneLabels = new Label[]{
                 pokemonName,type,stage,
                 experience,energy,energyColor,
@@ -262,30 +373,6 @@ public class GameplayPageController {
         }
         };
 
-        // when performing actions.
-        for(VBox[] players: playersCards){
-            for(VBox card: players){
-                card.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                        event -> playerCardClicked(getCardIndex(card.getId())));
-            }
-        }
-
-        // generate pokemon
-        playersPokemons = new PokemonBase[][]{{
-                new FairyTypePokemon("gugubird"),
-                new AttackTypePokemon("gugubird1"),
-                new DefenseTypePokemon("gugubird2"),
-                new AttackTypePokemon("gugubird3"),
-                new DefenseTypePokemon("gugubird4"),
-                new DefenseTypePokemon("gugubird5"),
-        },{
-                new FairyTypePokemon("gugubird"),
-                new AttackTypePokemon("gugubird1"),
-                new DefenseTypePokemon("gugubird2"),
-                new AttackTypePokemon("gugubird3"),
-                new DefenseTypePokemon("gugubird4"),
-                new DefenseTypePokemon("gugubird5"),
-        }};
 
         buttons = new Button[]{AttackButton,RechargeButton,TrainButton,SaveExitButton};
 
@@ -329,23 +416,9 @@ public class GameplayPageController {
         player1groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
         player2groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
 
-        /*
         for(int i = 0; i < playersPokemons.length; i++){
             for(int j = 0; j < playersPokemons[i].length; j++){
-                String className = playersPokemons[i][j].getClass().getName();
-                if(className.contains("Attack")){
-                    playersCards[i][j].setStyle("-fx-border-color:red;-fx-border-radius:10;-fx-border-width:5;");
-                }else if(className.contains("Defense")){
-                    playersCards[i][j].setStyle("-fx-border-color:brown;-fx-border-radius:10;-fx-border-width:5;");
-
-                }else {
-                    playersCards[i][j].setStyle("-fx-border-color:#851de0;-fx-border-radius:10;-fx-border-width:5;");
-                }
-            }
-        }
-        */
-        for(int i = 0; i < playersPokemons.length; i++){
-            for(int j = 0; j < playersPokemons[i].length; j++){
+                // show different color on border base on the pokemon color
                 if(!playersPokemons[i][j].getColor().equals("colorless")){
                     playersCards[i][j].setStyle("-fx-border-radius:10;-fx-border-color:"+playersPokemons[i][j].getColor()+";"
                         +"-fx-border-width:5;"
@@ -361,6 +434,7 @@ public class GameplayPageController {
             button.setDisable(true);
         }
 
+        // set for all pokemon card width and height
         for(VBox[] player: playersCards){
             for(VBox card: player){
                 card.setMinWidth(width*pokemonCardWidthRatio);
@@ -368,18 +442,12 @@ public class GameplayPageController {
                 card.setVisible(false);
             }
         }
-
-        for(Label label: pokemonDetailsPaneLabels){
-            label.setText("");
-        }
+        clearText("Generating your pokemons!");
+        setPokemonCardImage();
 
         // play music
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/battle.mp3"));
-
-        energy.setText("Generating your pokemons!");
         showPokemonDetailsOnCard();
         revealEffect();
     }
-
-
 }
