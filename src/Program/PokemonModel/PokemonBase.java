@@ -84,7 +84,7 @@ public class PokemonBase {
     }
 
     public int generateInt(int from, int to){
-        return (int)((Math.random()*(to-from))+from);
+        return (int)((Math.random()*(to-from+1))+from);
     }
 
     private String generateString(String[] generatorList){

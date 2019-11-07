@@ -12,10 +12,11 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.List;
 
 public class GameplayPageController {
     public static boolean continueSaveGame = false;
@@ -28,6 +29,7 @@ public class GameplayPageController {
     private Label[][] pokemonHpCardLabels;
     private Button[] buttons;
     private String currentButtonState;
+    private List<VBox> buttonEventQueue;
 
     @FXML
     public SplitPane GameplayPagePane;
@@ -47,8 +49,6 @@ public class GameplayPageController {
 
     @FXML
     public VBox ActionButtonPane;
-    @FXML
-    public AnchorPane anchorPanePivot;
 
     @FXML
     public Button AttackButton;
@@ -158,20 +158,49 @@ public class GameplayPageController {
 
 
 
-    private void playerCardClickedEventHandler(int[] cardIndex){
+    private void buttonEventHandler(int[] cardIndex){
+        // being referenced in initializePlayersCardVBox()
         switch (currentButtonState){
             case "normal":
                 showPokemonDetailOnPane(cardIndex);
                 break;
             case "attack":
+                // verify player chosen his own pokemon, add to event queue for next event calls;
+                if(buttonEventQueue.size()==0 && cardIndex[0]==0) {
+                    buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
+                }else if(buttonEventQueue.size()==1 && cardIndex[0]==1){
+                    buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
+                }
+                // the first item added into is player own pokemon
+                if(getCardIndex(buttonEventQueue.get(0).getId())[0]==0){
+
+                }else{
+
+                }
+                // if size is 2, it means 1 click for own, 1 click for target
+                if(buttonEventQueue.size()==2){
+
+                }
+                // prompt user
+                clearText("Please select one of your own pokemon");
                 // do attack first
                 // show attack effect ( ... attack!)
                 break;
             case "recharge":
+                // prompt user
+                clearText("Please select one of your own pokemon");
                 // do recharge first
                 // show recharge effect
                 break;
+            case "train":
+                // prompt user
+                clearText("Please select one of your own pokemon");
+                // do training
+                // show training effect
+                break;
             case "saveExit":
+                // prompt user
+                clearText("Please select one of your own pokemon");
                 // prompt to confirm, if yes next page
                 break;
         }
@@ -179,89 +208,22 @@ public class GameplayPageController {
         updatePokemonDetailsOnCard();
     }
 
-    private void showPokemonDetailOnPane(int[] cardIndex){
-        String className = playersPokemons[cardIndex[0]][cardIndex[1]].getClass().getName();
+    private void attack(int[] indexPokemonFrom, int indexPokemonTo){}
+    private void recharge(int[] indexPokemon){}
+    private void train(int[] indexPokemon){}
+    private void saveExit(){}
 
-        String classType;
-        if(className.contains("Attack")){
-            classType = "Attack";
-        }else if(className.contains("Defense")){
-            classType = "Defense";
-        }else {
-            classType = "Fairy";
-        }
-
-        String attackPoints = classType.equals("Attack")?
-                Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getAttackPoint())
-                :"-";
-        String resistancePoints = classType.equals("Defense")?
-                Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getResistancePoints())
-                :"-";
-        pokemonDetailsPaneLabels[0].setText("Name: "+playersPokemons[cardIndex[0]][cardIndex[1]].getName());
-        pokemonDetailsPaneLabels[1].setText("Type: "+classType);
-        pokemonDetailsPaneLabels[2].setText("Stage: "+Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getStage()));
-        pokemonDetailsPaneLabels[3].setText("Experience: "+Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getExp()));
-        pokemonDetailsPaneLabels[4].setText("Energy: "+Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getEnergy()));
-        pokemonDetailsPaneLabels[5].setText("Energy Color: "+playersPokemons[cardIndex[0]][cardIndex[1]].getColor());
-        pokemonDetailsPaneLabels[6].setText("Attack Point: "+attackPoints);
-        pokemonDetailsPaneLabels[7].setText("Resistance Point: "+resistancePoints);
-        pokemonDetailsPaneLabels[8].setText("Status: "+playersPokemons[cardIndex[0]][cardIndex[1]].getStatus());
-
-    }
-
-    private void updatePokemonDetailsOnCard(){
-
-        // get every pokemon Hp and set to the respective card Label
-        for(int i = 0; i < pokemonHpCardLabels.length; i++){
-            for(int j = 0; j < pokemonHpCardLabels[i].length; j++){
-                pokemonHpCardLabels[i][j].setText(
-                        playersPokemons[i][j].getName()+"\n"+
-                        "HP: "+Integer.toString(playersPokemons[i][j].getHp())
-                );
-            }
-        }
-    }
-
-    private int[] getCardIndex(String cardID){
-        int[] playerCard = new int[3];
-        String[] playerCardIndex;
-        // getting card index based on the id
-        if(cardID.contains("player1")){
-            playerCardIndex = cardID.split("player1card");
-        }else {
-            playerCardIndex = cardID.split("player2card");
-            playerCard[0]=1;
-        }
-        playerCard[1]=Integer.parseInt(playerCardIndex[1])-1;
-        return playerCard;
-    }
-
-    private void initializePokemonCardImage(){
-        // if no input is specify, generate it
-        for(ImageView[] playersCard: playersCardImages){
-            for(ImageView cardImage: playersCard){
-                int imageIndex = playersPokemons[0][0].generateInt(1,12);
-                cardImage.setImage(
-                        new Image(getClass().getResource("resources/fxml/assets/pokemon"+imageIndex+".png").toString())
-                );
+    private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo){
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double positionY, positionX;
 
             }
-        }
+        }.start();
     }
-    private void initializePokemonCardImage(String[][] playersCardImagesString){
-        // input is specified = game is load from previous game
-        for(int i = 0; i < playersCardImages.length; i++){
-            for(int j = 0; j < playersCardImages[i].length;j++){
-                playersCardImages[i][j].setImage(
-                        new Image(getClass().getResource("resources/fxml/assets/pokemon"
-                                +playersCardImagesString[i][j]+".png").toString())
-                );
-
-            }
-        }
-
-    }
-
+    private void rechargeEffect(int[] indexPokemon){}
+    private void trainEffect(int[] indexPokemon){}
     private void revealEffect() {
         new AnimationTimer() {
             @Override
@@ -311,15 +273,6 @@ public class GameplayPageController {
             }
         }.start();
     }
-    private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo){
-        new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                double positionY, positionX;
-
-            }
-        }.start();
-    }
 
     private void clearText(String promptText){
         for(Label label: pokemonDetailsPaneLabels){
@@ -335,7 +288,85 @@ public class GameplayPageController {
         //if there is any promptText
         energy.setText("Click any pokemon to see their stats!");
     }
+    private int[] getCardIndex(String cardID){
+        int[] playerCard = new int[3];
+        String[] playerCardIndex;
+        // getting card index based on the id
+        if(cardID.contains("player1")){
+            playerCardIndex = cardID.split("player1card");
+        }else {
+            playerCardIndex = cardID.split("player2card");
+            playerCard[0]=1;
+        }
+        playerCard[1]=Integer.parseInt(playerCardIndex[1])-1;
+        return playerCard;
+    }
+    private void showPokemonDetailOnPane(int[] cardIndex){
+        String className = playersPokemons[cardIndex[0]][cardIndex[1]].getClass().getName();
 
+        String classType;
+        if(className.contains("Attack")){
+            classType = "Attack";
+        }else if(className.contains("Defense")){
+            classType = "Defense";
+        }else {
+            classType = "Fairy";
+        }
+
+        String attackPoints = classType.equals("Attack")?
+                Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getAttackPoint())
+                :"-";
+        String resistancePoints = classType.equals("Defense")?
+                Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getResistancePoints())
+                :"-";
+        pokemonDetailsPaneLabels[0].setText("Name: "+playersPokemons[cardIndex[0]][cardIndex[1]].getName());
+        pokemonDetailsPaneLabels[1].setText("Type: "+classType);
+        pokemonDetailsPaneLabels[2].setText("Stage: "+Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getStage()));
+        pokemonDetailsPaneLabels[3].setText("Experience: "+Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getExp()));
+        pokemonDetailsPaneLabels[4].setText("Energy: "+Integer.toString(playersPokemons[cardIndex[0]][cardIndex[1]].getEnergy()));
+        pokemonDetailsPaneLabels[5].setText("Energy Color: "+playersPokemons[cardIndex[0]][cardIndex[1]].getColor());
+        pokemonDetailsPaneLabels[6].setText("Attack Point: "+attackPoints);
+        pokemonDetailsPaneLabels[7].setText("Resistance Point: "+resistancePoints);
+        pokemonDetailsPaneLabels[8].setText("Status: "+playersPokemons[cardIndex[0]][cardIndex[1]].getStatus());
+
+    }
+    private void updatePokemonDetailsOnCard(){
+
+        // get every pokemon Hp and set to the respective card Label
+        for(int i = 0; i < pokemonHpCardLabels.length; i++){
+            for(int j = 0; j < pokemonHpCardLabels[i].length; j++){
+                pokemonHpCardLabels[i][j].setText(
+                        "\n"
+                        +playersPokemons[i][j].getName()
+                        +"\n"+ "HP: "+Integer.toString(playersPokemons[i][j].getHp())
+                );
+            }
+        }
+    }
+
+    private void initializePokemonCardImage(){
+        // if no input is specify, generate it
+        for(ImageView[] playersCard: playersCardImages){
+            for(ImageView cardImage: playersCard){
+                int imageIndex = playersPokemons[0][0].generateInt(1,12);
+                Image image =  new Image(getClass().getResource("resources/fxml/assets/pokemon"+imageIndex+".png").toString());
+                cardImage.setImage(image);
+            }
+        }
+    }
+    private void initializePokemonCardImage(String[][] playersCardImagesString){
+        // input is specified = game is load from previous game
+        for(int i = 0; i < playersCardImages.length; i++){
+            for(int j = 0; j < playersCardImages[i].length;j++){
+                playersCardImages[i][j].setImage(
+                        new Image(getClass().getResource("resources/fxml/assets/pokemon"
+                                +playersCardImagesString[i][j]+".png").toString())
+                );
+
+            }
+        }
+
+    }
     private void intializePlayersPokemons(){
         // generate pokemon if not load saved game
         playersPokemons = new PokemonBase[][]{{
@@ -372,8 +403,17 @@ public class GameplayPageController {
 
         for(VBox[] player: playersCards){
             for(VBox card: player){
+                // on mouse hover enter -> hoverEffect
+                card.addEventHandler(MouseEvent.MOUSE_ENTERED,event -> {
+                    card.setTranslateY(-20);
+                });
+                // on mouse hover exit -> remove hoverEffect
+                card.addEventHandler(MouseEvent.MOUSE_EXITED,event -> {
+                    card.setTranslateY(20);
+                });
+                // on mouse clicked -> show stats
                 card.addEventHandler(MouseEvent.MOUSE_CLICKED,event -> {
-                    playerCardClickedEventHandler(getCardIndex(card.getId()));
+                    buttonEventHandler(getCardIndex(card.getId()));
                 });
                 card.setMinWidth(width*pokemonCardWidthRatio);
                 card.setMinHeight(height*pokemonCardHeightRatio);
@@ -434,7 +474,6 @@ public class GameplayPageController {
         }
         };
     }
-
     private void initializeButtons(){
 
         double width = ControllerUtil.getScreenWidth();
@@ -461,7 +500,6 @@ public class GameplayPageController {
         TrainButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
         SaveExitButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
     }
-
     private void initializePane(){
 
 
@@ -491,7 +529,6 @@ public class GameplayPageController {
         player1groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
         player2groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
     }
-
     public void initialize(){
         currentButtonState = "normal";
 
