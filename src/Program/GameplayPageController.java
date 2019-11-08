@@ -24,69 +24,7 @@ import static java.lang.Math.abs;
 
 public class GameplayPageController {
     public static boolean continueSaveGame = false;
-    private int[][] attackVerify(int[] cardIndex){
 
-        if(buttonEventQueue.size() == 2 && cardIndex[0]==0
-                || (cardIndex[0]==1 && buttonEventQueue.size() == 0)) {
-
-            clearText("Please re-choose the pokemon!");
-            buttonEventQueue = new ArrayList<VBox>();
-            return new int[][]{{-1},{-1}};
-
-        }else if(cardIndex[0]==0) {
-            buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
-        }else if(cardIndex[0]==1) {
-            buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
-        }
-
-        // remove duplicate
-        if(buttonEventQueue.size() ==2){
-            if(buttonEventQueue.get(0).getId().equals(buttonEventQueue.get(1).getId())){
-                buttonEventQueue.remove(0);
-            }
-        }
-        // the first item added into is player own pokemon
-        int[] secondCardIndex = new int[]{-1};
-        int[] firstCardIndex = new int[]{-1};
-
-        if (getCardIndex(buttonEventQueue.get(0).getId())[0] == 0) {
-            clearText("You chose " + playersPokemons[cardIndex[0]][cardIndex[1]].getName());
-            if(buttonEventQueue.size() == 2){
-                if (getCardIndex(buttonEventQueue.get(1).getId())[0] == 1) {
-
-                    disableButton(true);
-
-                    firstCardIndex = getCardIndex(buttonEventQueue.get(0).getId());
-                    secondCardIndex = getCardIndex(buttonEventQueue.get(1).getId());
-
-                    disableButton(false);
-                    clearText();
-                    currentButtonState = "normal";
-                    buttonEventQueue = new ArrayList<VBox>();
-                }
-            }
-        }
-
-        return new int[][]{
-                firstCardIndex,
-                secondCardIndex
-        };
-    }
-    private void attack(int[] indexPokemonFrom, int[] indexPokemonTo){
-        attackEffect(indexPokemonFrom,indexPokemonTo,true);
-        String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
-        if(classType.contains("Attack")) {
-            playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
-                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
-                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getAttackPoint()
-            );
-        }else {
-            playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
-                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
-            );
-        }
-        updatePokemonDetailsOnCard();
-    }
     private boolean oneRoundDone = false;
     private long lastSecond = -1;
     private double currentX = 0, currentY = 0;
@@ -227,7 +165,6 @@ public class GameplayPageController {
     public ImageView player1card6Image;
 
     private void buttonEventHandler(int[] cardIndex){
-        // being referenced in initializePlayersCardVBox()
         switch (currentButtonState){
             case "normal":
                 showPokemonDetailOnPane(cardIndex);
@@ -236,7 +173,9 @@ public class GameplayPageController {
                 // verify player chosen his own pokemon, add to event queue for next event calls;
                 int[][] pokemonsIndexes = attackVerify(cardIndex);
                 if(pokemonsIndexes[0][0] != -1){
-                    attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
+                    String returnedLog = attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
+                    currentButtonState = "normal";
+                    clearText(returnedLog);
                 }
                 // show attack effect ( ... attack!)
                 break;
@@ -257,7 +196,82 @@ public class GameplayPageController {
         updatePokemonDetailsOnCard();
     }
 
+    private int[][] attackVerify(int[] cardIndex){
 
+        if(buttonEventQueue.size() == 2 && cardIndex[0]==0
+                || (cardIndex[0]==1 && buttonEventQueue.size() == 0)) {
+
+            clearText("Please re-choose the pokemon!");
+            buttonEventQueue = new ArrayList<VBox>();
+            return new int[][]{{-1},{-1}};
+
+        }else if(cardIndex[0]==0) {
+            buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
+        }else if(cardIndex[0]==1) {
+            buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
+        }
+
+        // remove duplicate
+        if(buttonEventQueue.size() ==2){
+            if(buttonEventQueue.get(0).getId().equals(buttonEventQueue.get(1).getId())){
+                buttonEventQueue.remove(0);
+            }
+        }
+        // the first item added into is player own pokemon
+        int[] secondCardIndex = new int[]{-1};
+        int[] firstCardIndex = new int[]{-1};
+
+        if (getCardIndex(buttonEventQueue.get(0).getId())[0] == 0) {
+            clearText("You chose " + playersPokemons[cardIndex[0]][cardIndex[1]].getName());
+            if(buttonEventQueue.size() == 2){
+                if (getCardIndex(buttonEventQueue.get(1).getId())[0] == 1) {
+
+                    disableButton(true);
+
+                    firstCardIndex = getCardIndex(buttonEventQueue.get(0).getId());
+                    secondCardIndex = getCardIndex(buttonEventQueue.get(1).getId());
+
+                    disableButton(false);
+                    buttonEventQueue = new ArrayList<VBox>();
+                }
+            }
+        }
+
+        return new int[][]{
+                firstCardIndex,
+                secondCardIndex
+        };
+    }
+    private String attack(int[] indexPokemonFrom, int[] indexPokemonTo){
+
+        String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
+        String pokemonReturnedLog ;
+        if(classType.contains("Attack")) {
+            /*
+            pokemonReturnedLog = (AttackTypePokemon)playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
+                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
+                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getAttackPoint()
+            );
+            */
+            AttackTypePokemon attackTypePokemon = (AttackTypePokemon)playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+            pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
+                        attackTypePokemon.getAttackPoint()
+                    );
+
+        }else if(classType.contains("Fairy")){
+
+            FairyTypePokemon fairyTypePokemon= (FairyTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+            pokemonReturnedLog = fairyTypePokemon.fairyTypeLaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]);
+
+        }else{
+            pokemonReturnedLog = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
+                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
+            );
+        }
+        attackEffect(indexPokemonFrom,indexPokemonTo,true);
+        updatePokemonDetailsOnCard();
+        return pokemonReturnedLog;
+    }
     private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo, boolean isPlayer1){
         double spacing = 10;
         // (nt - nf)(space + width)
@@ -279,26 +293,57 @@ public class GameplayPageController {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                long secondPassed = 1000000000;
                 currentX += pixelPerFrameX;
                 currentY -= pixelPerFrameY;
 
                 playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].setTranslateX(currentX);
                 playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].setTranslateY(currentY);
 
+                // go forward
                 if(abs(currentX)> abs(outputX) || abs(currentY) > abs(outputY)){
                     pixelPerFrameX = -pixelPerFrameX;
                     pixelPerFrameY = -pixelPerFrameY;
                     oneRoundDone = true;
-                    ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/attack.mp3"));
+                    if(lastSecond < 0){
+                        lastSecond = now;
+                    }
+                    if(playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName().contains("Fairy")){
+                        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/fairyAttack.mp3"));
 
+                    }else {
+                        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/attack.mp3"));
+                    }
+                // go backward
                 }else if(oneRoundDone){
-                    if(abs(currentX) <= 5){
+                    if(abs(currentX) <= 5 && abs(currentY)<=5){
+
                         currentY = 0;
                         pixelPerFrameX = 1;
                         pixelPerFrameY = 1;
                         oneRoundDone = false;
+                        lastSecond = -1;
+
+                        // show visible if not
+                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
                         this.stop();
-                        initializePlayersCardVBoxMouseHover();
+                    }
+                }
+                // blinking effect
+                if(oneRoundDone) {
+                    if (now - lastSecond < secondPassed * 0.0375) {
+                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(false);
+                    }
+                    if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
+                    }
+
+                    if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(false);
+                    }
+
+                    if(now - lastSecond > secondPassed * 0.15){
+                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
                     }
                 }
             }
@@ -346,7 +391,6 @@ public class GameplayPageController {
                     player2card1.setVisible(true);
 
                     //clean up for animations
-                    clearText();
                     disableButton(false);
                     lastSecond = -1;
 
@@ -508,7 +552,7 @@ public class GameplayPageController {
             }
         }
     }
-    private void initializePlayersCardVBoxMouseHover(){
+    private void initializePlayersCardVBoxMouseEvent(){
         double width = ControllerUtil.getScreenWidth();
         double height = ControllerUtil.getScreenHeight();
         double pokemonCardWidthRatio = 0.142;
@@ -664,7 +708,7 @@ public class GameplayPageController {
 
         this.initializePlayersPokemons();
         this.initializePlayersCardVBox();
-        this.initializePlayersCardVBoxMouseHover();
+        this.initializePlayersCardVBoxMouseEvent();
         this.initializePlayersCardVBoxImage();
         this.initializeLabels();
         this.initializeButtons();

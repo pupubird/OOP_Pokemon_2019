@@ -5,16 +5,22 @@ public class FairyTypePokemon extends PokemonBase{
         super(name);
     }
 
-    @Override
-    public String launchAttack(PokemonBase target) {
-        super.launchAttack(target);
+    public String fairyTypeLaunchAttack(PokemonBase target){
+        String returnString = "";
+        returnString += launchAttack(target);
 
         if(this.flipCoinIsHead()){
             target.setPoisoned();
-        }else{
-            target.setParalysed();
+            return returnString+ "\n" + target.getName()+" get poisoned! Freezed for 2 round.";
         }
 
-        return target.getName();
+        target.setParalysed();
+        return returnString+ "\n" + target.getName()+" get paralysed! Freezed for 1 round.";
+
+    }
+
+    @Override
+    public String launchAttack(PokemonBase target) {
+        return super.launchAttack(target);
     }
 }

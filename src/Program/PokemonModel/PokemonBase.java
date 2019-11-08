@@ -19,6 +19,7 @@ public class PokemonBase {
     public String launchAttack(PokemonBase target){
         int energyConsume = 1;
         int attackPoint=1;
+        String returnString = "";
         // check if there is enough energy for critical damage (same type)
         if(this.energy - energyConsume > 2) {
             if (this.color.equals(target.getColor())) {
@@ -27,29 +28,29 @@ public class PokemonBase {
             }
         }
         this.energy -= energyConsume;
-        target.defense(attackPoint);
-        expPlus();
-        return target.getName();
-    }
-    public String launchAttack(PokemonBase target, int attackPoint){
-        attackPoint = flipCoinIsHead()?attackPoint:1;
-        int energyConsume = 1;
-        // check if there is enough energy for critical damage (same type)
-        if(this.energy - energyConsume > 2) {
-            if (this.color.equals(target.getColor())) {
-                attackPoint = 2;
-                energyConsume = 2;
-            }
+
+        String classType = target.getClass().getName();
+        if(classType.contains("Defense")){
+            DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon)target;
+            returnString += "\n" + defenseTypePokemon.defenseTypeLaunchDefense(attackPoint,this.getResistancePoints());
+        }else {
+            returnString += "\n" + defense(attackPoint);
         }
-        this.energy -= energyConsume;
-        target.defense(attackPoint);
         expPlus();
-        return target.getName();
+
+        if(attackPoint == 2){
+            return returnString + "\n" +"Same Type, Double attack!";
+        }
+
+        return returnString;
     }
 
-    public void defense(int receivedAttackPoint){
+
+    public String defense(int receivedAttackPoint){
         this.hp -= receivedAttackPoint;
+        return "Damaged received "+receivedAttackPoint;
     }
+
 
     public void expPlus(){
         this.exp += 1;

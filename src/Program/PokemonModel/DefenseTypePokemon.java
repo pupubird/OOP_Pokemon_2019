@@ -8,12 +8,19 @@ public class DefenseTypePokemon extends PokemonBase {
         this.resistancePoints = this.generateInt(1,3);
     }
 
-    @Override
-    public void defense(int receivedAttackPoint) {
-        int resistance = this.flipCoinIsHead()?this.resistancePoints :0;
+    public String defenseTypeLaunchDefense(int receivedAttackPoint, int resistance){
         receivedAttackPoint -= resistance;
+        String returnString = "";
+        defense(receivedAttackPoint);
+        if (resistance == 0){
+            return returnString+"\n"+ "Flipped Coin: Tail, Defense Type Pokemon Effect Canceled";
+        }
+        return returnString+"\n"+ "Flipped Coin: Head, Defense Type Pokemon Effect Triggered!";
 
-        super.defense(receivedAttackPoint);
+    }
+    @Override
+    public String defense(int receivedAttackPoint) {
+        return super.defense(receivedAttackPoint);
     }
 
     @Override
