@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+<?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<SplitPane dividerPositions="0.7" maxHeight="-Infinity"
+           maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+           orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0"
+           xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="GameplayPagePane"
+           fx:controller="Program.GameplayPageController"
+>
+    <stylesheets>
+        <URL value="@gameplayPage.css"/>
+    </stylesheets>
+
+    <!--Gameplay pane-->
+    <VBox alignment="CENTER" spacing="15" fx:id="gameplayZonePane">
+        <HBox fx:id="player2groupPane" alignment="CENTER" spacing="10.0">
+            <Label text="Player 2" textFill="white">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+            <AnchorPane>
+            <VBox fx:id="player2card1" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card1Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player2card1Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player2card2" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card2Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player2card2Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player2card3" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card3Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player2card3Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player2card4" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card4Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player2card4Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player2card5" alignment="CENTER" styleClass="pokemonCard" >
+                <ImageView fx:id="player2card5Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player2card5Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player2card6" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player2card6Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player2card6Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+        </HBox>
+
+        <!--player 1-->
+        <HBox fx:id="player1groupPane" alignment="CENTER" spacing="10.0" >
+            <Label text="Player 1" textFill="white">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+            <AnchorPane>
+            <VBox fx:id="player1card1" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card1Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player1card1Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player1card2" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card2Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player1card2Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player1card3" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card3Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player1card3Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player1card4" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card4Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player1card4Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player1card5" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card5Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player1card5Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+
+            <AnchorPane>
+            <VBox fx:id="player1card6" alignment="CENTER" styleClass="pokemonCard">
+                <ImageView fx:id="player1card6Image" fitWidth="100" fitHeight="100"/>
+                <Label fx:id="player1card6Hp" text="HP: 100" >
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <effect>
+                    <DropShadow color="#5c5c5c" />
+                </effect>
+            </VBox>
+            </AnchorPane>
+        </HBox>
+    </VBox>
+
+
+    <!--Properties and button-->
+  <SplitPane dividerPositions="0.7">
+    <GridPane alignment="CENTER" fx:id="PokemonPropertiesPane">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES"/>
+            <ColumnConstraints hgrow="SOMETIMES" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+        </rowConstraints>
+        <HBox alignment="CENTER">
+            <Label fx:id="pokemonName" text="Pokemon Name" textFill="white">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+        </HBox>
+        <HBox alignment="CENTER" GridPane.columnIndex="1" >
+            <Label fx:id="type" text="Type: Attacking" textFill="white">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+        </HBox>
+        <HBox alignment="CENTER" GridPane.columnIndex="2" >
+          <Label fx:id="stage" text="Stage: 0" textFill="white">
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Label>
+        </HBox>
+        <HBox alignment="CENTER" GridPane.rowIndex="1">
+          <Label fx:id="experience" text="Experience: 0" textFill="white">
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Label>
+        </HBox>
+        <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <Label fx:id="energy" text="Energy: 0" textFill="white">
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Label>
+        </HBox>
+        <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+          <Label fx:id="energyColor" text="Energy Color: Yellow" textFill="white">
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Label>
+        </HBox>
+        <HBox alignment="CENTER"  GridPane.rowIndex="2" >
+          <Label fx:id="attackPoint" text="Attack Point: 100" textFill="white">
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Label>
+        </HBox>
+        <HBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
+          <Label fx:id="resistancePoint" text="Resistance Point: 0" textFill="white">
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Label>
+        </HBox>
+        <HBox alignment="CENTER"  GridPane.columnIndex="2" GridPane.rowIndex="2">
+          <Label fx:id="status" text="Status: Paralysed" textFill="white">
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Label>
+        </HBox>
+    </GridPane>
+    <VBox fx:id="ActionButtonPane">
+      <HBox alignment="CENTER" fx:id="ButtonHBox">
+        <Button fx:id="AttackButton" mnemonicParsing="false" text="Attack"
+                style="-fx-background-color: linear-gradient(green,darkgreen);"
+                textFill="WHITE"
+        >
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+        <Button fx:id="RechargeButton" mnemonicParsing="false" text="Recharge"
+                style="-fx-background-color: linear-gradient(blue,darkblue);"
+                textFill="WHITE"
+        >
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+      </HBox>
+      <HBox alignment="CENTER" fx:id="ButtonHBox2">
+        <Button fx:id="TrainButton" mnemonicParsing="false" text="Train"
+                style="-fx-background-color: linear-gradient(red,darkred);"
+                textFill="WHITE"
+        >
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+        <Button fx:id="SaveExitButton" mnemonicParsing="false" text="Save/Exit"
+                style="-fx-background-color: linear-gradient(yellow,orange);"
+                textFill="BLACK"
+        >
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+      </HBox>
+    </VBox>
+  </SplitPane>
+</SplitPane>
