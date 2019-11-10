@@ -2,14 +2,14 @@ package Program.PokemonModel;
 
 public class PokemonBase {
     private int hp, energy, exp, stage, effectLeftRound;
-    private String color, state, name;
+    private String color, status, name;
 
     public PokemonBase(String name){
         this.name = name;
         this.hp = generateInt(50, 80);
         this.energy = generateInt(20,50);
         this.color = generateString(new String[]{"red","blue","yellow","colorless"});
-        this.state = "active";
+        this.status = "active";
         this.effectLeftRound = 0;
         this.stage = 0;
         this.exp = 0;
@@ -19,6 +19,7 @@ public class PokemonBase {
     public String launchAttack(PokemonBase target){
         int energyConsume = 1;
         int attackPoint=1;
+        String returnString = "";
         // check if there is enough energy for critical damage (same type)
         if(this.energy - energyConsume > 2) {
             if (this.color.equals(target.getColor())) {
@@ -26,27 +27,30 @@ public class PokemonBase {
                 energyConsume = 2;
             }
         }
-        target.defense(attackPoint);
-        expPlus();
-        return target.getName();
-    }
-    public String launchAttack(PokemonBase target, int attackPoint){
-        int energyConsume = 1;
-        // check if there is enough energy for critical damage (same type)
-        if(this.energy - energyConsume > 2) {
-            if (this.color.equals(target.getColor())) {
-                attackPoint = 2;
-                energyConsume = 2;
-            }
+        this.energy -= energyConsume;
+
+        String classType = target.getClass().getName();
+        if(classType.contains("Defense")){
+            DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon)target;
+            returnString += "\n" + defenseTypePokemon.defenseTypeLaunchDefense(attackPoint,this.getResistancePoints());
+        }else {
+            returnString += "\n" + defense(attackPoint);
         }
-        target.defense(attackPoint);
         expPlus();
-        return target.getName();
+
+        if(attackPoint == 2){
+            return returnString + "\n" +"Same Type, Double attack!";
+        }
+
+        return returnString;
     }
 
-    public void defense(int receivedAttackPoint){
+
+    public String defense(int receivedAttackPoint){
         this.hp -= receivedAttackPoint;
+        return "Damaged received "+receivedAttackPoint;
     }
+
 
     public void expPlus(){
         this.exp += 1;
@@ -64,25 +68,25 @@ public class PokemonBase {
         // do effect here, call controllerUtil effect
     }
     public void setPoisoned(){
-        this.setState("poisoned");
+        this.setStatus("poisoned");
         this.setEffectLeftRound(this.getEffectLeftRound()+1);
     }
     public void setParalysed(){
-        this.setState("paralysed");
+        this.setStatus("paralysed");
         this.setEffectLeftRound(this.getEffectLeftRound()+2);
     }
 
     // for controller class to update every round
     public void updateStateEffectLeft(){
         if(this.effectLeftRound == 0){
-            this.state = "active";
+            this.status = "active";
         }else{
             this.effectLeftRound -=1;
         }
     }
 
     public int generateInt(int from, int to){
-        return (int)((Math.random()*(to-from))+from);
+        return (int)((Math.random()*(to-from+1))+from);
     }
 
     private String generateString(String[] generatorList){
@@ -149,11 +153,18 @@ public class PokemonBase {
         this.color = color;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getAttackPoint(){
+        return 0;
+    }
+    public int getResistancePoints(){
+        return 0;
     }
 }

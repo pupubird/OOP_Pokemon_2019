@@ -22,6 +22,7 @@ public class Main extends Application {
         primaryStage.setWidth(width);
         primaryStage.setHeight(height);
 
+        primaryStage.setFullScreenExitHint("");
         primaryStage.setFullScreen(true);
         primaryStage.setTitle("OOP Pokemon 2019");
         primaryStage.setScene(scene);

@@ -11,7 +11,7 @@ public class GameConfigPageController {
     public void returnToMenu(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
-        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GamePage.fxml"));
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameplayPage.fxml"));
     }
 
     public void initialize(){
