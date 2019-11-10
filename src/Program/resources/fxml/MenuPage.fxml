@@ -42,6 +42,20 @@
         </ImageView>
       </HBox>
       <HBox alignment="CENTER">
+          <Button fx:id="loadButton" mnemonicParsing="false"
+                  style="-fx-background-color: linear-gradient(red,darkred); -fx-cursor: pointer; -fx-translate-x: 18;"
+                  text="Load" textFill="WHITE"
+                  onMouseClicked="#navigateToLoadPage"
+          >
+              <font>
+                  <Font name="System Bold" size="18.0" />
+              </font>
+          </Button>
+          <ImageView fx:id="loadButtonImage" preserveRatio="true">
+              <Image url="@assets/pokemon5.png" />
+          </ImageView>
+      </HBox>
+      <HBox alignment="CENTER">
         <Button fx:id="exitButton" mnemonicParsing="false"
                 style="-fx-background-color: linear-gradient(orange,darkorange); -fx-translate-x: 18;"
                 text="Exit" textFill="WHITE"

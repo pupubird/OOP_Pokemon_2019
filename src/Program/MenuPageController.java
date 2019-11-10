@@ -20,12 +20,16 @@ public class MenuPageController {
     @FXML
     public Button settingButton;
     @FXML
+    public Button loadButton;
+    @FXML
     public Button exitButton;
 
     @FXML
     public ImageView startButtonImage;
     @FXML
     public ImageView settingButtonImage;
+    @FXML
+    public ImageView loadButtonImage;
     @FXML
     public ImageView exitButtonImage;
 
@@ -41,6 +45,12 @@ public class MenuPageController {
     public void navigateToGamePage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameConfigPage.fxml"));
+    }
+
+    @FXML
+    public void navigateToLoadPage(){
+        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/LoadPage.fxml"));
     }
 
     @FXML
@@ -65,6 +75,7 @@ public class MenuPageController {
                         if (now - lastSecond >= 500000000) {
                             startButtonImage.setTranslateY(startButtonImage.getTranslateY() + vibratePixel);
                             settingButtonImage.setTranslateY(settingButtonImage.getTranslateY() + vibratePixel);
+                            loadButtonImage.setTranslateY(loadButtonImage.getTranslateY() + vibratePixel);
                             exitButtonImage.setTranslateY(exitButtonImage.getTranslateY() + vibratePixel);
                             vibratePixel += 10;
                             lastSecond = now;
@@ -99,14 +110,17 @@ public class MenuPageController {
 
         startButton.setPrefWidth(width/widthRatio);
         settingButton.setPrefWidth(width/widthRatio);
+        loadButton.setPrefWidth(width/widthRatio);
         exitButton.setPrefWidth(width/widthRatio);
 
         startButton.setPrefHeight(height/heightRatio);
         settingButton.setPrefHeight(height/heightRatio);
+        loadButton.setPrefHeight(height/heightRatio);
         exitButton.setPrefHeight(height/heightRatio);
 
         startButtonImage.setFitHeight(startButton.getPrefHeight()*2);
         settingButtonImage.setFitHeight(settingButton.getPrefHeight()*2);
+        loadButtonImage.setFitHeight(loadButton.getPrefHeight()*2);
         exitButtonImage.setFitHeight(exitButton.getPrefHeight()*2);
 
         vibrateEffect();
