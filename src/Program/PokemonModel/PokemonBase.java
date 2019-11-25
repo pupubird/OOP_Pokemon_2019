@@ -95,7 +95,7 @@ public class PokemonBase {
     }
 
     public boolean flipCoinIsHead(){
-        return Math.random()*2==1;
+        return Math.floor(Math.random()*2)==1;
     }
     public String getName() {
         return name;
