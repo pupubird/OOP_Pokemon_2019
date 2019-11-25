@@ -55,6 +55,7 @@ public class GameplayPageController {
     public ImageView player2card1Image, player2card2Image, player2card3Image, player2card4Image, player2card5Image, player2card6Image;
 
     private void buttonEventHandler(int[] cardIndex){
+        String returnedLog;
         switch (currentButtonState){
             case "normal":
                 showPokemonDetailOnPane(cardIndex);
@@ -63,22 +64,22 @@ public class GameplayPageController {
                 // verify player chosen his own pokemon, add to event queue for next event calls;
                 int[][] pokemonsIndexes = attackVerify(cardIndex);
                 if(pokemonsIndexes[0][0] != -1){
-                    String returnedLog = attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
+                    returnedLog = attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
                     currentButtonState = "normal";
                     clearText(returnedLog);
                 }
                 // show attack effect ( ... attack!)
                 break;
             case "recharge":
-
-                break;
-            case "train":
-                String returnedLog = train(cardIndex);
+                returnedLog = recharge(cardIndex);
                 currentButtonState = "normal";
                 clearText(returnedLog);
-                // prompt user
-                // do training
-                // show training effect
+                break;
+            case "train":
+                // runs train validation and plays animation is enough energy to train
+                returnedLog = train(cardIndex);
+                currentButtonState = "normal";
+                clearText(returnedLog);
                 break;
             case "saveExit":
                 // prompt to confirm, if yes next page
@@ -242,9 +243,62 @@ public class GameplayPageController {
         }.start();
     }
 
-    private void recharge(int[] indexPokemon){
+    private String recharge(int[] indexPokemon){
+
+        // need round system to validate
+        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+        String cardDrawn = selectedPokemon.generateString(new String[]{"red","blue","yellow"});
+        boolean recharged = false;
+
+        if (selectedPokemon.getColor().equals("colorless")
+                || selectedPokemon.getColor().equals(cardDrawn)) {
+            rechargeEffect(indexPokemon);
+            selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
+            recharged = true;
+        }
+
+        String showCard = String.format("Card Drawn : %s", cardDrawn);
+
+        if (recharged) {
+            return String.format("%s\n%s has successfully recharged ! (%s)"
+                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+        }
+        else {
+            return String.format("%s\n%s failed recharging. (%s)"
+                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+        }
+
+
     }
-    private void rechargeEffect(int[] indexPokemon){}
+    private void rechargeEffect(int[] indexPokemon){
+        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                long secondPassed = 1000000000;
+                if(lastSecond < 0){
+                    lastSecond = now;
+                }
+                if (now - lastSecond < secondPassed * 0.0375) {
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                }
+                if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                }
+
+                if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                }
+
+                if(now - lastSecond > secondPassed * 0.15){
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    lastSecond = -1;
+                    this.stop();
+                }
+            }
+        }.start();
+    }
 
     private String train(int[] indexPokemon){
 
