@@ -22,7 +22,7 @@ public class PokemonBase {
         String returnString = "";
         // check if there is enough energy for critical damage (same type)
         if(this.energy - energyConsume > 2) {
-            if (this.color.equals(target.getColor())) {
+            if (this.getClass().getName().equals(target.getClass().getName())) {
                 attackPoint = 2;
                 energyConsume = 2;
             }
