@@ -1,5 +1,10 @@
 package Program.PokemonModel;
 
+import Program.GameplayPageController;
+import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+
 public class PokemonBase {
     private int hp, energy, exp, stage, effectLeftRound;
     private String color, status, name;
@@ -44,9 +49,10 @@ public class PokemonBase {
             }
 
         }else {
+            GameplayPageController.buttonEventQueue = new ArrayList<VBox>();
             returnString += "Not enough energy.";
         }
-            return returnString;
+        return returnString;
     }
 
     public String launchAttack(PokemonBase target, int attackPoint){

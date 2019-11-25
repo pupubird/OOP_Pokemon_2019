@@ -1,5 +1,10 @@
 package Program.PokemonModel;
 
+import Program.GameplayPageController;
+import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+
 public class AttackTypePokemon extends PokemonBase{
     private int attackAttribute;
 
@@ -19,19 +24,15 @@ public class AttackTypePokemon extends PokemonBase{
             }
             //check if enough energy to  do action
         }
-        if(super.getEnergy() >0 ){
-            super.setEnergy(super.getEnergy() - energyConsume);
-            expPlus();
-            String returnString = "";
-            returnString += launchAttack(target,attackPoint);
-            if(attackPoint != 1){
-                return returnString + "\n" +"Flipped coin: Head, Attack Type Pokemon Effect Triggered!";
-            }
-            return returnString + "\n" + "Flipped coin: Tail, Attack Type Pokemon Effect Canceled!";
-
-        }else {
-            return "Not enough energy, please recharge/rechoose a pokemon";
+        super.setEnergy(super.getEnergy() - energyConsume);
+        expPlus();
+        String returnString = "";
+        returnString += launchAttack(target,attackPoint);
+        if(attackPoint != 1){
+            return returnString + "\n" +"Flipped coin: Head, Attack Type Pokemon Effect Triggered!";
         }
+        return returnString + "\n" + "Flipped coin: Tail, Attack Type Pokemon Effect Canceled!";
+
     }
 
     @Override

@@ -38,7 +38,7 @@ public class GameplayPageController {
     private Label[][] pokemonHpCardLabels;
     private Button[] buttons;
     private String currentButtonState;
-    private ArrayList<VBox> buttonEventQueue = new ArrayList<>();
+    public static ArrayList<VBox> buttonEventQueue = new ArrayList<>();
 
     @FXML
     public SplitPane GameplayPagePane;
@@ -269,7 +269,9 @@ public class GameplayPageController {
                     playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
             );
         }
-        attackEffect(indexPokemonFrom,indexPokemonTo,true);
+        if(!pokemonReturnedLog.contains("Not enough energy.")){
+            attackEffect(indexPokemonFrom,indexPokemonTo,true);
+        }
         updatePokemonDetailsOnCard();
         return pokemonReturnedLog;
     }
@@ -467,6 +469,9 @@ public class GameplayPageController {
                         +playersPokemons[i][j].getName()
                         +"\n"+ "HP: "+Integer.toString(playersPokemons[i][j].getHp())
                 );
+                if(playersPokemons[i][j].getHp()<=0){
+                    playersCards[i][j].setVisible(false);
+                }
             }
         }
     }
