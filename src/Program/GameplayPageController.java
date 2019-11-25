@@ -29,8 +29,7 @@ public class GameplayPageController {
     private boolean oneRoundDone = false;
     private long lastSecond = -1;
     private double currentX = 0, currentY = 0;
-    double pixelPerFrameX = 1;
-    double pixelPerFrameY = 1;
+    double pixelPerFrameX = 1, pixelPerFrameY = 1;
     private VBox[][] playersCards;
     private PokemonBase[][] playersPokemons;
     private ImageView[][] playersCardImages;
@@ -43,130 +42,21 @@ public class GameplayPageController {
 
     @FXML
     public SplitPane GameplayPagePane;
-    @FXML
-    public VBox gameplayZonePane;
-    @FXML
-    public HBox player1groupPane;
-    @FXML
-    public HBox player2groupPane;
-
-    @FXML
+    public VBox gameplayZonePane, ActionButtonPane;
+    public HBox player1groupPane, player2groupPane;
     public GridPane PokemonPropertiesPane;
-    @FXML
-    public HBox ButtonHBox;
-    @FXML
-    public HBox ButtonHBox2;
-
-    @FXML
-    public VBox ActionButtonPane;
-
-    @FXML
-    public Button AttackButton;
-    @FXML
-    public Button RechargeButton;
-    @FXML
-    public Button TrainButton;
-    @FXML
-    public Button SaveExitButton;
-
-    @FXML
-    public Label pokemonName;
-    @FXML
-    public Label type;
-    @FXML
-    public Label stage;
-    @FXML
-    public Label experience;
-    @FXML
-    public Label energy;
-    @FXML
-    public Label energyColor;
-    @FXML
-    public Label attackPoint;
-    @FXML
-    public Label resistancePoint;
-    @FXML
-    public Label status;
-
-    @FXML
-    public VBox player1card1;
-    @FXML
-    public VBox player1card2;
-    @FXML
-    public VBox player1card3;
-    @FXML
-    public VBox player1card4;
-    @FXML
-    public VBox player1card5;
-    @FXML
-    public VBox player1card6;
-
-    @FXML
-    public VBox player2card1;
-    @FXML
-    public VBox player2card2;
-    @FXML
-    public VBox player2card3;
-    @FXML
-    public VBox player2card4;
-    @FXML
-    public VBox player2card5;
-    @FXML
-    public VBox player2card6;
-
-    @FXML
-    public Label player1card1Hp;
-    @FXML
-    public Label player1card2Hp;
-    @FXML
-    public Label player1card3Hp;
-    @FXML
-    public Label player1card4Hp;
-    @FXML
-    public Label player1card5Hp;
-    @FXML
-    public Label player1card6Hp;
-
-    @FXML
-    public Label player2card1Hp;
-    @FXML
-    public Label player2card2Hp;
-    @FXML
-    public Label player2card3Hp;
-    @FXML
-    public Label player2card4Hp;
-    @FXML
-    public Label player2card5Hp;
-    @FXML
-    public Label player2card6Hp;
-
-    @FXML
-    public ImageView player2card1Image;
-    @FXML
-    public ImageView player2card2Image;
-    @FXML
-    public ImageView player2card3Image;
-    @FXML
-    public ImageView player2card4Image;
-    @FXML
-    public ImageView player2card5Image;
-    @FXML
-    public ImageView player2card6Image;
-
-    @FXML
-    public ImageView player1card1Image;
-    @FXML
-    public ImageView player1card2Image;
-    @FXML
-    public ImageView player1card3Image;
-    @FXML
-    public ImageView player1card4Image;
-    @FXML
-    public ImageView player1card5Image;
-    @FXML
-    public ImageView player1card6Image;
+    public HBox ButtonHBox, ButtonHBox2;
+    public Button AttackButton, RechargeButton, TrainButton, SaveExitButton;
+    public Label pokemonName, type, stage, experience, energy, energyColor, attackPoint, resistancePoint, status;
+    public VBox player1card1, player1card2, player1card3, player1card4, player1card5, player1card6;
+    public VBox player2card1, player2card2, player2card3, player2card4, player2card5, player2card6;
+    public Label player1card1Hp, player1card2Hp, player1card3Hp, player1card4Hp, player1card5Hp, player1card6Hp;
+    public Label player2card1Hp, player2card2Hp, player2card3Hp, player2card4Hp, player2card5Hp, player2card6Hp;
+    public ImageView player1card1Image, player1card2Image, player1card3Image, player1card4Image, player1card5Image, player1card6Image;
+    public ImageView player2card1Image, player2card2Image, player2card3Image, player2card4Image, player2card5Image, player2card6Image;
 
     private void buttonEventHandler(int[] cardIndex){
+        String returnedLog;
         switch (currentButtonState){
             case "normal":
                 showPokemonDetailOnPane(cardIndex);
@@ -175,20 +65,22 @@ public class GameplayPageController {
                 // verify player chosen his own pokemon, add to event queue for next event calls;
                 int[][] pokemonsIndexes = attackVerify(cardIndex);
                 if(pokemonsIndexes[0][0] != -1){
-                    String returnedLog = attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
+                    returnedLog = attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
                     currentButtonState = "normal";
                     clearText(returnedLog);
                     System.out.println(returnedLog);
                 }
                 break;
             case "recharge":
-                // do recharge first
-                // show recharge effect
+                returnedLog = recharge(cardIndex);
+                currentButtonState = "normal";
+                clearText(returnedLog);
                 break;
             case "train":
-                // prompt user
-                // do training
-                // show training effect
+                // runs train validation and plays animation is enough energy to train
+                returnedLog = train(cardIndex);
+                currentButtonState = "normal";
+                clearText(returnedLog);
                 break;
             case "saveExit":
                 // prompt to confirm, if yes next page
@@ -353,11 +245,107 @@ public class GameplayPageController {
         }.start();
     }
 
-    private void recharge(int[] indexPokemon){}
-    private void rechargeEffect(int[] indexPokemon){}
+    private String recharge(int[] indexPokemon){
 
-    private void train(int[] indexPokemon){}
-    private void trainEffect(int[] indexPokemon){}
+        // need round system to validate
+        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+        String cardDrawn = selectedPokemon.generateString(new String[]{"red","blue","yellow"});
+        boolean recharged = false;
+
+        if (selectedPokemon.getColor().equals("colorless")
+                || selectedPokemon.getColor().equals(cardDrawn)) {
+            rechargeEffect(indexPokemon);
+            selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
+            recharged = true;
+        }
+
+        String showCard = String.format("Card Drawn : %s", cardDrawn);
+
+        if (recharged) {
+            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
+            return String.format("%s\n%s has successfully recharged ! (%s)"
+                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+        }
+        else {
+            return String.format("%s\n%s failed recharging. (%s)"
+                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+        }
+
+
+    }
+    private void rechargeEffect(int[] indexPokemon){
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                long secondPassed = 1000000000;
+                if(lastSecond < 0){
+                    lastSecond = now;
+                }
+                if (now - lastSecond < secondPassed * 0.0375) {
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                }
+                if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                }
+
+                if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                }
+
+                if(now - lastSecond > secondPassed * 0.15){
+                    playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    lastSecond = -1;
+                    this.stop();
+                }
+            }
+        }.start();
+    }
+
+    private String train(int[] indexPokemon){
+
+        //need round system to validate
+        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+        if (selectedPokemon.getEnergy() < 5) {
+            return selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
+        }
+        else {
+            selectedPokemon.expPlus();
+            selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
+            trainEffect(indexPokemon);
+            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
+            return selectedPokemon.getName() + " has increased its experience by 1 !";
+        }
+
+    }
+    private void trainEffect(int[] indexPokemon){
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                long secondPassed = 1000000000;
+                    if(lastSecond < 0){
+                        lastSecond = now;
+                    }
+                    if (now - lastSecond < secondPassed * 0.0375) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+                    if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    }
+
+                    if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+
+                    if(now - lastSecond > secondPassed * 0.15){
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                        lastSecond = -1;
+                        this.stop();
+                    }
+                }
+        }.start();
+    }
 
     private void saveExit(){ }
 
