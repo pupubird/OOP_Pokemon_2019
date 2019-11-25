@@ -11,11 +11,11 @@ public class FairyTypePokemon extends PokemonBase{
 
         if(this.flipCoinIsHead()){
             target.setPoisoned();
-            return returnString+ "\n" + target.getName()+" get poisoned! Freezed for 2 round.";
+            return returnString+ "\n" + target.getName()+" get poisoned! Idle for "+target.getEffectLeftRound()+" round.";
         }
 
         target.setParalysed();
-        return returnString+ "\n" + target.getName()+" get paralysed! Freezed for 1 round.";
+        return returnString+ "\n" + target.getName()+" get paralysed! Idle for "+target.getEffectLeftRound()+" round.";
 
     }
 

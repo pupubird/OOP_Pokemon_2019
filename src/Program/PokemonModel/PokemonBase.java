@@ -1,5 +1,10 @@
 package Program.PokemonModel;
 
+import Program.GameplayPageController;
+import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+
 public class PokemonBase {
     private int hp, energy, exp, stage, effectLeftRound;
     private String color, status, name;
@@ -18,33 +23,65 @@ public class PokemonBase {
 
     public String launchAttack(PokemonBase target){
         int energyConsume = 1;
-        int attackPoint = 1;
         String returnString = "";
-        // check if there is enough energy for critical damage (same type)
-        if(this.energy - energyConsume > 2) {
-            if (this.getClass().getName().equals(target.getClass().getName())) {
-                attackPoint = attackPoint * 2;
-                energyConsume = 2;
+        if(this.energy >0) {
+            int attackPoint=1;
+            // check if there is enough energy for critical damage (same type)
+            if(this.energy - energyConsume > 2) {
+                if (this.getClass().getName().equals(target.getClass().getName())) {
+                    attackPoint = 2;
+                    energyConsume = 2;
+                }
             }
-        }
-        this.energy -= energyConsume;
+            this.energy -= energyConsume;
 
-        String classType = target.getClass().getName();
-        if(classType.contains("Defense")){
-            DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon)target;
-            returnString += "\n" + defenseTypePokemon.defenseTypeLaunchDefense(attackPoint,this.getResistancePoints());
+            String classType = target.getClass().getName();
+            if(classType.contains("Defense")){
+                DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon)target;
+                returnString += "\n" + defenseTypePokemon.defenseTypeLaunchDefense(attackPoint,this.getResistancePoints());
+            }else {
+                returnString += "\n" + target.defense(attackPoint);
+            }
+            expPlus();
+
+            if(attackPoint == 2){
+                return returnString + "\n" +"Same Type, Double attack!";
+            }
+
         }else {
-            returnString += "\n" + target.defense(attackPoint);
+            GameplayPageController.buttonEventQueue = new ArrayList<VBox>();
+            returnString += "Not enough energy.";
         }
-        expPlus();
-
-        if(attackPoint == 2){
-            return returnString + "\n" +"Same Type, Double attack!";
-        }
-
         return returnString;
     }
 
+    public String launchAttack(PokemonBase target, int attackPoint){
+        int energyConsume = 1;
+        String returnString = "";
+        if(this.energy >0) {
+            // check if there is enough energy for critical damage (same type)
+            if (this.energy - energyConsume > 2) {
+                if (this.getClass().getName().equals(target.getClass().getName())) {
+                    returnString += "\n" + "Same Type, Double attack!";
+                    attackPoint *= 2;
+                    energyConsume = 2;
+                }
+            }
+            this.energy -= energyConsume;
+
+            String classType = target.getClass().getName();
+            if (classType.contains("Defense")) {
+                DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon) target;
+                returnString += "\n" + defenseTypePokemon.defenseTypeLaunchDefense(attackPoint, this.getResistancePoints());
+            } else {
+                returnString += "\n" + target.defense(attackPoint);
+            }
+            expPlus();
+        }else {
+            returnString += "Not enough energy.";
+        }
+        return returnString;
+    }
 
     public String defense(int receivedAttackPoint){
         this.hp -= receivedAttackPoint;
