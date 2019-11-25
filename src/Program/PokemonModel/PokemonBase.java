@@ -18,12 +18,12 @@ public class PokemonBase {
 
     public String launchAttack(PokemonBase target){
         int energyConsume = 1;
-        int attackPoint=1;
+        int attackPoint = 1;
         String returnString = "";
         // check if there is enough energy for critical damage (same type)
         if(this.energy - energyConsume > 2) {
             if (this.getClass().getName().equals(target.getClass().getName())) {
-                attackPoint = 2;
+                attackPoint = attackPoint * 2;
                 energyConsume = 2;
             }
         }
