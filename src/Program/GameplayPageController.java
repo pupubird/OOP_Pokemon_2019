@@ -38,6 +38,7 @@ public class GameplayPageController {
     private Label[][] pokemonHpCardLabels;
     private Button[] buttons;
     private String currentButtonState;
+    private int currentPlayerRound;
     public static ArrayList<VBox> buttonEventQueue = new ArrayList<>();
 
     @FXML
@@ -177,8 +178,8 @@ public class GameplayPageController {
                     String returnedLog = attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
                     currentButtonState = "normal";
                     clearText(returnedLog);
+                    System.out.println(returnedLog);
                 }
-                // show attack effect ( ... attack!)
                 break;
             case "recharge":
                 // do recharge first
@@ -206,9 +207,9 @@ public class GameplayPageController {
             buttonEventQueue = new ArrayList<VBox>();
             return new int[][]{{-1},{-1}};
 
-        }else if(cardIndex[0]==0) {
+        }else if(cardIndex[0]==0 && buttonEventQueue.size() == 0) {
             buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
-        }else if(cardIndex[0]==1) {
+        }else if(cardIndex[0]==1 && buttonEventQueue.size() == 1) {
             buttonEventQueue.add(playersCards[cardIndex[0]][cardIndex[1]]);
         }
 
@@ -248,12 +249,6 @@ public class GameplayPageController {
         String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
         String pokemonReturnedLog ;
         if(classType.contains("Attack")) {
-            /*
-            pokemonReturnedLog = (AttackTypePokemon)playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
-                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
-                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getAttackPoint()
-            );
-            */
             AttackTypePokemon attackTypePokemon = (AttackTypePokemon)playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
             pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
                         attackTypePokemon.getAttackPoint()
@@ -265,13 +260,18 @@ public class GameplayPageController {
             pokemonReturnedLog = fairyTypePokemon.fairyTypeLaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]);
 
         }else{
+            // defense and other types of pokemons share the same launchAttack function.
             pokemonReturnedLog = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
                     playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
             );
         }
+
+        // execute the effect and call computer turn.
         if(!pokemonReturnedLog.contains("Not enough energy.")){
             attackEffect(indexPokemonFrom,indexPokemonTo,true);
         }
+
+
         updatePokemonDetailsOnCard();
         return pokemonReturnedLog;
     }
@@ -360,6 +360,38 @@ public class GameplayPageController {
     private void trainEffect(int[] indexPokemon){}
 
     private void saveExit(){ }
+
+    private void computerTurn(){
+        int action = Integer.parseInt(Double.toString(Math.floor(Math.random()*3)));
+        action = 0;
+        int cardAmount = 6;
+        int[] indexPokemonFrom;
+        int[] indexPokemonTo;
+        do {
+            indexPokemonFrom = new int[]{
+                    1,
+                    Integer.parseInt(Double.toString(Math.floor(Math.random() * cardAmount)))
+            };
+            indexPokemonTo = new int[]{
+                    0,
+                    Integer.parseInt(Double.toString(Math.floor(Math.random() * cardAmount)))
+            };
+        }while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() < 0
+        || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() < 0);
+
+        switch(action){
+            case 0:
+                attack(indexPokemonFrom,indexPokemonTo);
+                break;
+            case 1:
+                //recharge
+                break;
+            case 2:
+                //train
+                break;
+        }
+        currentPlayerRound = 0;
+    }
 
     private void revealEffect() {
         new AnimationTimer() {
