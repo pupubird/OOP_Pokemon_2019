@@ -9,7 +9,7 @@ public class DefenseTypePokemon extends PokemonBase {
     }
 
     public String defenseTypeLaunchDefense(int receivedAttackPoint, int resistance){
-        receivedAttackPoint -= resistance;
+        receivedAttackPoint -= receivedAttackPoint - resistance < 0? 0:resistance;
         String returnString = "";
         defense(receivedAttackPoint);
         if (resistance == 0){

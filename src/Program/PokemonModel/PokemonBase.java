@@ -34,7 +34,7 @@ public class PokemonBase {
             DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon)target;
             returnString += "\n" + defenseTypePokemon.defenseTypeLaunchDefense(attackPoint,this.getResistancePoints());
         }else {
-            returnString += "\n" + defense(attackPoint);
+            returnString += "\n" + target.defense(attackPoint);
         }
         expPlus();
 
