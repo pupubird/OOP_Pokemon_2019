@@ -261,6 +261,7 @@ public class GameplayPageController {
         String showCard = String.format("Card Drawn : %s", cardDrawn);
 
         if (recharged) {
+            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
             return String.format("%s\n%s has successfully recharged ! (%s)"
                     , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
         }
@@ -272,7 +273,6 @@ public class GameplayPageController {
 
     }
     private void rechargeEffect(int[] indexPokemon){
-        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -312,12 +312,12 @@ public class GameplayPageController {
             selectedPokemon.expPlus();
             selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
             trainEffect(indexPokemon);
+            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
             return selectedPokemon.getName() + " has increased its experience by 1 !";
         }
 
     }
     private void trainEffect(int[] indexPokemon){
-        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
         new AnimationTimer() {
             @Override
             public void handle(long now) {
