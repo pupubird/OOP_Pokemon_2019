@@ -56,7 +56,7 @@ class ControllerUtil {
             MediaPlayer effectPlayer = new MediaPlayer(effect);
             effectPlayer.setAutoPlay(true);
             // 1
-            effectPlayer.setVolume(0);
+            effectPlayer.setVolume(1);
             effectPlayer.setCycleCount(1);
         }).start();
     }
