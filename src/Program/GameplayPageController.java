@@ -70,8 +70,12 @@ public class GameplayPageController {
                 // show attack effect ( ... attack!)
                 break;
             case "recharge":
+
                 break;
             case "train":
+                String returnedLog = train(cardIndex);
+                currentButtonState = "normal";
+                clearText(returnedLog);
                 // prompt user
                 // do training
                 // show training effect
@@ -238,11 +242,54 @@ public class GameplayPageController {
         }.start();
     }
 
-    private void recharge(int[] indexPokemon){}
+    private void recharge(int[] indexPokemon){
+    }
     private void rechargeEffect(int[] indexPokemon){}
 
-    private void train(int[] indexPokemon){}
-    private void trainEffect(int[] indexPokemon){}
+    private String train(int[] indexPokemon){
+
+        //need round system to validate
+        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+        if (selectedPokemon.getEnergy() < 5) {
+            return selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
+        }
+        else {
+            selectedPokemon.expPlus();
+            selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
+            trainEffect(indexPokemon);
+            return selectedPokemon.getName() + " has increased its experience by 1 !";
+        }
+
+    }
+    private void trainEffect(int[] indexPokemon){
+        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                long secondPassed = 1000000000;
+                    if(lastSecond < 0){
+                        lastSecond = now;
+                    }
+                    if (now - lastSecond < secondPassed * 0.0375) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+                    if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    }
+
+                    if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+
+                    if(now - lastSecond > secondPassed * 0.15){
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                        lastSecond = -1;
+                        this.stop();
+                    }
+                }
+        }.start();
+    }
 
     private void saveExit(){ }
 
