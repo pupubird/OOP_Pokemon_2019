@@ -11,16 +11,12 @@ import java.net.URL;
 public class SettingPageController {
     @FXML
     public VBox SettingPagePane;
-    @FXML
     public ImageView menuLogo;
-    @FXML
     public ImageView returnButtonImage;
-    @FXML
     public Button returnButton;
 
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
-    @FXML
     public void navigateToMenuPage(){
         ControllerUtil.playEffect(clickingEffect);
         new MenuPageController();

@@ -10,16 +10,12 @@ import java.net.URL;
 public class LoadPageController {
     @FXML
     public VBox LoadPagePane;
-    @FXML
     public ImageView menuLogo;
-    @FXML
     public ImageView returnButtonImage;
-    @FXML
     public Button returnButton;
 
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
-    @FXML
     public void returnToMenu(){
         ControllerUtil.playEffect(clickingEffect);
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
