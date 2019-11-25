@@ -7,17 +7,19 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 
-public class LoadPageController {
+
+public class GameOverPageController {
     @FXML
-    public VBox LoadPagePane;
+    public VBox GameOverPagePane;
     public ImageView menuLogo;
     public ImageView returnButtonImage;
     public Button returnButton;
 
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
-    public void returnToMenu(){
+    public void navigateToMenuPage(){
         ControllerUtil.playEffect(clickingEffect);
+        new MenuPageController();
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
 
@@ -25,15 +27,16 @@ public class LoadPageController {
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;
+
         double width = ControllerUtil.getScreenWidth();
         double height = ControllerUtil.getScreenHeight();
 
-        LoadPagePane.setMinWidth(width);
-        LoadPagePane.setMinHeight(height);
-        LoadPagePane.setMaxWidth(width);
-        LoadPagePane.setMaxHeight(height);
+        GameOverPagePane.setMinWidth(width);
+        GameOverPagePane.setMinHeight(height);
+        GameOverPagePane.setMaxWidth(width);
+        GameOverPagePane.setMaxHeight(height);
 
-        LoadPagePane.setStyle(
+        GameOverPagePane.setStyle(
                 "-fx-background-image:url("+getClass().getResource("resources/fxml/assets/background.jpg")+");" +
                         "-fx-background-repeat:no-repeat;" +
                         "-fx-background-size:cover;"
@@ -44,6 +47,5 @@ public class LoadPageController {
         returnButton.setPrefWidth(width/widthRatio);
         returnButton.setPrefHeight(height/heightRatio);
         returnButtonImage.setFitHeight(returnButton.getPrefHeight()*2);
-
     }
 }
