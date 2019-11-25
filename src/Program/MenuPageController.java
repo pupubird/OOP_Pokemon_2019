@@ -44,7 +44,7 @@ public class MenuPageController {
     @FXML
     public void navigateToGamePage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
-        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameConfigPage.fxml"));
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameplayPage.fxml"));
     }
 
     @FXML
