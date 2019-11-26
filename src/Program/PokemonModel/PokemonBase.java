@@ -34,7 +34,7 @@ public class PokemonBase {
                 }
             }
             this.energy -= energyConsume;
-            if(!target.getStatus().equals("normal")){
+            if(!target.getStatus().equals("active")){
                 returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
                 attackPoint *= 2;
             }
@@ -73,7 +73,7 @@ public class PokemonBase {
             }
             this.energy -= energyConsume;
 
-            if(!target.getStatus().equals("normal")){
+            if(!target.getStatus().equals("active")){
                 returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
                 attackPoint *= 2;
             }
