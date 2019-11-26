@@ -135,7 +135,7 @@ public class PokemonBase {
      * @param receivedAttackPoint the attack point
      * @return a log of the process
      */
-    public String defense(int receivedAttackPoint) {
+    String defense(int receivedAttackPoint) {
         this.setHp(this.getHp()- receivedAttackPoint);
         return this.getName()+" damages received "+receivedAttackPoint;
     }
@@ -250,7 +250,6 @@ public class PokemonBase {
     public int getStage() {
         return stage;
     }
-
 
     /**
      * @param stage setter
