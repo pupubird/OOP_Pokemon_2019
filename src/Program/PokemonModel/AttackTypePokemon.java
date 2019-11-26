@@ -17,11 +17,14 @@ public class AttackTypePokemon extends PokemonBase{
         attackPoint = flipCoinIsHead()?attackPoint:1;
         String returnString = "";
         returnString += super.launchAttack(target,attackPoint);
-        if(attackPoint != 1){
-            return returnString + "\n" +"Flipped coin: Head, Attack Type Pokemon Effect Triggered!";
+        if(!returnString.contains("Not enough energy.")) {
+            if (attackPoint != 1) {
+                returnString += "\n" + "Flipped coin: Head, Attack Type Pokemon Effect Triggered!";
+            } else {
+                returnString += "\n" + "Flipped coin: Tail, Attack Type Pokemon Effect Canceled!";
+            }
         }
-        return returnString + "\n" + "Flipped coin: Tail, Attack Type Pokemon Effect Canceled!";
-
+        return returnString;
     }
 
     @Override

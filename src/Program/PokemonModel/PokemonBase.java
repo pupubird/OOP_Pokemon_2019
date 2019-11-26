@@ -61,6 +61,7 @@ public class PokemonBase {
     public String launchAttack(PokemonBase target, int attackPoint){
         int energyConsume = 1;
         String returnString = "";
+
         if(this.energy >0) {
             // check if there is enough energy for critical damage (same type)
             if (this.energy - energyConsume > 2) {
