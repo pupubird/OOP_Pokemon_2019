@@ -822,8 +822,8 @@ public class GameplayPageController {
         SaveExitButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
 
         AttackButton.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
-            currentButtonState = currentButtonState.equals("attack")?"active":"attack";
-            if(currentButtonState.equals("active")){
+            currentButtonState = currentButtonState.equals("attack")?"normal":"attack";
+            if(currentButtonState.equals("normal")){
                 clearText("Click any pokemon to see their stats!");
             }else {
                 clearText("Attack: Please select one of your own pokemon"
@@ -832,8 +832,8 @@ public class GameplayPageController {
             }
         });
         RechargeButton.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
-            currentButtonState = currentButtonState.equals("recharge")?"active":"recharge";
-            if(currentButtonState.equals("active")){
+            currentButtonState = currentButtonState.equals("recharge")?"normal":"recharge";
+            if(currentButtonState.equals("normal")){
                 clearText("Click any pokemon to see their stats!");
             }else {
                 clearText("Recharge: Please select one of your own pokemon"
@@ -842,8 +842,8 @@ public class GameplayPageController {
             }
         });
         TrainButton.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
-            currentButtonState = currentButtonState.equals("train")?"active":"train";
-            if(currentButtonState.equals("active")){
+            currentButtonState = currentButtonState.equals("train")?"normal":"train";
+            if(currentButtonState.equals("normal")){
                 clearText("Click any pokemon to see their stats!");
             }else {
                 clearText("Train: Please select one of your own pokemon"
