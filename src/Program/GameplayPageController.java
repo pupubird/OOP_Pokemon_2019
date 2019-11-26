@@ -486,8 +486,9 @@ public class GameplayPageController {
                     0,
                     (int) Math.floor(Math.random() * cardAmount)
             };
-        } while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() < 0
-                || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() < 0);
+        } while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() <= 0
+                || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() <= 0
+        );
         String returnedLog = "";
         // attack has 50% chance
         if(action >=0 && action <=50){
@@ -614,16 +615,16 @@ public class GameplayPageController {
     private void updateOnGameActionOccured(){
 
         // to check if any player wins
-        int count = 0;
         for (int i = 0; i < playersPokemons.length; i++){
+            int count = 0;
             for(int j = 0; j < playersPokemons[i].length; j++){
                 if(playersPokemons[i][j].getHp()<=0){
                     playersCards[i][j].setVisible(false);
                 }
-                if(playersPokemons[i][j].getHp() < 0){
+                if(playersPokemons[i][j].getHp() <= 0){
                     count ++;
                 }
-                if(count >= playersCards[i].length/2){
+                if(count >= 3){
                     ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameOverPage.fxml"));
                     break;
                 }
