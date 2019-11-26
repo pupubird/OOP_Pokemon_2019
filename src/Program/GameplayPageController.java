@@ -261,6 +261,7 @@ public class GameplayPageController {
                     }
                 }
                 if (doneAnimation) {
+                    updateOnGameActionOccured();
                     if (now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2) {
                         if (currentRoundIsComputer) {
                             clearText("Computer is thinking...");
@@ -360,6 +361,7 @@ public class GameplayPageController {
 
                 if(now - lastSecond > secondPassed * 2) {
                     lastSecond = -1;
+                    updateOnGameActionOccured();
                     this.stop();
                     if(currentRoundIsComputer){
                         computerTurn();
@@ -437,6 +439,7 @@ public class GameplayPageController {
                     if(now - lastSecond > secondPassed * 2) {
                         lastSecond = -1;
                         this.stop();
+                        updateOnGameActionOccured();
                         if(currentRoundIsComputer){
                             computerTurn();
                         }
@@ -586,7 +589,25 @@ public class GameplayPageController {
                 }
             }
         }
+    }
+    private void updateOnGameActionOccured(){
 
+        // to check if any player wins
+        int count = 0;
+        for (int i = 0; i < playersPokemons.length; i++){
+            for(int j = 0; j < playersPokemons[i].length; j++){
+                if(playersPokemons[i][j].getHp()<=0){
+                    playersCards[i][j].setVisible(false);
+                }
+                if(playersPokemons[i][j].getHp() < 0){
+                    count ++;
+                }
+                if(count >= playersCards[i].length/2){
+                    ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameOverPage.fxml"));
+                    break;
+                }
+            }
+        }
     }
     private void updatePokemonDetailsOnCard(){
 
@@ -598,9 +619,6 @@ public class GameplayPageController {
                         +playersPokemons[i][j].getName()
                         +"\n"+ "HP: "+Integer.toString(playersPokemons[i][j].getHp())
                 );
-                if(playersPokemons[i][j].getHp()<=0){
-                    playersCards[i][j].setVisible(false);
-                }
             }
         }
     }

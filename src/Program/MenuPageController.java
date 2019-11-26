@@ -9,51 +9,30 @@ import javafx.scene.layout.*;
 
 
 public class MenuPageController {
+
     @FXML
     public VBox MenuPagePane;
-
-    @FXML
     public ImageView menuLogo;
-
-    @FXML
-    public Button startButton;
-    @FXML
-    public Button settingButton;
-    @FXML
-    public Button loadButton;
-    @FXML
-    public Button exitButton;
-
-    @FXML
-    public ImageView startButtonImage;
-    @FXML
-    public ImageView settingButtonImage;
-    @FXML
-    public ImageView loadButtonImage;
-    @FXML
-    public ImageView exitButtonImage;
+    public Button startButton, settingButton, loadButton, exitButton;
+    public ImageView startButtonImage, settingButtonImage, loadButtonImage, exitButtonImage;
 
     private int vibratePixel = 10;
     private long lastSecond = -1;
 
-    @FXML
     public void navigateToSettingPage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
     }
-    @FXML
     public void navigateToGamePage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameplayPage.fxml"));
     }
 
-    @FXML
     public void navigateToLoadPage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/LoadPage.fxml"));
     }
 
-    @FXML
     public void exitProgram() {
         System.exit(0);
     }
@@ -86,7 +65,6 @@ public class MenuPageController {
         }.start();
     }
 
-    @FXML
     public void initialize() {
         double widthRatio = 10;
         double heightRatio = 24;
