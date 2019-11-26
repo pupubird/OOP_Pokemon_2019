@@ -48,6 +48,10 @@ public class SettingPageController {
     }
 
 
+    /**
+     * @param vol the volume for the background music
+     * @return
+     */
     public String translateVolume(double vol) {
 
         // return volume in percentage format (45%)

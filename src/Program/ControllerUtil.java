@@ -18,6 +18,9 @@ class ControllerUtil {
     static Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
 
+    /**
+     * @param url the URL class of the fxml file, use getClass.getResources().
+     */
     static void switchToScene(URL url) {
 
         Parent root = null;
@@ -44,6 +47,9 @@ class ControllerUtil {
     }
 
 
+    /**
+     * @param location the URL class of the resources file, use getClass.getResources().
+     */
     static void playBackgroundMusic(URL location) {
         // play music
         try {
@@ -61,7 +67,9 @@ class ControllerUtil {
 
     }
 
-
+    /**
+     * @param location the URL class of the resources file, use getClass.getResources().
+     */
     static void playEffect(URL location) {
 
         new Thread(() -> {

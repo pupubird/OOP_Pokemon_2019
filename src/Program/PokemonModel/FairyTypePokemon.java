@@ -2,10 +2,17 @@ package Program.PokemonModel;
 
 public class FairyTypePokemon extends PokemonBase {
 
+    /**
+     * @param name the name of the pokemon
+     */
     public FairyTypePokemon(String name) {
         super(name);
     }
 
+    /**
+     * @param target the target pokemon class
+     * @return a log of all actions performed
+     */
     public String fairyTypeLaunchAttack(PokemonBase target) {
 
         String returnString = "";

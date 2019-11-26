@@ -7,10 +7,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import static Program.ControllerUtil.primaryScreenBounds;
 
-
 public class Main extends Application {
 
 
+    /**
+     * @param primaryStage Stage class that will be used as window
+     * @throws Exception for all exceptions
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
         // the width and height is determined by user screen size
@@ -42,6 +45,9 @@ public class Main extends Application {
 
     }
 
+    /**
+     * @param args environment arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
