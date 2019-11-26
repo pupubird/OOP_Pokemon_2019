@@ -146,43 +146,50 @@ public class GameplayPageController {
                 pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
             }
         }else {
-            String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
-            if (classType.contains("Attack")) {
-                AttackTypePokemon attackTypePokemon = (AttackTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
-                pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
-                        attackTypePokemon.getAttackPoint()
-                );
+            if (playersPokemons[indexPokemonFrom[0]][indexPokemonTo[1]].getHp() <0){
+                if (currentRoundIsComputer) {
+                    pokemonReturnedLog += computerTurn();
+                }
+            }else {
+                String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
+                if (classType.contains("Attack")) {
+                    AttackTypePokemon attackTypePokemon = (AttackTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+                    pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
+                            attackTypePokemon.getAttackPoint()
+                    );
 
-            } else if (classType.contains("Fairy")) {
+                } else if (classType.contains("Fairy")) {
 
-                FairyTypePokemon fairyTypePokemon = (FairyTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
-                pokemonReturnedLog = fairyTypePokemon.fairyTypeLaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]);
+                    FairyTypePokemon fairyTypePokemon = (FairyTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+                    pokemonReturnedLog = fairyTypePokemon.fairyTypeLaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]);
 
-            } else {
-                // defense and other types of pokemons share the same launchAttack function.
-                pokemonReturnedLog = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
-                        playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
-                );
+                } else {
+                    // defense and other types of pokemons share the same launchAttack function.
+                    pokemonReturnedLog = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
+                            playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
+                    );
+                }
+
+                // execute the effect and call computer turn.
+                if (!pokemonReturnedLog.contains("Not enough energy.")) {
+                    if (currentRoundIsComputer) {
+                        updateOnGameRoundDone();
+                    }
+                    currentRoundIsComputer = !currentRoundIsComputer;
+                    attackEffect(indexPokemonFrom, indexPokemonTo);
+                } else if (currentRoundIsComputer) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    pokemonReturnedLog += computerTurn();
+                }
+
+
+                updatePokemonDetailsOnCard();
             }
 
-            // execute the effect and call computer turn.
-            if (!pokemonReturnedLog.contains("Not enough energy.")) {
-                if(currentRoundIsComputer){
-                    updateOnGameRoundDone();
-                }
-                currentRoundIsComputer = !currentRoundIsComputer;
-                attackEffect(indexPokemonFrom, indexPokemonTo);
-            }else if (currentRoundIsComputer) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                pokemonReturnedLog += computerTurn();
-            }
-
-
-            updatePokemonDetailsOnCard();
         }
         return pokemonReturnedLog;
     }
@@ -298,33 +305,37 @@ public class GameplayPageController {
                 pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             }
         }else {
-
             PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+            if (playersPokemons[indexPokemon[0]][indexPokemon[1]].getHp() <0){
+                if (currentRoundIsComputer) {
+                    pokemonReturnedLog += computerTurn();
+                }
+            }else {
+                String cardDrawn = selectedPokemon.generateString(new String[]{"red", "blue", "yellow"});
+                boolean recharged = false;
 
-            String cardDrawn = selectedPokemon.generateString(new String[]{"red", "blue", "yellow"});
-            boolean recharged = false;
+                if (!currentRoundIsComputer) {
+                    updateOnGameRoundDone();
+                }
+                currentRoundIsComputer = !currentRoundIsComputer;
+                if (selectedPokemon.getColor().equals("colorless")
+                        || selectedPokemon.getColor().equals(cardDrawn)) {
+                    rechargeEffect(indexPokemon, true);
+                    selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
+                    recharged = true;
+                }
 
-            if(!currentRoundIsComputer){
-                updateOnGameRoundDone();
-            }
-            currentRoundIsComputer = !currentRoundIsComputer;
-            if (selectedPokemon.getColor().equals("colorless")
-                    || selectedPokemon.getColor().equals(cardDrawn)) {
-                rechargeEffect(indexPokemon, true);
-                selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
-                recharged = true;
-            }
+                String showCard = String.format("Card Drawn : %s", cardDrawn);
 
-            String showCard = String.format("Card Drawn : %s", cardDrawn);
-
-            if (recharged) {
-                ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
-                pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
-                        , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
-            } else {
-                rechargeEffect(indexPokemon, false);
-                pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
-                        , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+                if (recharged) {
+                    ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
+                    pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
+                            , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+                } else {
+                    rechargeEffect(indexPokemon, false);
+                    pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
+                            , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+                }
             }
 
         }
@@ -384,7 +395,11 @@ public class GameplayPageController {
             }else{
                 pokemonReturnedLog += "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             }
-        }else {
+        }else if (playersPokemons[indexPokemon[0]][indexPokemon[1]].getHp() <0){
+            if (currentRoundIsComputer) {
+                pokemonReturnedLog += computerTurn();
+            }
+        } else {
 
             //need round system to validate
             PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
