@@ -101,6 +101,7 @@ public class PokemonBase {
         this.exp += 1;
         if(this.exp == 20){
             stageIncrease();
+
         }
 
     }
