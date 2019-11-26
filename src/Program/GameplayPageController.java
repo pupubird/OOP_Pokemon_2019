@@ -211,6 +211,7 @@ public class GameplayPageController {
             double outputY = currentRoundIsComputer? (targetY+spacing) :- (targetY+spacing);
 
             double pixelPerFrameX = outputX/10, pixelPerFrameY = outputY/10;
+
             @Override
             public void handle(long now) {
                 disableButton(true);
