@@ -625,6 +625,7 @@ public class GameplayPageController {
                     count ++;
                 }
                 if(count >= 3){
+                    ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/gameover.mp3"));
                     ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameOverPage.fxml"));
                     break;
                 }
