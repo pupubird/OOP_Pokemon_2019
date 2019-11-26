@@ -5,7 +5,6 @@ import Program.PokemonModel.DefenseTypePokemon;
 import Program.PokemonModel.FairyTypePokemon;
 import Program.PokemonModel.PokemonBase;
 import javafx.animation.AnimationTimer;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,10 +26,8 @@ public class GameplayPageController {
     public static boolean continueSaveGame = false;
 
     private boolean oneRoundDone = false;
+    private boolean currentRoundIsComputer = false;
     private long lastSecond = -1;
-    private double currentX = 0, currentY = 0;
-    double pixelPerFrameX = 1;
-    double pixelPerFrameY = 1;
     private VBox[][] playersCards;
     private PokemonBase[][] playersPokemons;
     private ImageView[][] playersCardImages;
@@ -38,135 +35,26 @@ public class GameplayPageController {
     private Label[][] pokemonHpCardLabels;
     private Button[] buttons;
     private String currentButtonState;
-    private int currentPlayerRound;
+
     public static ArrayList<VBox> buttonEventQueue = new ArrayList<>();
 
     @FXML
     public SplitPane GameplayPagePane;
-    @FXML
-    public VBox gameplayZonePane;
-    @FXML
-    public HBox player1groupPane;
-    @FXML
-    public HBox player2groupPane;
-
-    @FXML
+    public VBox gameplayZonePane, ActionButtonPane;
+    public HBox player1groupPane, player2groupPane;
     public GridPane PokemonPropertiesPane;
-    @FXML
-    public HBox ButtonHBox;
-    @FXML
-    public HBox ButtonHBox2;
+    public HBox ButtonHBox, ButtonHBox2;
+    public Button AttackButton, RechargeButton, TrainButton, SaveExitButton;
+    public Label pokemonName, type, stage, experience, energy, energyColor, attackPoint, resistancePoint, status;
+    public VBox player1card1, player1card2, player1card3, player1card4, player1card5, player1card6;
+    public VBox player2card1, player2card2, player2card3, player2card4, player2card5, player2card6;
+    public Label player1card1Hp, player1card2Hp, player1card3Hp, player1card4Hp, player1card5Hp, player1card6Hp;
+    public Label player2card1Hp, player2card2Hp, player2card3Hp, player2card4Hp, player2card5Hp, player2card6Hp;
+    public ImageView player1card1Image, player1card2Image, player1card3Image, player1card4Image, player1card5Image, player1card6Image;
+    public ImageView player2card1Image, player2card2Image, player2card3Image, player2card4Image, player2card5Image, player2card6Image;
 
-    @FXML
-    public VBox ActionButtonPane;
-
-    @FXML
-    public Button AttackButton;
-    @FXML
-    public Button RechargeButton;
-    @FXML
-    public Button TrainButton;
-    @FXML
-    public Button SaveExitButton;
-
-    @FXML
-    public Label pokemonName;
-    @FXML
-    public Label type;
-    @FXML
-    public Label stage;
-    @FXML
-    public Label experience;
-    @FXML
-    public Label energy;
-    @FXML
-    public Label energyColor;
-    @FXML
-    public Label attackPoint;
-    @FXML
-    public Label resistancePoint;
-    @FXML
-    public Label status;
-
-    @FXML
-    public VBox player1card1;
-    @FXML
-    public VBox player1card2;
-    @FXML
-    public VBox player1card3;
-    @FXML
-    public VBox player1card4;
-    @FXML
-    public VBox player1card5;
-    @FXML
-    public VBox player1card6;
-
-    @FXML
-    public VBox player2card1;
-    @FXML
-    public VBox player2card2;
-    @FXML
-    public VBox player2card3;
-    @FXML
-    public VBox player2card4;
-    @FXML
-    public VBox player2card5;
-    @FXML
-    public VBox player2card6;
-
-    @FXML
-    public Label player1card1Hp;
-    @FXML
-    public Label player1card2Hp;
-    @FXML
-    public Label player1card3Hp;
-    @FXML
-    public Label player1card4Hp;
-    @FXML
-    public Label player1card5Hp;
-    @FXML
-    public Label player1card6Hp;
-
-    @FXML
-    public Label player2card1Hp;
-    @FXML
-    public Label player2card2Hp;
-    @FXML
-    public Label player2card3Hp;
-    @FXML
-    public Label player2card4Hp;
-    @FXML
-    public Label player2card5Hp;
-    @FXML
-    public Label player2card6Hp;
-
-    @FXML
-    public ImageView player2card1Image;
-    @FXML
-    public ImageView player2card2Image;
-    @FXML
-    public ImageView player2card3Image;
-    @FXML
-    public ImageView player2card4Image;
-    @FXML
-    public ImageView player2card5Image;
-    @FXML
-    public ImageView player2card6Image;
-
-    @FXML
-    public ImageView player1card1Image;
-    @FXML
-    public ImageView player1card2Image;
-    @FXML
-    public ImageView player1card3Image;
-    @FXML
-    public ImageView player1card4Image;
-    @FXML
-    public ImageView player1card5Image;
-    @FXML
-    public ImageView player1card6Image;
-
-    private void buttonEventHandler(int[] cardIndex){
+    private void buttonEventHandler(int[] cardIndex) throws InterruptedException {
+        String returnedLog = "Player 1: \n";
         switch (currentButtonState){
             case "normal":
                 showPokemonDetailOnPane(cardIndex);
@@ -175,20 +63,21 @@ public class GameplayPageController {
                 // verify player chosen his own pokemon, add to event queue for next event calls;
                 int[][] pokemonsIndexes = attackVerify(cardIndex);
                 if(pokemonsIndexes[0][0] != -1){
-                    String returnedLog = attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
+                    returnedLog += attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
                     currentButtonState = "normal";
                     clearText(returnedLog);
-                    System.out.println(returnedLog);
                 }
                 break;
             case "recharge":
-                // do recharge first
-                // show recharge effect
+                returnedLog += recharge(cardIndex);
+                currentButtonState = "normal";
+                clearText(returnedLog);
                 break;
             case "train":
-                // prompt user
-                // do training
-                // show training effect
+                // runs train validation and plays animation is enough energy to train
+                returnedLog += train(cardIndex);
+                currentButtonState = "normal";
+                clearText(returnedLog);
                 break;
             case "saveExit":
                 // prompt to confirm, if yes next page
@@ -268,34 +157,37 @@ public class GameplayPageController {
 
         // execute the effect and call computer turn.
         if(!pokemonReturnedLog.contains("Not enough energy.")){
-            attackEffect(indexPokemonFrom,indexPokemonTo,true);
+            currentRoundIsComputer = !currentRoundIsComputer;
+            attackEffect(indexPokemonFrom,indexPokemonTo);
         }
 
 
         updatePokemonDetailsOnCard();
         return pokemonReturnedLog;
     }
-    private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo, boolean isPlayer1){
+    private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo){
         double spacing = 10;
-        // (nt - nf)(space + width)
-        // (height/2)+space
-        currentX = 0;
-        currentY = 0;
 
 
-        double targetXIndex = indexPokemonTo[1] - indexPokemonFrom[1];
-        double targetXSpaceWidth = spacing + playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].getWidth();
-        double outputX = targetXIndex*targetXSpaceWidth;
-
-        double targetY = (playersCards[indexPokemonFrom[0]][indexPokemonTo[1]].getHeight()/2);
-        double outputY = isPlayer1?(targetY+spacing):-(targetY+spacing);
-
-        pixelPerFrameX = outputX/10;
-        pixelPerFrameY = outputY/10;
 
         new AnimationTimer() {
+            private boolean doneAnimation = false;
+
+            double currentX = 0, currentY = 0;
+            // n = index, t = target, f = from
+            // (nt - nf)(space + width)
+            // (height/2)+space
+            double targetXIndex = indexPokemonTo[1] - indexPokemonFrom[1];
+            double targetXSpaceWidth = spacing + playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].getWidth();
+            double outputX = targetXIndex*targetXSpaceWidth;
+
+            double targetY = (playersCards[indexPokemonFrom[0]][indexPokemonTo[1]].getHeight()/2);
+            double outputY = currentRoundIsComputer? (targetY+spacing) :- (targetY+spacing);
+
+            double pixelPerFrameX = outputX/10, pixelPerFrameY = outputY/10;
             @Override
             public void handle(long now) {
+                disableButton(true);
                 long secondPassed = 1000000000;
                 currentX += pixelPerFrameX;
                 currentY -= pixelPerFrameY;
@@ -303,94 +195,241 @@ public class GameplayPageController {
                 playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].setTranslateX(currentX);
                 playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].setTranslateY(currentY);
 
-                // go forward
-                if(abs(currentX)> abs(outputX) || abs(currentY) > abs(outputY)){
-                    pixelPerFrameX = -pixelPerFrameX;
-                    pixelPerFrameY = -pixelPerFrameY;
-                    oneRoundDone = true;
-                    if(lastSecond < 0){
-                        lastSecond = now;
-                    }
-                    if(playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName().contains("Fairy")){
-                        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/fairyAttack.mp3"));
+                if(!doneAnimation) {
+                    // go forward
+                    if (abs(currentX) > abs(outputX) || abs(currentY) > abs(outputY)) {
+                        pixelPerFrameX = -pixelPerFrameX;
+                        pixelPerFrameY = -pixelPerFrameY;
+                        oneRoundDone = true;
+                        if (lastSecond < 0) {
+                            lastSecond = now;
+                        }
+                        if (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName().contains("Fairy")) {
+                            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/fairyAttack.mp3"));
 
-                    }else {
-                        ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/attack.mp3"));
-                    }
-                // go backward
-                }else if(oneRoundDone){
-                    if(abs(currentX) <= 5 && abs(currentY)<=5){
+                        } else {
+                            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/attack.mp3"));
+                        }
+                        // go backward
+                    } else if (oneRoundDone) {
+                        // blinking effect
+                        if (now - lastSecond < secondPassed * 0.0375) {
+                            playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(false);
+                        }
+                        if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                            playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
+                        }
 
-                        currentY = 0;
-                        pixelPerFrameX = 1;
-                        pixelPerFrameY = 1;
-                        oneRoundDone = false;
-                        lastSecond = -1;
+                        if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                            playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(false);
+                        }
 
-                        // show visible if not
-                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
-                        this.stop();
+                        if (now - lastSecond > secondPassed * 0.15 && now - lastSecond < secondPassed * 0.2) {
+                            playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
+                        }
+
+                        // returned to original position
+                        if (abs(currentX) <= 5 && abs(currentY) <= 5) {
+
+                            currentY = 0;
+                            pixelPerFrameX = 0;
+                            pixelPerFrameY = 0;
+                            oneRoundDone = false;
+                            doneAnimation = true;
+                            // show visible if not
+                            playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
+
+                        }
                     }
                 }
-                // blinking effect
-                if(oneRoundDone) {
+                if (doneAnimation) {
+                    if (now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2) {
+                        if (currentRoundIsComputer) {
+                            clearText("Computer is thinking...");
+                        }
+                    }
+                    if (now - lastSecond > secondPassed * 2) {
+                        lastSecond = -1;
+                        this.stop();
+                        if (currentRoundIsComputer) {
+                            computerTurn();
+                        }
+                        disableButton(false);
+                    }
+                }
+
+            }
+        }.start();
+    }
+
+    private String recharge(int[] indexPokemon){
+
+        // need round system to validate
+        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+        String cardDrawn = selectedPokemon.generateString(new String[]{"red","blue","yellow"});
+        boolean recharged = false;
+
+        currentRoundIsComputer = !currentRoundIsComputer;
+        if (selectedPokemon.getColor().equals("colorless")
+                || selectedPokemon.getColor().equals(cardDrawn)) {
+            rechargeEffect(indexPokemon,true);
+            selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
+            recharged = true;
+        }
+
+        String showCard = String.format("Card Drawn : %s", cardDrawn);
+
+        if (recharged) {
+            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
+            return String.format("%s\n%s has successfully recharged ! (%s)"
+                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+        }
+        else {
+            rechargeEffect(indexPokemon,false);
+            return String.format("%s\n%s failed recharging. (%s)"
+                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+        }
+
+
+    }
+    private void rechargeEffect(int[] indexPokemon, boolean show){
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                long secondPassed = 1000000000;
+                if(lastSecond < 0){
+                    lastSecond = now;
+                    disableButton(true);
+                }
+                if(show) {
                     if (now - lastSecond < secondPassed * 0.0375) {
-                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(false);
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
                     }
                     if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
-                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
                     }
 
                     if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
-                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(false);
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
                     }
 
-                    if(now - lastSecond > secondPassed * 0.15){
-                        playersCards[indexPokemonTo[0]][indexPokemonTo[1]].setVisible(true);
+                    if (now - lastSecond > secondPassed * 0.15 && now - lastSecond < secondPassed * 0.2) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
                     }
+                }
+                if (now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2) {
+                    if (currentRoundIsComputer) {
+                        clearText("Computer is thinking...");
+                    }
+                }
+
+                if(now - lastSecond > secondPassed * 2) {
+                    lastSecond = -1;
+                    this.stop();
+                    if(currentRoundIsComputer){
+                        computerTurn();
+                    }
+                    disableButton(false);
                 }
             }
         }.start();
     }
 
-    private void recharge(int[] indexPokemon){}
-    private void rechargeEffect(int[] indexPokemon){}
+    private String train(int[] indexPokemon){
 
-    private void train(int[] indexPokemon){}
-    private void trainEffect(int[] indexPokemon){}
+        //need round system to validate
+        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+        if (selectedPokemon.getEnergy() < 5) {
+            return selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
+        }
+        else {
+            selectedPokemon.expPlus();
+            selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
+            currentRoundIsComputer = !currentRoundIsComputer;
+            trainEffect(indexPokemon);
+            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
+            return selectedPokemon.getName() + " has increased its experience by 1 !";
+        }
+
+    }
+    private void trainEffect(int[] indexPokemon){
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                long secondPassed = 1000000000;
+                    if(lastSecond < 0){
+                        lastSecond = now;
+                        disableButton(true);
+                    }
+                    if (now - lastSecond < secondPassed * 0.0375) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+                    if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    }
+
+                    if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+
+                    if(now - lastSecond > secondPassed * 0.15 && now - lastSecond < secondPassed * 0.2){
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    }
+
+                    if (now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2) {
+                        if (currentRoundIsComputer) {
+                            clearText("Computer is thinking...");
+                        }
+                    }
+                    if(now - lastSecond > secondPassed * 2) {
+                        lastSecond = -1;
+                        this.stop();
+                        if(currentRoundIsComputer){
+                            computerTurn();
+                        }
+                        disableButton(false);
+                    }
+                }
+        }.start();
+    }
 
     private void saveExit(){ }
 
-    private void computerTurn(){
-        int action = Integer.parseInt(Double.toString(Math.floor(Math.random()*3)));
-        action = 0;
+    private void computerTurn()  {
+        disableButton(true);
+        int action = (int) Math.floor(Math.random() * 100);
         int cardAmount = 6;
         int[] indexPokemonFrom;
         int[] indexPokemonTo;
         do {
             indexPokemonFrom = new int[]{
                     1,
-                    Integer.parseInt(Double.toString(Math.floor(Math.random() * cardAmount)))
+                    (int) Math.floor(Math.random() * cardAmount)
             };
             indexPokemonTo = new int[]{
                     0,
-                    Integer.parseInt(Double.toString(Math.floor(Math.random() * cardAmount)))
+                    (int) Math.floor(Math.random() * cardAmount)
             };
-        }while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() < 0
-        || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() < 0);
+        } while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() < 0
+                || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() < 0);
 
-        switch(action){
-            case 0:
-                attack(indexPokemonFrom,indexPokemonTo);
-                break;
-            case 1:
-                //recharge
-                break;
-            case 2:
-                //train
-                break;
+        String returnedLog = "Computer: \n";
+        // attack has 50% chance
+        if(action >=0 && action <=50){
+            returnedLog += attack(indexPokemonFrom, indexPokemonTo);
+            // recharge has 25% chance
+        }else if(action>50 && action <=75){
+            returnedLog += recharge(indexPokemonFrom);
+            // train has 25% chance
+        }else{
+            returnedLog += train(indexPokemonFrom);
         }
-        currentPlayerRound = 0;
+        clearText(returnedLog);
+        // update pokemon details
+        updatePokemonDetailsOnCard();
+        disableButton(false);
     }
 
     private void revealEffect() {
@@ -616,7 +655,11 @@ public class GameplayPageController {
                 });
                 // on mouse clicked -> show stats
                 card.addEventHandler(MouseEvent.MOUSE_CLICKED,event -> {
-                    buttonEventHandler(getCardIndex(card.getId()));
+                    try {
+                        buttonEventHandler(getCardIndex(card.getId()));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
                 card.setMinWidth(width*pokemonCardWidthRatio);
                 card.setMinHeight(height*pokemonCardHeightRatio);

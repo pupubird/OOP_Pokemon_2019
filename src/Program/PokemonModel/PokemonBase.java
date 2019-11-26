@@ -126,7 +126,7 @@ public class PokemonBase {
         return (int)((Math.random()*(to-from+1))+from);
     }
 
-    private String generateString(String[] generatorList){
+    public String generateString(String[] generatorList){
         int random = (int)(Math.random()*generatorList.length);
         return generatorList[random];
     }
