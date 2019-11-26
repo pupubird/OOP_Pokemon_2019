@@ -9,7 +9,7 @@ public class DefenseTypePokemon extends PokemonBase {
         this.resistancePoints = this.generateInt(5,10);
     }
 
-    public String defenseTypeLaunchDefense(int receivedAttackPoint, int resistance) {
+    String defenseTypeLaunchDefense(int receivedAttackPoint, int resistance) {
 
         resistance = flipCoinIsHead() ? resistance :0;
         receivedAttackPoint -= receivedAttackPoint - resistance < 0 ? receivedAttackPoint : resistance;

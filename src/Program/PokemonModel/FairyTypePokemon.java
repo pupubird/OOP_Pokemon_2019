@@ -9,7 +9,7 @@ public class FairyTypePokemon extends PokemonBase {
     public String fairyTypeLaunchAttack(PokemonBase target) {
 
         String returnString = "";
-        returnString += launchAttack(target);
+        returnString += super.launchAttack(target);;
 
         if ( !returnString.contains("Not enough energy.") ) {
 
@@ -28,11 +28,5 @@ public class FairyTypePokemon extends PokemonBase {
         return returnString;
 
     }
-
-    @Override
-    public String launchAttack(PokemonBase target) {
-        return super.launchAttack(target);
-    }
-
 
 }
