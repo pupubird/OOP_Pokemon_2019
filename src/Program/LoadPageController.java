@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 
 public class LoadPageController {
+
     @FXML
     public VBox LoadPagePane;
     public ImageView menuLogo;
@@ -17,12 +18,16 @@ public class LoadPageController {
 
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
-    public void returnToMenu(){
+
+    public void returnToMenu() {
+
         ControllerUtil.playEffect(clickingEffect);
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
 
-    public void initialize(){
+
+    public void initialize() {
+
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;
@@ -47,4 +52,6 @@ public class LoadPageController {
         returnButtonImage.setFitHeight(returnButton.getPrefHeight()*2);
 
     }
+
+
 }

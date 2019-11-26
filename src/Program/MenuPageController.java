@@ -19,23 +19,29 @@ public class MenuPageController {
     private int vibratePixel = 10;
     private long lastSecond = -1;
 
-    public void navigateToSettingPage(){
+
+    public void navigateToSettingPage() {
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
     }
-    public void navigateToGamePage(){
+
+
+    public void navigateToGamePage() {
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameplayPage.fxml"));
     }
+
 
     public void navigateToLoadPage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/LoadPage.fxml"));
     }
 
+
     public void exitProgram() {
         System.exit(0);
     }
+
 
     private void vibrateEffect() {
         new AnimationTimer() {
@@ -65,7 +71,9 @@ public class MenuPageController {
         }.start();
     }
 
+
     public void initialize() {
+
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;
@@ -102,8 +110,8 @@ public class MenuPageController {
         exitButtonImage.setFitHeight(exitButton.getPrefHeight()*2);
 
         vibrateEffect();
-    }
 
+    }
 
 
 }

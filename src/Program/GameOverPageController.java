@@ -9,6 +9,7 @@ import java.net.URL;
 
 
 public class GameOverPageController {
+
     @FXML
     public VBox GameOverPagePane;
     public ImageView menuLogo;
@@ -17,17 +18,19 @@ public class GameOverPageController {
 
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
-    public void navigateToMenuPage(){
+
+    public void navigateToMenuPage() {
         ControllerUtil.playEffect(clickingEffect);
         new MenuPageController();
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
 
-    public void initialize(){
+
+    public void initialize() {
+
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;
-
         double width = ControllerUtil.getScreenWidth();
         double height = ControllerUtil.getScreenHeight();
 
@@ -47,5 +50,8 @@ public class GameOverPageController {
         returnButton.setPrefWidth(width/widthRatio);
         returnButton.setPrefHeight(height/heightRatio);
         returnButtonImage.setFitHeight(returnButton.getPrefHeight()*2);
+
     }
+
+
 }

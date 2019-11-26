@@ -12,9 +12,11 @@ import java.io.IOException;
 import java.net.URL;
 
 class ControllerUtil {
+
     static Stage stage;
     static MediaPlayer audioplayer;
     static Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
 
     static void switchToScene(URL url){
         Parent root = null;
@@ -26,14 +28,17 @@ class ControllerUtil {
         stage.getScene().setRoot(root);
     }
 
+
     static double getScreenWidth(){
         return primaryScreenBounds.getWidth();
     }
+
 
     static double getScreenHeight(){
         return primaryScreenBounds.getHeight();
 
     }
+
 
     static void playBackgroundMusic(URL location){
         // play music
@@ -50,6 +55,7 @@ class ControllerUtil {
         audioplayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
+
     static void playEffect(URL location){
         new Thread(() -> {
             Media effect = new Media(location.toString());
@@ -60,4 +66,6 @@ class ControllerUtil {
             effectPlayer.setCycleCount(1);
         }).start();
     }
+
+
 }

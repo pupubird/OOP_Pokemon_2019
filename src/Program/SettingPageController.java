@@ -23,6 +23,7 @@ public class SettingPageController {
 
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
+
     public void volumeDown() {
         if (volume > 0.01) {
             volume -= 0.05;
@@ -32,6 +33,7 @@ public class SettingPageController {
             ControllerUtil.audioplayer.setVolume(volume);
         }
     }
+
 
     public void volumeUp() {
         if (volume < 1) {
@@ -43,6 +45,7 @@ public class SettingPageController {
         }
     }
 
+
     public String translateVolume(double vol) {
         // return volume in percentage format (45%)
         String volumePercentage = ((int) Math.round(vol * 100)) + "%";
@@ -50,13 +53,16 @@ public class SettingPageController {
         return volumePercentage;
     }
 
+
     public void navigateToMenuPage(){
         ControllerUtil.playEffect(clickingEffect);
         new MenuPageController();
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
 
+
     public void initialize(){
+
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;
@@ -80,5 +86,8 @@ public class SettingPageController {
         returnButton.setPrefWidth(width/widthRatio);
         returnButton.setPrefHeight(height/heightRatio);
         returnButtonImage.setFitHeight(returnButton.getPrefHeight()*2);
+
     }
+
+
 }
