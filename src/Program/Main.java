@@ -5,10 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import static Program.ControllerUtil.primaryScreenBounds;
 
+
 public class Main extends Application {
+
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         // the width and height is determined by user screen size
@@ -37,6 +39,7 @@ public class Main extends Application {
 
         // play music
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
+
     }
 
     public static void main(String[] args) {
