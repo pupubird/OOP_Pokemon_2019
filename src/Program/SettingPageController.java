@@ -25,27 +25,21 @@ public class SettingPageController {
 
     public void volumeDown() {
         if (volume > 0.01) {
-
             volume -= 0.05;
-
             volumeValueLabel.setText(
                     translateVolume(volume)
             );
             ControllerUtil.audioplayer.setVolume(volume);
-
         }
     }
 
     public void volumeUp() {
         if (volume < 1) {
-
             volume += 0.05;
-
             volumeValueLabel.setText(
                     translateVolume(volume)
             );
             ControllerUtil.audioplayer.setVolume(volume);
-
         }
     }
 
