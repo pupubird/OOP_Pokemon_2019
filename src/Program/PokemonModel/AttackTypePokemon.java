@@ -16,14 +16,6 @@ public class AttackTypePokemon extends PokemonBase{
     public String attackTypelaunchAttack(PokemonBase target, int attackPoint) {
         attackPoint = flipCoinIsHead()?attackPoint:1;
         int energyConsume = 1;
-        // check if there is enough energy for critical damage (same type)
-        if(super.getEnergy() - energyConsume > 2) {
-            if (super.getColor().equals(target.getColor())) {
-                attackPoint = attackPoint*2;
-                energyConsume = 2;
-            }
-            //check if enough energy to  do action
-        }
         super.setEnergy(super.getEnergy() - energyConsume);
         expPlus();
         String returnString = "";
