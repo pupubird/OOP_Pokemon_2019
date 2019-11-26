@@ -67,7 +67,7 @@ public class PokemonBase {
 
         if(this.energy >0) {
             // check if there is enough energy for critical damage (same type)
-            if (this.energy - energyConsume > 2) {
+            if (this.energy - energyConsume >= 2) {
                 if (this.getClass().getName().equals(target.getClass().getName())) {
                     returnString += "\n" + "Same Type, Double attack!";
                     attackPoint *= 2;
