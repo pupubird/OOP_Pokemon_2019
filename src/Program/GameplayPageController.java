@@ -137,12 +137,13 @@ public class GameplayPageController {
     private String attack(int[] indexPokemonFrom, int[] indexPokemonTo){
 
 
-        String pokemonReturnedLog;
+        String pokemonReturnedLog="";
         if(/*if it is idle*/ (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()>0)){
-            pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
             buttonEventQueue = new ArrayList<VBox>();
             if (currentRoundIsComputer) {
                 computerTurn();
+            }else{
+                pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
             }
         }else {
             String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
@@ -285,7 +286,6 @@ public class GameplayPageController {
 
         String pokemonReturnedLog = "";
         if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
-            pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             buttonEventQueue = new ArrayList<VBox>();
             if (currentRoundIsComputer) {
                 try {
@@ -294,6 +294,8 @@ public class GameplayPageController {
                     e.printStackTrace();
                 }
                 computerTurn();
+            }else{
+                pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             }
         }else {
 
@@ -376,10 +378,11 @@ public class GameplayPageController {
 
         String pokemonReturnedLog = "";
         if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
-            pokemonReturnedLog += "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             buttonEventQueue = new ArrayList<VBox>();
             if (currentRoundIsComputer) {
                 computerTurn();
+            }else{
+                pokemonReturnedLog += "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             }
         }else {
 

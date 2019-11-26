@@ -19,17 +19,12 @@ public class AttackTypePokemon extends PokemonBase{
         super.setEnergy(super.getEnergy() - energyConsume);
         expPlus();
         String returnString = "";
-        returnString += launchAttack(target,attackPoint);
+        returnString += super.launchAttack(target,attackPoint);
         if(attackPoint != 1){
             return returnString + "\n" +"Flipped coin: Head, Attack Type Pokemon Effect Triggered!";
         }
         return returnString + "\n" + "Flipped coin: Tail, Attack Type Pokemon Effect Canceled!";
 
-    }
-
-    @Override
-    public String launchAttack(PokemonBase target,int attackPoint){
-        return super.launchAttack(target,attackPoint);
     }
 
     @Override
