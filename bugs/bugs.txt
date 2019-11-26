@@ -5,7 +5,7 @@ Bugs
 
 2. When a Pokemon attacks with insufficient energy, they continue to lose energy and gain experience. 
 
-3. Poisoned / paralyzed Pokemon can still attack.
+3. Poisoned / paralyzed Pokemon can still attack. [SOLVED]
 
 4. An attacking Pokemon always loses 2 energy instead of only when weakness is valid.
 
