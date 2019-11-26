@@ -19,7 +19,7 @@ public class GameOverPageController {
 
     public void navigateToMenuPage(){
         ControllerUtil.playEffect(clickingEffect);
-        new MenuPageController();
+        ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
 
