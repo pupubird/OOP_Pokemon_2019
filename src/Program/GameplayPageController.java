@@ -166,8 +166,8 @@ public class GameplayPageController {
 
             // execute the effect and call computer turn.
             if (!pokemonReturnedLog.contains("Not enough energy.")) {
-                if(!currentRoundIsComputer){
-                    updatePokemonIdleState();
+                if(currentRoundIsComputer){
+                    updateOnGameRoundDone();
                 }
                 currentRoundIsComputer = !currentRoundIsComputer;
                 attackEffect(indexPokemonFrom, indexPokemonTo);
@@ -302,7 +302,7 @@ public class GameplayPageController {
             boolean recharged = false;
 
             if(!currentRoundIsComputer){
-                updatePokemonIdleState();
+                updateOnGameRoundDone();
             }
             currentRoundIsComputer = !currentRoundIsComputer;
             if (selectedPokemon.getColor().equals("colorless")
@@ -392,8 +392,8 @@ public class GameplayPageController {
             } else {
                 selectedPokemon.expPlus();
                 selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
-                if(!currentRoundIsComputer){
-                    updatePokemonIdleState();
+                if(currentRoundIsComputer){
+                    updateOnGameRoundDone();
                 }
                 currentRoundIsComputer = !currentRoundIsComputer;
                 trainEffect(indexPokemon);
@@ -532,18 +532,7 @@ public class GameplayPageController {
         //if there is any promptText
         energy.setText(promptText);
     }
-    private void updatePokemonIdleState(){
-        for(PokemonBase[] player: playersPokemons){
-            for(PokemonBase pokemon : player ){
-                if(pokemon.getEffectLeftRound()>0) {
-                    pokemon.setEffectLeftRound(pokemon.getEffectLeftRound() - 1);
-                }
-                if(pokemon.getEffectLeftRound() == 0){
-                    pokemon.setStatus("normal");
-                }
-            }
-        }
-    }
+
     private int[] getCardIndex(String cardID){
         int[] playerCard = new int[3];
         String[] playerCardIndex;
@@ -584,6 +573,19 @@ public class GameplayPageController {
         pokemonDetailsPaneLabels[6].setText("Attack Point: "+attackPoints);
         pokemonDetailsPaneLabels[7].setText("Resistance Point: "+resistancePoints);
         pokemonDetailsPaneLabels[8].setText("Status: "+playersPokemons[cardIndex[0]][cardIndex[1]].getStatus());
+
+    }
+    private void updateOnGameRoundDone(){
+        for(PokemonBase[] player: playersPokemons){
+            for(PokemonBase pokemon : player ){
+                if(pokemon.getEffectLeftRound()>0) {
+                    pokemon.setEffectLeftRound(pokemon.getEffectLeftRound() - 1);
+                }
+                if(pokemon.getEffectLeftRound() == 0){
+                    pokemon.setStatus("normal");
+                }
+            }
+        }
 
     }
     private void updatePokemonDetailsOnCard(){
