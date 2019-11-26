@@ -662,16 +662,15 @@ public class GameplayPageController {
     }
     private void initializePokemonCardImage(String[][] playersCardImagesString){
         // input is specified = game is load from previous game
-        for(int i = 0; i < playersCardImages.length; i++){
-            for(int j = 0; j < playersCardImages[i].length;j++){
+        for(int i = 0; i < playersCardImages.length; i++) {
+            for (int j = 0; j < playersCardImages[i].length; j++) {
                 playersCardImages[i][j].setImage(
                         new Image(getClass().getResource("resources/fxml/assets/pokemon"
-                                +playersCardImagesString[i][j]+".png").toString())
+                                + playersCardImagesString[i][j] + ".png").toString())
                 );
 
             }
         }
-
     }
     private void initializePlayersPokemons(){
         // generate pokemon if not load saved game
@@ -883,7 +882,7 @@ public class GameplayPageController {
         player2groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
     }
     public void initialize(){
-        currentButtonState = "active";
+        currentButtonState = "normal";
 
         this.initializePlayersPokemons();
         this.initializePlayersCardVBox();
@@ -893,7 +892,6 @@ public class GameplayPageController {
         this.initializeButtons();
         this.initializePane();
 
-        clearText("Generating your pokemons!");
         if(continueSaveGame) {
             // pass the information of the pokemon inside
             initializePokemonCardImage();
@@ -905,5 +903,6 @@ public class GameplayPageController {
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/battle.mp3"));
         updatePokemonDetailsOnCard();
         revealEffect();
+        clearText("Click any pokemon to view their stats/ click any button to perform action!");
     }
 }
