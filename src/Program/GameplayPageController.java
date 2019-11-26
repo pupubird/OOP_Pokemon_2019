@@ -93,6 +93,7 @@ public class GameplayPageController {
                 || (cardIndex[0]==1 && buttonEventQueue.size() == 0)) {
 
             clearText("Please re-choose the pokemon!");
+
             buttonEventQueue = new ArrayList<VBox>();
             return new int[][]{{-1},{-1}};
 
@@ -135,40 +136,54 @@ public class GameplayPageController {
     }
     private String attack(int[] indexPokemonFrom, int[] indexPokemonTo){
 
-        String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
-        String pokemonReturnedLog ;
-        if(classType.contains("Attack")) {
-            AttackTypePokemon attackTypePokemon = (AttackTypePokemon)playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
-            pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
+
+        String pokemonReturnedLog;
+        if(/*if it is idle*/ (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()>0)){
+            pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
+            buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                computerTurn();
+            }
+        }else {
+            String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
+            if (classType.contains("Attack")) {
+                AttackTypePokemon attackTypePokemon = (AttackTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+                pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
                         attackTypePokemon.getAttackPoint()
-                    );
+                );
 
-        }else if(classType.contains("Fairy")){
+            } else if (classType.contains("Fairy")) {
 
-            FairyTypePokemon fairyTypePokemon= (FairyTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
-            pokemonReturnedLog = fairyTypePokemon.fairyTypeLaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]);
+                FairyTypePokemon fairyTypePokemon = (FairyTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+                pokemonReturnedLog = fairyTypePokemon.fairyTypeLaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]);
 
-        }else{
-            // defense and other types of pokemons share the same launchAttack function.
-            pokemonReturnedLog = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
-                    playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
-            );
+            } else {
+                // defense and other types of pokemons share the same launchAttack function.
+                pokemonReturnedLog = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
+                        playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
+                );
+            }
+
+            // execute the effect and call computer turn.
+            if (!pokemonReturnedLog.contains("Not enough energy.")) {
+                currentRoundIsComputer = !currentRoundIsComputer;
+                attackEffect(indexPokemonFrom, indexPokemonTo);
+            }else if (currentRoundIsComputer) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                computerTurn();
+            }
+
+
+            updatePokemonDetailsOnCard();
         }
-
-        // execute the effect and call computer turn.
-        if(!pokemonReturnedLog.contains("Not enough energy.")){
-            currentRoundIsComputer = !currentRoundIsComputer;
-            attackEffect(indexPokemonFrom,indexPokemonTo);
-        }
-
-
-        updatePokemonDetailsOnCard();
         return pokemonReturnedLog;
     }
     private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo){
         double spacing = 10;
-
-
 
         new AnimationTimer() {
             private boolean doneAnimation = false;
@@ -264,34 +279,48 @@ public class GameplayPageController {
 
     private String recharge(int[] indexPokemon){
 
-        // need round system to validate
-        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+        String pokemonReturnedLog = "";
+        if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
+            pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
+            buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                computerTurn();
+            }
+        }else {
 
-        String cardDrawn = selectedPokemon.generateString(new String[]{"red","blue","yellow"});
-        boolean recharged = false;
+            // need round system to validate
+            PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
 
-        currentRoundIsComputer = !currentRoundIsComputer;
-        if (selectedPokemon.getColor().equals("colorless")
-                || selectedPokemon.getColor().equals(cardDrawn)) {
-            rechargeEffect(indexPokemon,true);
-            selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
-            recharged = true;
+            String cardDrawn = selectedPokemon.generateString(new String[]{"red", "blue", "yellow"});
+            boolean recharged = false;
+
+            currentRoundIsComputer = !currentRoundIsComputer;
+            if (selectedPokemon.getColor().equals("colorless")
+                    || selectedPokemon.getColor().equals(cardDrawn)) {
+                rechargeEffect(indexPokemon, true);
+                selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
+                recharged = true;
+            }
+
+            String showCard = String.format("Card Drawn : %s", cardDrawn);
+
+            if (recharged) {
+                ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
+                pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
+                        , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+            } else {
+                rechargeEffect(indexPokemon, false);
+                pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
+                        , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+            }
+
         }
-
-        String showCard = String.format("Card Drawn : %s", cardDrawn);
-
-        if (recharged) {
-            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
-            return String.format("%s\n%s has successfully recharged ! (%s)"
-                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
-        }
-        else {
-            rechargeEffect(indexPokemon,false);
-            return String.format("%s\n%s failed recharging. (%s)"
-                    , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
-        }
-
-
+        return pokemonReturnedLog;
     }
     private void rechargeEffect(int[] indexPokemon, boolean show){
         new AnimationTimer() {
@@ -338,20 +367,33 @@ public class GameplayPageController {
 
     private String train(int[] indexPokemon){
 
-        //need round system to validate
-        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+        String pokemonReturnedLog = "";
+        if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
+            pokemonReturnedLog += "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
+            buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                computerTurn();
+            }
+        }else {
 
-        if (selectedPokemon.getEnergy() < 5) {
-            return selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
+            //need round system to validate
+            PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+            if (selectedPokemon.getEnergy() < 5) {
+                pokemonReturnedLog += selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
+                if (currentRoundIsComputer) {
+                    computerTurn();
+                }
+            } else {
+                selectedPokemon.expPlus();
+                selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
+                currentRoundIsComputer = !currentRoundIsComputer;
+                trainEffect(indexPokemon);
+                ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
+                pokemonReturnedLog += selectedPokemon.getName() + " has increased its experience by 1 !";
+            }
         }
-        else {
-            selectedPokemon.expPlus();
-            selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
-            currentRoundIsComputer = !currentRoundIsComputer;
-            trainEffect(indexPokemon);
-            ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
-            return selectedPokemon.getName() + " has increased its experience by 1 !";
-        }
+        return  pokemonReturnedLog;
 
     }
     private void trainEffect(int[] indexPokemon){
