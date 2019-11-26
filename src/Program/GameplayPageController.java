@@ -141,7 +141,7 @@ public class GameplayPageController {
         if(/*if it is idle*/ (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()>0)){
             buttonEventQueue = new ArrayList<VBox>();
             if (currentRoundIsComputer) {
-                computerTurn();
+                pokemonReturnedLog += computerTurn();
             }else{
                 pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
             }
@@ -178,7 +178,7 @@ public class GameplayPageController {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                computerTurn();
+                pokemonReturnedLog += computerTurn();
             }
 
 
@@ -293,7 +293,7 @@ public class GameplayPageController {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                computerTurn();
+                pokemonReturnedLog += computerTurn();
             }else{
                 pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             }
@@ -380,7 +380,7 @@ public class GameplayPageController {
         if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
             buttonEventQueue = new ArrayList<VBox>();
             if (currentRoundIsComputer) {
-                computerTurn();
+                pokemonReturnedLog += computerTurn();
             }else{
                 pokemonReturnedLog += "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             }
@@ -392,7 +392,9 @@ public class GameplayPageController {
             if (selectedPokemon.getEnergy() < 5) {
                 pokemonReturnedLog += selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
                 if (currentRoundIsComputer) {
-                    computerTurn();
+                    pokemonReturnedLog += computerTurn();
+                    pokemonReturnedLog.replaceAll("Computer: \n","");
+                    pokemonReturnedLog = "Computer: "+pokemonReturnedLog;
                 }
             } else {
                 selectedPokemon.expPlus();
@@ -407,6 +409,7 @@ public class GameplayPageController {
 
             }
         }
+
         return  pokemonReturnedLog;
 
     }
@@ -454,7 +457,7 @@ public class GameplayPageController {
 
     private void saveExit(){ }
 
-    private void computerTurn()  {
+    private String computerTurn()  {
         disableButton(true);
         int action = (int) Math.floor(Math.random() * 100);
         int cardAmount = 6;
@@ -471,11 +474,11 @@ public class GameplayPageController {
             };
         } while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() < 0
                 || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() < 0);
-
-        String returnedLog = "Computer: \n";
+        String returnedLog = "";
         // attack has 50% chance
         if(action >=0 && action <=50){
             returnedLog += attack(indexPokemonFrom, indexPokemonTo);
+
             // recharge has 25% chance
         }else if(action>50 && action <=75){
             returnedLog += recharge(indexPokemonFrom);
@@ -483,10 +486,11 @@ public class GameplayPageController {
         }else{
             returnedLog += train(indexPokemonFrom);
         }
-        clearText(returnedLog);
+        clearText("Computer: \n"+returnedLog);
         // update pokemon details
         updatePokemonDetailsOnCard();
         disableButton(false);
+        return returnedLog;
     }
 
     private void revealEffect() {
