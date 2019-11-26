@@ -23,10 +23,8 @@ import static java.lang.Math.abs;
 
 public class GameplayPageController {
 
-    public static boolean continueSaveGame = false;
-    private boolean oneRoundDone = false;
     private boolean currentRoundIsComputer = false;
-    private long lastSecond = -1;
+    public static ArrayList<VBox> buttonEventQueue = new ArrayList<>();
     private VBox[][] playersCards;
     private PokemonBase[][] playersPokemons;
     private ImageView[][] playersCardImages;
@@ -34,7 +32,6 @@ public class GameplayPageController {
     private Label[][] pokemonHpCardLabels;
     private Button[] buttons;
     private String currentButtonState;
-    public static ArrayList<VBox> buttonEventQueue = new ArrayList<>();
 
     @FXML
     public SplitPane GameplayPagePane;
@@ -67,9 +64,9 @@ public class GameplayPageController {
 
             case "attack":
                 // verify player chosen his own pokemon, add to event queue for next event calls;
-                int[][] pokemonsIndexes = attackVerify(cardIndex);
-                if(pokemonsIndexes[0][0] != -1){
-                    returnedLog += attack( pokemonsIndexes[0] , pokemonsIndexes[1] );
+                int[][] pokemonIndexes = attackVerify(cardIndex);
+                if(pokemonIndexes[0][0] != -1){
+                    returnedLog += attack( pokemonIndexes[0] , pokemonIndexes[1] );
                     currentButtonState = "normal";
                     clearText(returnedLog);
                 }
@@ -88,7 +85,7 @@ public class GameplayPageController {
                 break;
 
             case "saveExit":
-                // prompt to confirm, if yes next page
+                saveExit();
                 break;
 
         }
@@ -109,7 +106,7 @@ public class GameplayPageController {
 
             clearText("Please re-choose the pokemon!");
 
-            buttonEventQueue = new ArrayList<VBox>();
+            buttonEventQueue = new ArrayList<>();
             return new int[][]{{-1},{-1}} ;
 
         } else if ( cardIndex[0] == 0 && buttonEventQueue.size() == 0) {
@@ -144,7 +141,7 @@ public class GameplayPageController {
 
                     disableButton(false);
                     // event queue cycle done, back to status quo
-                    buttonEventQueue = new ArrayList<VBox>();
+                    buttonEventQueue = new ArrayList<>();
 
                 }
             }
@@ -167,7 +164,7 @@ public class GameplayPageController {
 
         if (/*if it is idle*/ attackingPokemon.getEffectLeftRound() > 0  ) {
 
-            buttonEventQueue = new ArrayList<VBox>();
+            buttonEventQueue = new ArrayList<>();
             // if computer get to here but it faces this error, call the function recursively again until it success.
             if (currentRoundIsComputer) {
                 pokemonReturnedLog += computerTurn();
@@ -251,8 +248,8 @@ public class GameplayPageController {
             private boolean doneAnimation = false;
             double currentX = 0, currentY = 0;
             // n = index, t = target, f = from
-            // (nt - nf)(space + width)
-            // (height/2)+space
+            // outputX = (nt - nf)*(space + width)
+            // outputY = (height/2)+space
             double targetXIndex = indexPokemonTo[1] - indexPokemonFrom[1];
             double targetXSpaceWidth = spacing + attackingCard.getWidth();
             double outputX = targetXIndex * targetXSpaceWidth;
@@ -263,6 +260,8 @@ public class GameplayPageController {
             double pixelPerFrameX = outputX/10, pixelPerFrameY = outputY/10;
 
 
+            private boolean oneRoundDone = false;
+            private long lastSecond = -1;
             @Override
             public void handle(long now) {
 
@@ -373,7 +372,7 @@ public class GameplayPageController {
 
         if(/*if it is idle*/ selectedPokemon.getEffectLeftRound() > 0 ) {
 
-            buttonEventQueue = new ArrayList<VBox>();
+            buttonEventQueue = new ArrayList<>();
 
             if ( currentRoundIsComputer ) {
 
@@ -445,6 +444,7 @@ public class GameplayPageController {
     private void rechargeEffect(int[] indexPokemon, boolean show) {
 
         new AnimationTimer() {
+            private long lastSecond = -1;
             @Override
             public void handle(long now) {
 
@@ -509,7 +509,7 @@ public class GameplayPageController {
 
         if (/*if it is idle*/ selectedPokemon.getEffectLeftRound() > 0 ) {
 
-            buttonEventQueue = new ArrayList<VBox>();
+            buttonEventQueue = new ArrayList<>();
 
             if (currentRoundIsComputer) {
                 pokemonReturnedLog += computerTurn();
@@ -563,6 +563,7 @@ public class GameplayPageController {
 
         new AnimationTimer() {
 
+            private long lastSecond = -1;
             @Override
             public void handle(long now) {
 
@@ -606,7 +607,10 @@ public class GameplayPageController {
     }
 
 
-    private void saveExit(){ }
+    private void saveExit(){
+        ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
+        ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
+    }
 
 
     private String computerTurn() {
@@ -661,6 +665,7 @@ public class GameplayPageController {
 
         new AnimationTimer() {
 
+            private long lastSecond = -1;
             @Override
             public void handle(long now) {
 
@@ -850,23 +855,6 @@ public class GameplayPageController {
         }
     }
 
-
-    private void initializePokemonCardImage(String[][] playersCardImagesString) {
-
-        // input is specified = game is load from previous game
-        for ( int i = 0; i < playersCardImages.length; i++ ) {
-            for ( int j = 0; j < playersCardImages[i].length; j++) {
-
-                playersCardImages[i][j].setImage(
-                        new Image(getClass().getResource("resources/fxml/assets/pokemon"
-                                + playersCardImagesString[i][j] + ".png").toString())
-                );
-
-            }
-        }
-    }
-
-
     private void initializePlayersPokemons() {
 
         // generate pokemon if not load saved game
@@ -944,32 +932,21 @@ public class GameplayPageController {
         double pokemonCardWidthRatio = 0.142;
         double pokemonCardHeightRatio = 0.3;
 
-        for ( int i = 0; i < playersCards.length; i++ ) {
-
-            for ( int j = 0; j < playersCards[i].length; j++ ) {
+        for ( int i = 0; i < playersCards.length; i++ )
+            for (int j = 0; j < playersCards[i].length; j++) {
 
                 VBox card = playersCards[i][j];
                 // on mouse hover enter -> hoverEffect
                 int a = i;
                 int b = j;
 
-                card.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        pokemonHpCardLabels[a][b].setTextFill(Color.RED);
-                    }
-                });
+                card.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> pokemonHpCardLabels[a][b].setTextFill(Color.RED));
 
                 // on mouse hover exit -> remove hoverEffect
-                card.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        pokemonHpCardLabels[a][b].setTextFill(Color.BLACK);
-                    }
-                });
+                card.addEventHandler(MouseEvent.MOUSE_EXITED, event -> pokemonHpCardLabels[a][b].setTextFill(Color.BLACK));
 
                 // on mouse clicked -> show stats
-                card.addEventHandler(MouseEvent.MOUSE_CLICKED,event -> {
+                card.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     try {
                         buttonEventHandler(getCardIndex(card.getId()));
                     } catch (InterruptedException e) {
@@ -977,10 +954,9 @@ public class GameplayPageController {
                     }
                 });
 
-                card.setMinWidth(width*pokemonCardWidthRatio);
-                card.setMinHeight(height*pokemonCardHeightRatio);
+                card.setMinWidth(width * pokemonCardWidthRatio);
+                card.setMinHeight(height * pokemonCardHeightRatio);
             }
-        }
     }
 
 
@@ -1134,14 +1110,7 @@ public class GameplayPageController {
         this.initializeLabels();
         this.initializeButtons();
         this.initializePane();
-
-        if( continueSaveGame ) {
-            // pass the information of the pokemon inside
-            initializePokemonCardImage();
-        } else{
-            // generate it instead
-            initializePokemonCardImage();
-        }
+        this.initializePokemonCardImage();
         // play music
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/battle.mp3"));
         updatePokemonDetailsOnCard();

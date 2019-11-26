@@ -11,7 +11,7 @@ public class PokemonBase {
     private String color, status, name;
 
 
-    public PokemonBase(String name) {
+    PokemonBase(String name) {
         this.name = name;
         this.hp = generateInt(50, 80);
         this.energy = generateInt(20, 50);
@@ -67,7 +67,7 @@ public class PokemonBase {
 
 
         } else {
-            GameplayPageController.buttonEventQueue = new ArrayList<VBox>();
+            GameplayPageController.buttonEventQueue = new ArrayList<>();
             returnString += "Not enough energy.";
         }
         return returnString;
@@ -76,7 +76,7 @@ public class PokemonBase {
 
     // self defined attack point, mainly used in attack type pokemon, but possible
     // to use for future item card attack
-    public String launchAttack(PokemonBase target, int attackPoint){
+    String launchAttack(PokemonBase target, int attackPoint){
         int energyConsume = 1;
         String returnString = "";
 
@@ -121,7 +121,7 @@ public class PokemonBase {
 
 
     public String defense(int receivedAttackPoint) {
-        this.hp -= receivedAttackPoint;
+        this.setHp(this.getHp()- receivedAttackPoint);
         return this.getName()+" damages received "+receivedAttackPoint;
     }
 
@@ -144,26 +144,16 @@ public class PokemonBase {
     }
 
 
-    public void setPoisoned() {
+    void setPoisoned() {
         this.setStatus("poisoned");
         this.setEffectLeftRound(this.getEffectLeftRound()+1);
     }
 
 
-    public void setParalysed() {
+    void setParalysed() {
         this.setStatus("paralysed");
         this.setEffectLeftRound(this.getEffectLeftRound()+2);
     }
-
-    // for controller class to update every round
-    public void updateStateEffectLeft() {
-        if ( this.effectLeftRound == 0 ) {
-            this.status = "active";
-        } else {
-            this.effectLeftRound -=1;
-        }
-    }
-
 
     public int generateInt(int from, int to) {
         return (int)((Math.random()*(to-from+1))+from);
@@ -176,7 +166,7 @@ public class PokemonBase {
     }
 
 
-    public boolean flipCoinIsHead() {
+    boolean flipCoinIsHead() {
         return Math.floor(Math.random()*2)==1;
     }
 
@@ -196,8 +186,8 @@ public class PokemonBase {
     }
 
 
-    public void setHp(int hp) {
-        this.hp = hp;
+    private void setHp(int newHp) {
+        this.hp = newHp;
     }
 
 
