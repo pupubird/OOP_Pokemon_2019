@@ -95,8 +95,7 @@ public class GameplayPageController {
         // update pokemon details
         updatePokemonDetailsOnCard();
     }
-
-
+    private int[][] attackVerify(int[] cardIndex){
         /*
         this is to check if user click opponent pokemon (in the first click),
         user should choose his own pokemon first to perform attack.
