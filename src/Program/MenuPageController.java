@@ -8,6 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 
+/**
+ * Menu Page Controller
+ */
 public class MenuPageController {
 
     // initialized variables with fx:id in fxml file
@@ -46,26 +49,23 @@ public class MenuPageController {
             @Override
             public void handle(long now) {
                 // for non-blocking javafx thread, create a new runnable.
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // initialize
-                        if (lastSecond == -1) {
-                            lastSecond = now;
-                        }
+                Platform.runLater(() -> {
+                    // initialize
+                    if (lastSecond == -1) {
+                        lastSecond = now;
+                    }
 
-                        if (vibratePixel > 5) {
-                            vibratePixel = -5;
-                        }
-                        // update every 0.5s
-                        if (now - lastSecond >= 500000000) {
-                            startButtonImage.setTranslateY(startButtonImage.getTranslateY() + vibratePixel);
-                            settingButtonImage.setTranslateY(settingButtonImage.getTranslateY() + vibratePixel);
-                            loadButtonImage.setTranslateY(loadButtonImage.getTranslateY() + vibratePixel);
-                            exitButtonImage.setTranslateY(exitButtonImage.getTranslateY() + vibratePixel);
-                            vibratePixel += 10;
-                            lastSecond = now;
-                        }
+                    if (vibratePixel > 5) {
+                        vibratePixel = -5;
+                    }
+                    // update every 0.5s
+                    if (now - lastSecond >= 500000000) {
+                        startButtonImage.setTranslateY(startButtonImage.getTranslateY() + vibratePixel);
+                        settingButtonImage.setTranslateY(settingButtonImage.getTranslateY() + vibratePixel);
+                        loadButtonImage.setTranslateY(loadButtonImage.getTranslateY() + vibratePixel);
+                        exitButtonImage.setTranslateY(exitButtonImage.getTranslateY() + vibratePixel);
+                        vibratePixel += 10;
+                        lastSecond = now;
                     }
                 });
             }

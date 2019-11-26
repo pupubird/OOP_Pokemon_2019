@@ -5,7 +5,6 @@ import Program.PokemonModel.DefenseTypePokemon;
 import Program.PokemonModel.FairyTypePokemon;
 import Program.PokemonModel.PokemonBase;
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,6 +20,9 @@ import java.util.*;
 import static java.lang.Math.abs;
 
 
+/**
+ * Game play page controller
+ */
 public class GameplayPageController {
 
     private boolean currentRoundIsComputer = false;
@@ -48,12 +50,16 @@ public class GameplayPageController {
     public ImageView player1card1Image, player1card2Image, player1card3Image, player1card4Image, player1card5Image, player1card6Image;
     public ImageView player2card1Image, player2card2Image, player2card3Image, player2card4Image, player2card5Image, player2card6Image;
 
+
     /*
     when user click something, it will be added into the event queue
     so that the history of clicked event will be recorded for animation to know
     what did the user clicked before the current click.
      */
-    private void buttonEventHandler(int[] cardIndex) throws InterruptedException {
+    /**
+     * @param cardIndex, the clicked card's position in the array
+     */
+    private void buttonEventHandler(int[] cardIndex)  {
 
         String returnedLog = "Player 1: \n";
         // which action is clicked
@@ -92,6 +98,10 @@ public class GameplayPageController {
         // update pokemon details
         updatePokemonDetailsOnCard();
     }
+    /**
+     * @param cardIndex, the clicked card's position in the array
+     * @return the clicked player's card index and the clicked target (opponent) card's index on the array.
+     */
     private int[][] attackVerify(int[] cardIndex){
         /*
         this is to check if user click opponent pokemon (in the first click),
@@ -155,6 +165,11 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param indexPokemonFrom, the player card.
+     * @param indexPokemonTo, the attack target card.
+     * @return a log for all the actions performed.
+     */
     private String attack(int[] indexPokemonFrom, int[] indexPokemonTo) {
 
         String pokemonReturnedLog="";
@@ -188,9 +203,7 @@ public class GameplayPageController {
                 if ( classType.contains("Attack") ) {
 
                     AttackTypePokemon attackTypePokemon = (AttackTypePokemon) attackingPokemon;
-                    pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(receivingPokemon,
-                            attackTypePokemon.getAttackPoint()
-                    );
+                    pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(receivingPokemon);
 
                 } else if (classType.contains("Fairy")) {
 
@@ -235,6 +248,10 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param indexPokemonFrom, the player card.
+     * @param indexPokemonTo, the attack target card.
+     */
     private void attackEffect(int[] indexPokemonFrom, int[] indexPokemonTo) {
 
         VBox attackingCard = playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]];
@@ -364,6 +381,10 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param indexPokemon, the index of desire pokemon to recharge in the array
+     * @return a log for all the actions performed.
+     */
     private String recharge(int[] indexPokemon) {
 
         String pokemonReturnedLog = "";
@@ -441,6 +462,10 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param indexPokemon, the index of desire pokemon to recharge in the array
+     * @param show, show the animation if recharge success.
+     */
     private void rechargeEffect(int[] indexPokemon, boolean show) {
 
         new AnimationTimer() {
@@ -502,6 +527,10 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param indexPokemon, the index of desire pokemon to recharge in the array
+     * @return a log of all the actions performed
+     */
     private String train(int[] indexPokemon) {
 
         String pokemonReturnedLog = "";
@@ -557,6 +586,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param indexPokemon, the index of desire pokemon to recharge in the array
+     */
     private void trainEffect(int[] indexPokemon) {
 
         VBox selectedCard = playersCards[indexPokemon[0]][indexPokemon[1]];
@@ -606,13 +638,15 @@ public class GameplayPageController {
         }.start();
     }
 
-
     private void saveExit(){
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
     }
 
 
+    /**
+     * @return a log of all the actions performed
+     */
     private String computerTurn() {
 
         disableButton(true);
@@ -709,6 +743,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param promptText, the string that will be shown on the details pane label
+     */
     private void clearText(String promptText) {
 
         for( Label label: pokemonDetailsPaneLabels ) {
@@ -720,6 +757,10 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param cardID, the fx id of the card
+     * @return the index of the card's pokemon in the array
+     */
     private int[] getCardIndex(String cardID) {
 
         int[] playerCard = new int[3];
@@ -739,6 +780,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param cardIndex,the index of the card's pokemon in the array
+     */
     private void showPokemonDetailOnPane(int[] cardIndex) {
 
         String className = playersPokemons[cardIndex[0]][cardIndex[1]].getClass().getName();
@@ -773,7 +817,6 @@ public class GameplayPageController {
         pokemonDetailsPaneLabels[8].setText("Status: " + selectedPokemon.getStatus());
 
     }
-
 
     private void updateOnGameRoundDone() {
 
@@ -833,6 +876,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * @param disable, true to disable all the buttons
+     */
     private void disableButton(boolean disable) {
         for(Button button: buttons){
             button.setDisable(disable);
@@ -946,13 +992,7 @@ public class GameplayPageController {
                 card.addEventHandler(MouseEvent.MOUSE_EXITED, event -> pokemonHpCardLabels[a][b].setTextFill(Color.BLACK));
 
                 // on mouse clicked -> show stats
-                card.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                    try {
-                        buttonEventHandler(getCardIndex(card.getId()));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
+                card.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> buttonEventHandler(getCardIndex(card.getId())));
 
                 card.setMinWidth(width * pokemonCardWidthRatio);
                 card.setMinHeight(height * pokemonCardHeightRatio);

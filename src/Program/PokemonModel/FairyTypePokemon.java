@@ -1,15 +1,25 @@
 package Program.PokemonModel;
 
+/**
+ * fairy type pokemon which extends from pokemon base
+ */
 public class FairyTypePokemon extends PokemonBase {
 
+    /**
+     * @param name the name of the pokemon
+     */
     public FairyTypePokemon(String name) {
         super(name);
     }
 
+    /**
+     * @param target the target pokemon class
+     * @return a log of all actions performed
+     */
     public String fairyTypeLaunchAttack(PokemonBase target) {
 
         String returnString = "";
-        returnString += super.launchAttack(target);;
+        returnString += super.launchAttack(target);
 
         if ( !returnString.contains("Not enough energy.") ) {
 

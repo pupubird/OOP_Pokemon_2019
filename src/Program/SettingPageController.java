@@ -8,6 +8,9 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 
 
+/**
+ * Setting Page Controller
+ */
 public class SettingPageController {
 
     private double volume = 0.5;
@@ -48,11 +51,14 @@ public class SettingPageController {
     }
 
 
-    public String translateVolume(double vol) {
+    /**
+     * @param vol the volume for the background music
+     * @return the volume percentage
+     */
+    private String translateVolume(double vol) {
 
         // return volume in percentage format (45%)
-        String volumePercentage = ((int) Math.round(vol * 100)) + "%";
-        return volumePercentage;
+        return ((int) Math.round(vol * 100)) + "%";
 
     }
 

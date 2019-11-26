@@ -1,21 +1,31 @@
 package Program.PokemonModel;
 
+/**
+ * defense type pokemon which extends from pokemon base
+ */
 public class DefenseTypePokemon extends PokemonBase {
 
     private int resistancePoints;
 
+    /**
+     * @param name the name of the pokemon
+     */
     public DefenseTypePokemon(String name) {
         super(name);
         this.resistancePoints = this.generateInt(5,10);
     }
 
-    String defenseTypeLaunchDefense(int receivedAttackPoint, int resistance) {
+    /**
+     * @param receivedAttackPoint the received attack points from opponent pokemon
+     * @return a log of all actions performed
+     */
+    String defenseTypeLaunchDefense(int receivedAttackPoint) {
 
-        resistance = flipCoinIsHead() ? resistance :0;
+        int resistance = flipCoinIsHead() ? this.getResistancePoints() :0;
         receivedAttackPoint -= receivedAttackPoint - resistance < 0 ? receivedAttackPoint : resistance;
 
         String returnString = "";
-        returnString += defense(receivedAttackPoint);
+        returnString += super.defense(receivedAttackPoint);
 
         if ( resistance == 0 ) {
             return returnString + "\n" + "Flipped Coin: Tail, Defense Type Pokemon Effect Canceled";
@@ -26,11 +36,6 @@ public class DefenseTypePokemon extends PokemonBase {
 
     }
 
-
-    @Override
-    public String defense(int receivedAttackPoint) {
-        return super.defense(receivedAttackPoint);
-    }
 
 
     @Override

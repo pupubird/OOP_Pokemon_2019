@@ -7,6 +7,9 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 
 
+/**
+ * Load Page Controller
+ */
 public class LoadPageController {
 
     @FXML

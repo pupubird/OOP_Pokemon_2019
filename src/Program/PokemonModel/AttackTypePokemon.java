@@ -1,19 +1,29 @@
 package Program.PokemonModel;
 
+/**
+ * Attack type pokemon which extends from pokemon base
+ */
 public class AttackTypePokemon extends PokemonBase {
 
     private int attackAttribute;
 
 
+    /**
+     * @param name the name of the pokemon
+     */
     public AttackTypePokemon(String name) {
         super(name);
         this.attackAttribute = this.generateInt(20, 30);
     }
 
 
-    public String attackTypelaunchAttack(PokemonBase target, int attackPoint) {
+    /**
+     * @param target the attacking target pokemon class
+     * @return the log of the results attack process
+     */
+    public String attackTypelaunchAttack(PokemonBase target) {
         // based on business logic
-        attackPoint = flipCoinIsHead()?attackPoint:1;
+        int attackPoint = flipCoinIsHead()?this.getAttackPoint():1;
         String returnString = "";
 
         returnString += super.launchAttack(target,attackPoint);
