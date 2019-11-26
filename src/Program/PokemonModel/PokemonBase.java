@@ -42,7 +42,10 @@ public class PokemonBase {
             }
 
             this.energy -= energyConsume;
-
+            if(!target.getStatus().equals("active")){
+                returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
+                attackPoint *= 2;
+            }
             String classType = target.getClass().getName();
 
             if ( classType.contains("Defense") ) {
@@ -72,7 +75,7 @@ public class PokemonBase {
         int energyConsume = 1;
         String returnString = "";
 
-        if ( this.energy > 0 ) {
+        if(this.energy >0) {
             // check if there is enough energy for critical damage (same type)
             if ( this.energy - energyConsume > 2 ) {
                 if ( this.getClass().getName().equals(target.getClass().getName()) ) {
@@ -84,6 +87,10 @@ public class PokemonBase {
 
             this.energy -= energyConsume;
 
+            if(!target.getStatus().equals("active")){
+                returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
+                attackPoint *= 2;
+            }
             String classType = target.getClass().getName();
 
             if ( classType.contains("Defense") ) {
@@ -105,7 +112,7 @@ public class PokemonBase {
 
     public String defense(int receivedAttackPoint) {
         this.hp -= receivedAttackPoint;
-        return "Damaged received "+receivedAttackPoint;
+        return this.getName()+" damages received "+receivedAttackPoint;
     }
 
 
@@ -113,6 +120,7 @@ public class PokemonBase {
         this.exp += 1;
         if(this.exp == 20){
             stageIncrease();
+
         }
 
     }

@@ -17,39 +17,17 @@ public class AttackTypePokemon extends PokemonBase {
 
 
     public String attackTypelaunchAttack(PokemonBase target, int attackPoint) {
-
-        attackPoint = flipCoinIsHead() ? attackPoint : 1;
-
-        int energyConsume = 1;
-        // check if there is enough energy for critical damage (same type)
-        if ( super.getEnergy() - energyConsume > 2 ) {
-
-            if (super.getColor().equals(target.getColor())) {
-                attackPoint = attackPoint*2;
-                energyConsume = 2;
-            }
-
-            //check if enough energy to  do action
-        }
-
-        super.setEnergy(super.getEnergy() - energyConsume);
-
-        expPlus();
-
+        attackPoint = flipCoinIsHead()?attackPoint:1;
         String returnString = "";
-        returnString += launchAttack(target,attackPoint);
-
-        if ( attackPoint != 1 ) {
-            return returnString + "\n" +"Flipped coin: Head, Attack Type Pokemon Effect Triggered!";
+        returnString += super.launchAttack(target,attackPoint);
+        if(!returnString.contains("Not enough energy.")) {
+            if (attackPoint != 1) {
+                returnString += "\n" + "Flipped coin: Head, Attack Type Pokemon Effect Triggered!";
+            } else {
+                returnString += "\n" + "Flipped coin: Tail, Attack Type Pokemon Effect Canceled!";
+            }
         }
-
-        return returnString + "\n" + "Flipped coin: Tail, Attack Type Pokemon Effect Canceled!";
-    }
-
-
-    @Override
-    public String launchAttack(PokemonBase target,int attackPoint){
-        return super.launchAttack(target,attackPoint);
+        return returnString;
     }
 
 

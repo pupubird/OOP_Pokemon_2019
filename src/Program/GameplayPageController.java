@@ -216,55 +216,60 @@ public class GameplayPageController {
     }
 
 
-    private String recharge(int[] indexPokemon) {
-
-        PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
-
-        String pokemonReturnedLog = "";
-
-        if (/*if it is idle*/ (selectedPokemon.getEffectLeftRound()>0) ){
-
-            pokemonReturnedLog = "Pokemon is in idled for: " + selectedPokemon.getEffectLeftRound()+" round.";
+        String pokemonReturnedLog="";
+        if(/*if it is idle*/ (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()>0)){
             buttonEventQueue = new ArrayList<VBox>();
-
-            if ( currentRoundIsComputer ) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                computerTurn();
+            if (currentRoundIsComputer) {
+                pokemonReturnedLog += computerTurn();
+            }else{
+                pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
             }
+        }else {
+            if (playersPokemons[indexPokemonFrom[0]][indexPokemonTo[1]].getHp() <0){
+                if (currentRoundIsComputer) {
+                    pokemonReturnedLog += computerTurn();
+                }
+            }else {
+                String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
+                if (classType.contains("Attack")) {
+                    AttackTypePokemon attackTypePokemon = (AttackTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+                    pokemonReturnedLog = attackTypePokemon.attackTypelaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]],
+                            attackTypePokemon.getAttackPoint()
+                    );
+
+                } else if (classType.contains("Fairy")) {
+
+                    FairyTypePokemon fairyTypePokemon = (FairyTypePokemon) playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]];
+                    pokemonReturnedLog = fairyTypePokemon.fairyTypeLaunchAttack(playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]);
+
+                } else {
+                    // defense and other types of pokemons share the same launchAttack function.
+                    pokemonReturnedLog = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].launchAttack(
+                            playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]]
+                    );
+                }
+
+                // execute the effect and call computer turn.
+                if (!pokemonReturnedLog.contains("Not enough energy.")) {
+                    if (currentRoundIsComputer) {
+                        updateOnGameRoundDone();
+                    }
+                    currentRoundIsComputer = !currentRoundIsComputer;
+                    attackEffect(indexPokemonFrom, indexPokemonTo);
+                } else if (currentRoundIsComputer) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    pokemonReturnedLog += computerTurn();
+                }
 
         } else {
 
-            String cardDrawn = selectedPokemon.generateString(new String[]{"red", "blue", "yellow"});
-            boolean recharged = false;
-
-            currentRoundIsComputer = !currentRoundIsComputer;
-
-            if ( selectedPokemon.getColor().equals("colorless")
-                    || selectedPokemon.getColor().equals(cardDrawn) ) {
-                rechargeEffect(indexPokemon, true);
-                selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
-                recharged = true;
+                updatePokemonDetailsOnCard();
             }
 
-            String showCard = String.format("Card Drawn : %s", cardDrawn);
-
-            if ( recharged ) {
-
-                ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
-                pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
-                        , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
-
-            } else {
-
-                rechargeEffect(indexPokemon, false);
-                pokemonReturnedLog += String.format("%s\n%s failed recharging. (%s)"
-                        , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
-
-            }
         }
         return pokemonReturnedLog;
     }
@@ -381,9 +386,10 @@ public class GameplayPageController {
                         }
                     }
                 }
-                if ( doneAnimation ) {
-                    if ( now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2 ) {
-                        if ( currentRoundIsComputer ) {
+                if (doneAnimation) {
+                    updateOnGameActionOccured();
+                    if (now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2) {
+                        if (currentRoundIsComputer) {
                             clearText("Computer is thinking...");
                         }
                     }
@@ -400,33 +406,54 @@ public class GameplayPageController {
         }.start();
     }
 
+    private String recharge(int[] indexPokemon){
 
-    private void trainEffect(int[] indexPokemon) {
+        String pokemonReturnedLog = "";
+        if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
+            buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                pokemonReturnedLog += computerTurn();
+            }else{
+                pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
+            }
+        }else {
+            PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+            if (playersPokemons[indexPokemon[0]][indexPokemon[1]].getHp() <0){
+                if (currentRoundIsComputer) {
+                    pokemonReturnedLog += computerTurn();
+                }
+            }else {
+                String cardDrawn = selectedPokemon.generateString(new String[]{"red", "blue", "yellow"});
+                boolean recharged = false;
 
-        VBox selectedCard = playersCards[indexPokemon[0]][indexPokemon[1]];
+                if (!currentRoundIsComputer) {
+                    updateOnGameRoundDone();
+                }
+                currentRoundIsComputer = !currentRoundIsComputer;
+                if (selectedPokemon.getColor().equals("colorless")
+                        || selectedPokemon.getColor().equals(cardDrawn)) {
+                    rechargeEffect(indexPokemon, true);
+                    selectedPokemon.setEnergy(selectedPokemon.getEnergy() + 5);
+                    recharged = true;
+                }
 
-        new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                long secondPassed = 1000000000;
-                    if(lastSecond < 0){
-                        lastSecond = now;
-                        disableButton(true);
-                    }
-                    if (now - lastSecond < secondPassed * 0.0375) {
-                        selectedCard.setVisible(false);
-                    }
-                    if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
-                        selectedCard.setVisible(true);
-                    }
+                String showCard = String.format("Card Drawn : %s", cardDrawn);
 
-                    if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
-                        selectedCard.setVisible(false);
-                    }
-
-                    if(now - lastSecond > secondPassed * 0.15 && now - lastSecond < secondPassed * 0.2){
-                        selectedCard.setVisible(true);
-                    }
+                if (recharged) {
+                    ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/recharge.mp3"));
+                    pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
+                            , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+                } else {
+                    rechargeEffect(indexPokemon, false);
+                    pokemonReturnedLog += String.format("%s\n%s has failed to recharged ! (%s)"
+                            , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
+                }
+            }
 
                     if (now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2) {
                         if ( currentRoundIsComputer ) {
@@ -481,6 +508,7 @@ public class GameplayPageController {
                 }
                 if(now - lastSecond > secondPassed * 2) {
                     lastSecond = -1;
+                    updateOnGameActionOccured();
                     this.stop();
                     if(currentRoundIsComputer){
                         computerTurn();
@@ -491,27 +519,83 @@ public class GameplayPageController {
         }.start();
     }
 
+    private String train(int[] indexPokemon){
 
-    private void revealEffect() {
+        String pokemonReturnedLog = "";
+        if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
+            buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                pokemonReturnedLog += computerTurn();
+            }else{
+                pokemonReturnedLog += "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
+            }
+        }else if (playersPokemons[indexPokemon[0]][indexPokemon[1]].getHp() <0){
+            if (currentRoundIsComputer) {
+                pokemonReturnedLog += computerTurn();
+            }
+        } else {
+
+            //need round system to validate
+            PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
+
+            if (selectedPokemon.getEnergy() < 5) {
+                pokemonReturnedLog += selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
+                if (currentRoundIsComputer) {
+                    pokemonReturnedLog += computerTurn();
+                }
+            } else {
+                selectedPokemon.expPlus();
+                selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
+                if(currentRoundIsComputer){
+                    updateOnGameRoundDone();
+                }
+                currentRoundIsComputer = !currentRoundIsComputer;
+                trainEffect(indexPokemon);
+                ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
+                pokemonReturnedLog += selectedPokemon.getName() + " has increased its experience by 1 !";
+
+            }
+        }
+
+        return  pokemonReturnedLog;
 
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 long secondPassed = 1000000000;
-                if(lastSecond<0){
-                    lastSecond = now;
-                }
-                if(now - lastSecond > secondPassed*0.6){
-                    player1card1.setVisible(true);
-                    player2card6.setVisible(true);
-                }
-                if(now - lastSecond > secondPassed*1.2){
-                    player1card2.setVisible(true);
-                    player2card5.setVisible(true);
-                }
-                if(now - lastSecond > secondPassed*1.8){
-                    player1card3.setVisible(true);
-                    player2card4.setVisible(true);
+                    if(lastSecond < 0){
+                        lastSecond = now;
+                        disableButton(true);
+                    }
+                    if (now - lastSecond < secondPassed * 0.0375) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+                    if (now - lastSecond > secondPassed * 0.075 && now - lastSecond < secondPassed * 0.1125) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    }
+
+                    if (now - lastSecond > secondPassed * 0.1125 && now - lastSecond < secondPassed * 0.15) {
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(false);
+                    }
+
+                    if(now - lastSecond > secondPassed * 0.15 && now - lastSecond < secondPassed * 0.2){
+                        playersCards[indexPokemon[0]][indexPokemon[1]].setVisible(true);
+                    }
+
+                    if (now - lastSecond > secondPassed * 1.5 && now - lastSecond < secondPassed * 2) {
+                        if (currentRoundIsComputer) {
+                            clearText("Computer is thinking...");
+                        }
+                    }
+                    if(now - lastSecond > secondPassed * 2) {
+                        lastSecond = -1;
+                        this.stop();
+                        updateOnGameActionOccured();
+                        if(currentRoundIsComputer){
+                            computerTurn();
+                        }
+                        disableButton(false);
+                    }
                 }
                 if(now - lastSecond > secondPassed*2.4){
                     player1card4.setVisible(true);
@@ -536,9 +620,7 @@ public class GameplayPageController {
 
     private void saveExit(){ }
 
-
-    private void computerTurn() {
-
+    private String computerTurn()  {
         disableButton(true);
         int action = (int) Math.floor(Math.random() * 100);
         int cardAmount = 6;
@@ -555,14 +637,14 @@ public class GameplayPageController {
                     0,
                     (int) Math.floor(Math.random() * cardAmount)
             };
-
-        } while (  playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() < 0
-                || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() < 0 );
-
-        String returnedLog = "Computer: \n";
+        } while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() <= 0
+                || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() <= 0
+        );
+        String returnedLog = "";
         // attack has 50% chance
         if ( action >=0 && action <=50 ) {
             returnedLog += attack(indexPokemonFrom, indexPokemonTo);
+
             // recharge has 25% chance
         } else if ( action>50 && action <=75 ) {
             returnedLog += recharge(indexPokemonFrom);
@@ -570,10 +652,11 @@ public class GameplayPageController {
         } else {
             returnedLog += train(indexPokemonFrom);
         }
-        clearText(returnedLog);
+        clearText("Computer: \n"+returnedLog);
         // update pokemon details
         updatePokemonDetailsOnCard();
         disableButton(false);
+        return returnedLog;
     }
 
 
@@ -586,19 +669,7 @@ public class GameplayPageController {
         energy.setText(promptText);
     }
 
-
-    private void clearText(){
-
-        for(Label label: pokemonDetailsPaneLabels){
-            label.setText("");
-        }
-        //if there is any promptText
-        energy.setText("Click any pokemon to see their stats!");
-    }
-
-
-    private int[] getCardIndex(String cardID) {
-
+    private int[] getCardIndex(String cardID){
         int[] playerCard = new int[3];
         String[] playerCardIndex;
         // getting card index based on the id
@@ -646,9 +717,39 @@ public class GameplayPageController {
         pokemonDetailsPaneLabels[8].setText("Status: " + selectedPokemon.getStatus());
 
     }
+    private void updateOnGameRoundDone(){
+        for(PokemonBase[] player: playersPokemons){
+            for(PokemonBase pokemon : player ){
+                if(pokemon.getEffectLeftRound()>0) {
+                    pokemon.setEffectLeftRound(pokemon.getEffectLeftRound() - 1);
+                }
+                if(pokemon.getEffectLeftRound() == 0){
+                    pokemon.setStatus("active");
+                }
+            }
+        }
+    }
+    private void updateOnGameActionOccured(){
 
-
-    private void updatePokemonDetailsOnCard() {
+        // to check if any player wins
+        for (int i = 0; i < playersPokemons.length; i++){
+            int count = 0;
+            for(int j = 0; j < playersPokemons[i].length; j++){
+                if(playersPokemons[i][j].getHp()<=0){
+                    playersCards[i][j].setVisible(false);
+                }
+                if(playersPokemons[i][j].getHp() <= 0){
+                    count ++;
+                }
+                if(count >= 3){
+                    ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/gameover.mp3"));
+                    ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameOverPage.fxml"));
+                    break;
+                }
+            }
+        }
+    }
+    private void updatePokemonDetailsOnCard(){
 
         // get every pokemon Hp and set to the respective card Label
         for( int i = 0; i < pokemonHpCardLabels.length; i++ ) {
@@ -659,9 +760,6 @@ public class GameplayPageController {
                         +playersPokemons[i][j].getName()
                         +"\n"+ "HP: "+Integer.toString(playersPokemons[i][j].getHp())
                 );
-                if(playersPokemons[i][j].getHp()<=0){
-                    playersCards[i][j].setVisible(false);
-                }
             }
 
         }
@@ -694,15 +792,13 @@ public class GameplayPageController {
 
     private void initializePokemonCardImage(String[][] playersCardImagesString) {
         // input is specified = game is load from previous game
-        for( int i = 0; i < playersCardImages.length; i++ ) {
-
-            for( int j = 0; j < playersCardImages[i].length;j++ ) {
+        for(int i = 0; i < playersCardImages.length; i++) {
+            for (int j = 0; j < playersCardImages[i].length; j++) {
                 playersCardImages[i][j].setImage(
                         new Image(getClass().getResource("resources/fxml/assets/pokemon"
-                                +playersCardImagesString[i][j]+".png").toString())
+                                + playersCardImagesString[i][j] + ".png").toString())
                 );
             }
-
         }
     }
 
@@ -973,8 +1069,7 @@ public class GameplayPageController {
         this.initializeButtons();
         this.initializePane();
 
-        clearText("Generating your pokemons!");
-        if ( continueSaveGame ) {
+        if(continueSaveGame) {
             // pass the information of the pokemon inside
             initializePokemonCardImage();
         } else {
@@ -985,6 +1080,7 @@ public class GameplayPageController {
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/battle.mp3"));
         updatePokemonDetailsOnCard();
         revealEffect();
+        clearText("Click any pokemon to view their stats/ click any button to perform action!");
     }
 
 }
