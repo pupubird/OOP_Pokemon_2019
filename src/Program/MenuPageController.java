@@ -19,25 +19,27 @@ public class MenuPageController {
     private int vibratePixel = 10;
     private long lastSecond = -1;
 
-    public void navigateToSettingPage(){
+    public void navigateToSettingPage() {
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
     }
-    public void navigateToGamePage(){
+    public void navigateToGamePage() {
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameplayPage.fxml"));
     }
-
-    public void navigateToLoadPage(){
+    public void navigateToLoadPage() {
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/LoadPage.fxml"));
     }
+
 
     public void exitProgram() {
         System.exit(0);
     }
 
+
     private void vibrateEffect() {
+
         new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -63,13 +65,15 @@ public class MenuPageController {
                 });
             }
         }.start();
+
     }
 
+
     public void initialize() {
+
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;
-
         double width = ControllerUtil.getScreenWidth();
         double height = ControllerUtil.getScreenHeight();
 
@@ -77,13 +81,11 @@ public class MenuPageController {
         MenuPagePane.setMinHeight(height);
         MenuPagePane.setMaxWidth(width);
         MenuPagePane.setMaxHeight(height);
-
         MenuPagePane.setStyle(
                 "-fx-background-image:url("+getClass().getResource("resources/fxml/assets/background.jpg")+");" +
                         "-fx-background-repeat:no-repeat;" +
                         "-fx-background-size:cover;"
         );
-
         menuLogo.setFitWidth(width/imageWidthRatio);
 
         startButton.setPrefWidth(width/widthRatio);
@@ -96,14 +98,14 @@ public class MenuPageController {
         loadButton.setPrefHeight(height/heightRatio);
         exitButton.setPrefHeight(height/heightRatio);
 
-        startButtonImage.setFitHeight(startButton.getPrefHeight()*2);
-        settingButtonImage.setFitHeight(settingButton.getPrefHeight()*2);
-        loadButtonImage.setFitHeight(loadButton.getPrefHeight()*2);
-        exitButtonImage.setFitHeight(exitButton.getPrefHeight()*2);
+        startButtonImage.setFitHeight(startButton.getPrefHeight() * 2);
+        settingButtonImage.setFitHeight(settingButton.getPrefHeight() * 2);
+        loadButtonImage.setFitHeight(loadButton.getPrefHeight() * 2);
+        exitButtonImage.setFitHeight(exitButton.getPrefHeight() * 2);
 
         vibrateEffect();
-    }
 
+    }
 
 
 }
