@@ -141,6 +141,9 @@ public class GameplayPageController {
         if(/*if it is idle*/ (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()>0)){
             pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
             buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                computerTurn();
+            }
         }else {
             String classType = playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getClass().getName();
             if (classType.contains("Attack")) {
@@ -165,6 +168,13 @@ public class GameplayPageController {
             if (!pokemonReturnedLog.contains("Not enough energy.")) {
                 currentRoundIsComputer = !currentRoundIsComputer;
                 attackEffect(indexPokemonFrom, indexPokemonTo);
+            }else if (currentRoundIsComputer) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                computerTurn();
             }
 
 
@@ -273,6 +283,14 @@ public class GameplayPageController {
         if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
             pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                computerTurn();
+            }
         }else {
 
             // need round system to validate
@@ -353,6 +371,9 @@ public class GameplayPageController {
         if(/*if it is idle*/ (playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()>0)){
             pokemonReturnedLog += "Pokemon is in idled for: "+playersPokemons[indexPokemon[0]][indexPokemon[1]].getEffectLeftRound()+" round.";
             buttonEventQueue = new ArrayList<VBox>();
+            if (currentRoundIsComputer) {
+                computerTurn();
+            }
         }else {
 
             //need round system to validate
@@ -360,6 +381,9 @@ public class GameplayPageController {
 
             if (selectedPokemon.getEnergy() < 5) {
                 pokemonReturnedLog += selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
+                if (currentRoundIsComputer) {
+                    computerTurn();
+                }
             } else {
                 selectedPokemon.expPlus();
                 selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
