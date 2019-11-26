@@ -334,7 +334,7 @@ public class GameplayPageController {
                             , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
                 } else {
                     rechargeEffect(indexPokemon, false);
-                    pokemonReturnedLog += String.format("%s\n%s has successfully recharged ! (%s)"
+                    pokemonReturnedLog += String.format("%s\n%s has failed to recharged ! (%s)"
                             , showCard, selectedPokemon.getName(), selectedPokemon.getColor());
                 }
             }
