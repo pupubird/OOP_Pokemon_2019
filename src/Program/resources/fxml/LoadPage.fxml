@@ -17,6 +17,11 @@
         <Image url="@assets/pokemonLogo.png" />
     </ImageView>
     <HBox alignment="CENTER">
+        <ImageView  fx:id="comingSoonImage" preserveRatio="true">
+            <Image url="@assets/comingSoon.png" />
+        </ImageView>
+    </HBox>
+    <HBox alignment="CENTER">
         <Button fx:id="returnButton" mnemonicParsing="false"
                 style="-fx-background-color: linear-gradient(orange,darkorange); -fx-translate-x: 18;"
                 text="Return to menu" textFill="WHITE"

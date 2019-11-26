@@ -11,6 +11,7 @@ public class LoadPageController {
     @FXML
     public VBox LoadPagePane;
     public ImageView menuLogo;
+    public ImageView comingSoonImage;
     public ImageView returnButtonImage;
     public Button returnButton;
 
