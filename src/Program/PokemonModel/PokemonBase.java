@@ -93,7 +93,7 @@ public class PokemonBase {
 
     public String defense(int receivedAttackPoint){
         this.hp -= receivedAttackPoint;
-        return "Damaged received "+receivedAttackPoint;
+        return this.getName()+" damages received "+receivedAttackPoint;
     }
 
 
