@@ -166,6 +166,9 @@ public class GameplayPageController {
 
             // execute the effect and call computer turn.
             if (!pokemonReturnedLog.contains("Not enough energy.")) {
+                if(!currentRoundIsComputer){
+                    updatePokemonIdleState();
+                }
                 currentRoundIsComputer = !currentRoundIsComputer;
                 attackEffect(indexPokemonFrom, indexPokemonTo);
             }else if (currentRoundIsComputer) {
@@ -293,12 +296,14 @@ public class GameplayPageController {
             }
         }else {
 
-            // need round system to validate
             PokemonBase selectedPokemon = playersPokemons[indexPokemon[0]][indexPokemon[1]];
 
             String cardDrawn = selectedPokemon.generateString(new String[]{"red", "blue", "yellow"});
             boolean recharged = false;
 
+            if(!currentRoundIsComputer){
+                updatePokemonIdleState();
+            }
             currentRoundIsComputer = !currentRoundIsComputer;
             if (selectedPokemon.getColor().equals("colorless")
                     || selectedPokemon.getColor().equals(cardDrawn)) {
@@ -387,10 +392,14 @@ public class GameplayPageController {
             } else {
                 selectedPokemon.expPlus();
                 selectedPokemon.setEnergy(selectedPokemon.getEnergy() - 5);
+                if(!currentRoundIsComputer){
+                    updatePokemonIdleState();
+                }
                 currentRoundIsComputer = !currentRoundIsComputer;
                 trainEffect(indexPokemon);
                 ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/train.mp3"));
                 pokemonReturnedLog += selectedPokemon.getName() + " has increased its experience by 1 !";
+
             }
         }
         return  pokemonReturnedLog;
@@ -523,12 +532,14 @@ public class GameplayPageController {
         //if there is any promptText
         energy.setText(promptText);
     }
-    private void clearText(){
-        for(Label label: pokemonDetailsPaneLabels){
-            label.setText("");
+    private void updatePokemonIdleState(){
+        for(PokemonBase[] player: playersPokemons){
+            for(PokemonBase pokemon : player ){
+                if(pokemon.getEffectLeftRound()>0) {
+                    pokemon.setEffectLeftRound(pokemon.getEffectLeftRound() - 1);
+                }
+            }
         }
-        //if there is any promptText
-        energy.setText("Click any pokemon to see their stats!");
     }
     private int[] getCardIndex(String cardID){
         int[] playerCard = new int[3];
