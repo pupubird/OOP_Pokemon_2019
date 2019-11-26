@@ -4,11 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-
 import java.net.URL;
 
 
 public class GameOverPageController {
+
     @FXML
     public VBox GameOverPagePane;
     public ImageView menuLogo;
@@ -17,13 +17,18 @@ public class GameOverPageController {
 
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
-    public void navigateToMenuPage(){
+
+    public void navigateToMenuPage() {
+
         ControllerUtil.playEffect(clickingEffect);
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
+
     }
 
-    public void initialize(){
+
+    public void initialize() {
+
         double widthRatio = 10;
         double heightRatio = 24;
         double imageWidthRatio = 3.25;
@@ -47,5 +52,8 @@ public class GameOverPageController {
         returnButton.setPrefWidth(width/widthRatio);
         returnButton.setPrefHeight(height/heightRatio);
         returnButtonImage.setFitHeight(returnButton.getPrefHeight()*2);
+
     }
+
+
 }
