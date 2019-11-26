@@ -29,18 +29,7 @@
               <Image url="@assets/pokemon4.png" />
         </ImageView>
       </HBox>
-      <HBox alignment="CENTER" >
-        <Button onMouseClicked="#navigateToSettingPage" fx:id="settingButton" mnemonicParsing="false"
-                style="-fx-background-color: linear-gradient(blue,darkblue); -fx-translate-x: 18;"
-                text="Setting" textFill="WHITE" >
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Button>
-        <ImageView fx:id="settingButtonImage" preserveRatio="true">
-              <Image url="@assets/pokemon2.png" />
-        </ImageView>
-      </HBox>
+
       <HBox alignment="CENTER">
           <Button fx:id="loadButton" mnemonicParsing="false"
                   style="-fx-background-color: linear-gradient(red,darkred); -fx-cursor: pointer; -fx-translate-x: 18;"
@@ -54,6 +43,18 @@
           <ImageView fx:id="loadButtonImage" preserveRatio="true">
               <Image url="@assets/pokemon5.png" />
           </ImageView>
+      </HBox>
+      <HBox alignment="CENTER" >
+        <Button onMouseClicked="#navigateToSettingPage" fx:id="settingButton" mnemonicParsing="false"
+                style="-fx-background-color: linear-gradient(blue,darkblue); -fx-translate-x: 18;"
+                text="Setting" textFill="WHITE" >
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+        <ImageView fx:id="settingButtonImage" preserveRatio="true">
+              <Image url="@assets/pokemon2.png" />
+        </ImageView>
       </HBox>
       <HBox alignment="CENTER">
         <Button fx:id="exitButton" mnemonicParsing="false"
