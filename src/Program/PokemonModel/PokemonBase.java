@@ -34,6 +34,7 @@ public class PokemonBase {
                 }
             }
             this.energy -= energyConsume;
+            // if target pokemon is not active, double attack point
             if(!target.getStatus().equals("active")){
                 returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
                 attackPoint *= 2;
@@ -58,6 +59,8 @@ public class PokemonBase {
         return returnString;
     }
 
+    // self defined attack point, mainly used in attack type pokemon, but possible
+    // to use for future item card attack
     public String launchAttack(PokemonBase target, int attackPoint){
         int energyConsume = 1;
         String returnString = "";
@@ -207,6 +210,7 @@ public class PokemonBase {
         this.status = status;
     }
 
+    // these will be override for attack and defense type pokemon
     public int getAttackPoint(){
         return 0;
     }
