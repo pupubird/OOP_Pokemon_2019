@@ -15,8 +15,6 @@ public class AttackTypePokemon extends PokemonBase{
 
     public String attackTypelaunchAttack(PokemonBase target, int attackPoint) {
         attackPoint = flipCoinIsHead()?attackPoint:1;
-        int energyConsume = 1;
-        super.setEnergy(super.getEnergy() - energyConsume);
         expPlus();
         String returnString = "";
         returnString += super.launchAttack(target,attackPoint);

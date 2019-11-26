@@ -393,8 +393,6 @@ public class GameplayPageController {
                 pokemonReturnedLog += selectedPokemon.getName() + " does not have enough energy (5) to be trained !";
                 if (currentRoundIsComputer) {
                     pokemonReturnedLog += computerTurn();
-                    pokemonReturnedLog.replaceAll("Computer: \n","");
-                    pokemonReturnedLog = "Computer: "+pokemonReturnedLog;
                 }
             } else {
                 selectedPokemon.expPlus();
