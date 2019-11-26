@@ -16,3 +16,5 @@ Bugs
 7. AI Pokemon can successfully recharge if card drawn matches player's Pokemon colour. (?)
 
 8. The AI recharges a defeated Pokemon.
+
+9. Coin-flip events are inaccurate. (Some attacks deal more damage than calculated, some attacks deal damage even though events failed)
