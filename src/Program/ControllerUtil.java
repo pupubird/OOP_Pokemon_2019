@@ -46,7 +46,7 @@ class ControllerUtil {
         audioplayer = new MediaPlayer(media);
         audioplayer.setAutoPlay(true);
         // 0.5
-        audioplayer.setVolume(0);
+        audioplayer.setVolume(0.5);
         audioplayer.setCycleCount(MediaPlayer.INDEFINITE);
     }
 
@@ -56,7 +56,7 @@ class ControllerUtil {
             MediaPlayer effectPlayer = new MediaPlayer(effect);
             effectPlayer.setAutoPlay(true);
             // 1
-            effectPlayer.setVolume(0);
+            effectPlayer.setVolume(1);
             effectPlayer.setCycleCount(1);
         }).start();
     }

@@ -9,14 +9,16 @@ public class FairyTypePokemon extends PokemonBase{
         String returnString = "";
         returnString += launchAttack(target);
 
-        if(this.flipCoinIsHead()){
-            target.setPoisoned();
-            return returnString+ "\n" + target.getName()+" get poisoned! Freezed for 2 round.";
+        if(!returnString.contains("Not enough energy.")) {
+            if (this.flipCoinIsHead()) {
+                target.setPoisoned();
+                return returnString + "\n" + target.getName() + " get poisoned! Idle for " + target.getEffectLeftRound() + " round.";
+            }
+
+            target.setParalysed();
+            return returnString + "\n" + target.getName() + " get paralysed! Idle for " + target.getEffectLeftRound() + " round.";
         }
-
-        target.setParalysed();
-        return returnString+ "\n" + target.getName()+" get paralysed! Freezed for 1 round.";
-
+        return returnString;
     }
 
     @Override

@@ -1,5 +1,10 @@
 package Program.PokemonModel;
 
+import Program.GameplayPageController;
+import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+
 public class PokemonBase {
     private int hp, energy, exp, stage, effectLeftRound;
     private String color, status, name;
@@ -29,7 +34,10 @@ public class PokemonBase {
                 }
             }
             this.energy -= energyConsume;
-
+            if(!target.getStatus().equals("active")){
+                returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
+                attackPoint *= 2;
+            }
             String classType = target.getClass().getName();
             if(classType.contains("Defense")){
                 DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon)target;
@@ -44,14 +52,16 @@ public class PokemonBase {
             }
 
         }else {
+            GameplayPageController.buttonEventQueue = new ArrayList<VBox>();
             returnString += "Not enough energy.";
         }
-            return returnString;
+        return returnString;
     }
 
     public String launchAttack(PokemonBase target, int attackPoint){
         int energyConsume = 1;
         String returnString = "";
+
         if(this.energy >0) {
             // check if there is enough energy for critical damage (same type)
             if (this.energy - energyConsume > 2) {
@@ -63,6 +73,10 @@ public class PokemonBase {
             }
             this.energy -= energyConsume;
 
+            if(!target.getStatus().equals("active")){
+                returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
+                attackPoint *= 2;
+            }
             String classType = target.getClass().getName();
             if (classType.contains("Defense")) {
                 DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon) target;
@@ -79,7 +93,7 @@ public class PokemonBase {
 
     public String defense(int receivedAttackPoint){
         this.hp -= receivedAttackPoint;
-        return "Damaged received "+receivedAttackPoint;
+        return this.getName()+" damages received "+receivedAttackPoint;
     }
 
 
@@ -87,6 +101,7 @@ public class PokemonBase {
         this.exp += 1;
         if(this.exp == 20){
             stageIncrease();
+
         }
 
     }
@@ -120,7 +135,7 @@ public class PokemonBase {
         return (int)((Math.random()*(to-from+1))+from);
     }
 
-    private String generateString(String[] generatorList){
+    public String generateString(String[] generatorList){
         int random = (int)(Math.random()*generatorList.length);
         return generatorList[random];
     }

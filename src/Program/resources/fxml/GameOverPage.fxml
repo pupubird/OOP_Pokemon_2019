@@ -7,25 +7,18 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.text.Font?>
-
-<VBox alignment="CENTER" fx:controller="Program.LoadPageController"
+<VBox alignment="CENTER" fx:controller="Program.GameOverPageController"
       spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1"
-      xmlns:fx="http://javafx.com/fxml/1" fx:id="LoadPagePane"
+      xmlns:fx="http://javafx.com/fxml/1" fx:id="GameOverPagePane"
 >
-
     <ImageView fx:id="menuLogo" preserveRatio="true">
         <Image url="@assets/pokemonLogo.png" />
     </ImageView>
     <HBox alignment="CENTER">
-        <ImageView  fx:id="comingSoonImage" preserveRatio="true">
-            <Image url="@assets/comingSoon.png" />
-        </ImageView>
-    </HBox>
-    <HBox alignment="CENTER">
         <Button fx:id="returnButton" mnemonicParsing="false"
                 style="-fx-background-color: linear-gradient(orange,darkorange); -fx-translate-x: 18;"
-                text="Return to menu" textFill="WHITE"
-                onMouseClicked="#returnToMenu"
+                text="Game Over" textFill="WHITE"
+                onMouseClicked="#navigateToMenuPage"
         >
             <font>
                 <Font name="System Bold" size="18.0" />
@@ -36,5 +29,4 @@
         </ImageView>
     </HBox>
     <HBox prefHeight="100.0" prefWidth="200.0" />
-
 </VBox>
