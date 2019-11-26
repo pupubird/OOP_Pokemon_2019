@@ -607,7 +607,7 @@ public class GameplayPageController {
                     pokemon.setEffectLeftRound(pokemon.getEffectLeftRound() - 1);
                 }
                 if(pokemon.getEffectLeftRound() == 0){
-                    pokemon.setStatus("normal");
+                    pokemon.setStatus("active");
                 }
             }
         }
@@ -823,8 +823,8 @@ public class GameplayPageController {
         SaveExitButton.setMinWidth(width*(1-PokemonPropertiesPaneWidthRatio)*0.25);
 
         AttackButton.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
-            currentButtonState = currentButtonState.equals("attack")?"normal":"attack";
-            if(currentButtonState.equals("normal")){
+            currentButtonState = currentButtonState.equals("attack")?"active":"attack";
+            if(currentButtonState.equals("active")){
                 clearText("Click any pokemon to see their stats!");
             }else {
                 clearText("Attack: Please select one of your own pokemon"
@@ -833,8 +833,8 @@ public class GameplayPageController {
             }
         });
         RechargeButton.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
-            currentButtonState = currentButtonState.equals("recharge")?"normal":"recharge";
-            if(currentButtonState.equals("normal")){
+            currentButtonState = currentButtonState.equals("recharge")?"active":"recharge";
+            if(currentButtonState.equals("active")){
                 clearText("Click any pokemon to see their stats!");
             }else {
                 clearText("Recharge: Please select one of your own pokemon"
@@ -843,8 +843,8 @@ public class GameplayPageController {
             }
         });
         TrainButton.addEventFilter(MouseEvent.MOUSE_CLICKED,event -> {
-            currentButtonState = currentButtonState.equals("train")?"normal":"train";
-            if(currentButtonState.equals("normal")){
+            currentButtonState = currentButtonState.equals("train")?"active":"train";
+            if(currentButtonState.equals("active")){
                 clearText("Click any pokemon to see their stats!");
             }else {
                 clearText("Train: Please select one of your own pokemon"
@@ -883,7 +883,7 @@ public class GameplayPageController {
         player2groupPane.setMinHeight(height*(1-bottomPaneHeightRatio)*0.5);
     }
     public void initialize(){
-        currentButtonState = "normal";
+        currentButtonState = "active";
 
         this.initializePlayersPokemons();
         this.initializePlayersCardVBox();
