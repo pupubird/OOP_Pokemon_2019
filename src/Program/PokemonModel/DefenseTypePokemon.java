@@ -12,7 +12,7 @@ public class DefenseTypePokemon extends PokemonBase {
         resistance = flipCoinIsHead()?resistance :0;
         receivedAttackPoint -= receivedAttackPoint - resistance < 0? receivedAttackPoint : resistance;
         String returnString = "";
-        defense(receivedAttackPoint);
+        returnString += defense(receivedAttackPoint);
         if (resistance == 0){
             return returnString+"\n"+ "Flipped Coin: Tail, Defense Type Pokemon Effect Canceled";
         }
