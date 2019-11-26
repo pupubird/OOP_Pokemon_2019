@@ -21,7 +21,7 @@ import static java.lang.Math.abs;
 
 
 /**
- *
+ * Game play page controller
  */
 public class GameplayPageController {
 

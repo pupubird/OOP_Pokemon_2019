@@ -7,6 +7,9 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 
 
+/**
+ * Game over page controller
+ */
 public class GameOverPageController {
 
     @FXML

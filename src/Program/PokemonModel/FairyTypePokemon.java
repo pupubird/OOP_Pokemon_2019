@@ -1,5 +1,8 @@
 package Program.PokemonModel;
 
+/**
+ * fairy type pokemon which extends from pokemon base
+ */
 public class FairyTypePokemon extends PokemonBase {
 
     /**

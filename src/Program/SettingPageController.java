@@ -8,6 +8,9 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 
 
+/**
+ * Setting Page Controller
+ */
 public class SettingPageController {
 
     private double volume = 0.5;

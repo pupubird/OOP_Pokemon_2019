@@ -4,6 +4,9 @@ import Program.GameplayPageController;
 import java.util.ArrayList;
 
 
+/**
+ * The base class for all types of pokemon
+ */
 public class PokemonBase {
 
     private int hp, energy, exp, stage, effectLeftRound;

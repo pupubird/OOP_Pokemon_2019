@@ -1,5 +1,8 @@
 package Program.PokemonModel;
 
+/**
+ * defense type pokemon which extends from pokemon base
+ */
 public class DefenseTypePokemon extends PokemonBase {
 
     private int resistancePoints;

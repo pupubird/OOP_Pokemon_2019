@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import static Program.ControllerUtil.primaryScreenBounds;
 
+/**
+ * Program main class which consists of the main method
+ */
 public class Main extends Application {
 
 

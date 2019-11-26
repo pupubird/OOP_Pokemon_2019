@@ -1,5 +1,8 @@
 package Program.PokemonModel;
 
+/**
+ * Attack type pokemon which extends from pokemon base
+ */
 public class AttackTypePokemon extends PokemonBase {
 
     private int attackAttribute;

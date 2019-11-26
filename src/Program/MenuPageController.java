@@ -8,6 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 
+/**
+ * Menu Page Controller
+ */
 public class MenuPageController {
 
     // initialized variables with fx:id in fxml file

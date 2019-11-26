@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.net.URL;
 
 
+/**
+ * A singleton class to act as middleman and helper between all the scene and controller
+ */
 class ControllerUtil {
 
     static Stage stage;
