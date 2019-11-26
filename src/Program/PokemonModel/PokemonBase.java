@@ -69,6 +69,10 @@ public class PokemonBase {
             }
             this.energy -= energyConsume;
 
+            if(!target.getStatus().equals("normal")){
+                returnString += "\n" + "Target pokemon is in "+target.getStatus()+", Double attack!";
+                attackPoint *= 2;
+            }
             String classType = target.getClass().getName();
             if (classType.contains("Defense")) {
                 DefenseTypePokemon defenseTypePokemon = (DefenseTypePokemon) target;
