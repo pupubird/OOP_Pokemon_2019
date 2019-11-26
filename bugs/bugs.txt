@@ -14,3 +14,5 @@ Bugs
 6. Poison / paralysis status does not count down. [SOLVED]
 
 7. AI Pokemon can successfully recharge if card drawn matches player's Pokemon colour. (?)
+
+8. The AI recharges a defeated Pokemon.
