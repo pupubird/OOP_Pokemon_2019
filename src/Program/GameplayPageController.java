@@ -53,10 +53,16 @@ public class GameplayPageController {
     public ImageView player1card1Image, player1card2Image, player1card3Image, player1card4Image, player1card5Image, player1card6Image;
     public ImageView player2card1Image, player2card2Image, player2card3Image, player2card4Image, player2card5Image, player2card6Image;
 
+    /*
+    when user click something, it will be added into the event queue
+    so that the history of clicked event will be recorded for animation to know
+    what did the user clicked before the current click.
+     */
     private void buttonEventHandler(int[] cardIndex) throws InterruptedException {
         String returnedLog = "Player 1: \n";
+        // which action is clicked
         switch (currentButtonState){
-            case "normal":
+            case "normal": // no button is clicked, this is use for checking pokemon stat.
                 showPokemonDetailOnPane(cardIndex);
                 break;
             case "attack":
@@ -74,7 +80,6 @@ public class GameplayPageController {
                 clearText(returnedLog);
                 break;
             case "train":
-                // runs train validation and plays animation is enough energy to train
                 returnedLog += train(cardIndex);
                 currentButtonState = "normal";
                 clearText(returnedLog);
@@ -89,6 +94,14 @@ public class GameplayPageController {
 
     private int[][] attackVerify(int[] cardIndex){
 
+        /*
+        this is to check if user click opponent pokemon (in the first click),
+        user should choose his own pokemon first to perform attack.
+
+        if the size of the queue is 2, means user had clicked something twice
+        if the first pokemon index passed (cardIndex) is 0 (player1), it means
+        the first event queue is invalid, hence prompt again.
+         */
         if(buttonEventQueue.size() == 2 && cardIndex[0]==0
                 || (cardIndex[0]==1 && buttonEventQueue.size() == 0)) {
 
@@ -113,8 +126,10 @@ public class GameplayPageController {
         int[] secondCardIndex = new int[]{-1};
         int[] firstCardIndex = new int[]{-1};
 
+        // get the first event in the event queue
         if (getCardIndex(buttonEventQueue.get(0).getId())[0] == 0) {
             clearText("You chose " + playersPokemons[cardIndex[0]][cardIndex[1]].getName());
+            // await for the next button event queue (user click the opponent pokemon as attacking target)
             if(buttonEventQueue.size() == 2){
                 if (getCardIndex(buttonEventQueue.get(1).getId())[0] == 1) {
 
@@ -124,6 +139,7 @@ public class GameplayPageController {
                     secondCardIndex = getCardIndex(buttonEventQueue.get(1).getId());
 
                     disableButton(false);
+                    // event queue cycle done, back to status quo
                     buttonEventQueue = new ArrayList<VBox>();
                 }
             }
@@ -140,12 +156,14 @@ public class GameplayPageController {
         String pokemonReturnedLog="";
         if(/*if it is idle*/ (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()>0)){
             buttonEventQueue = new ArrayList<VBox>();
+            // if computer get to here but it faces this error, call the function recursively again until it success.
             if (currentRoundIsComputer) {
                 pokemonReturnedLog += computerTurn();
             }else{
                 pokemonReturnedLog = "Pokemon is in idled for: "+playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getEffectLeftRound()+" round.";
             }
         }else {
+            // check if the pokemon is dead
             if (playersPokemons[indexPokemonFrom[0]][indexPokemonTo[1]].getHp() <0){
                 if (currentRoundIsComputer) {
                     pokemonReturnedLog += computerTurn();
@@ -173,6 +191,8 @@ public class GameplayPageController {
                 // execute the effect and call computer turn.
                 if (!pokemonReturnedLog.contains("Not enough energy.")) {
                     if (currentRoundIsComputer) {
+                        // from computer perspective, when computer finish, it means
+                        // one round is done.
                         updateOnGameRoundDone();
                     }
                     currentRoundIsComputer = !currentRoundIsComputer;
@@ -183,6 +203,8 @@ public class GameplayPageController {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    // computer fall into this not enough energy error
+                    // call itself recursively again.
                     pokemonReturnedLog += computerTurn();
                 }
 
@@ -222,6 +244,7 @@ public class GameplayPageController {
                 playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].setTranslateX(currentX);
                 playersCards[indexPokemonFrom[0]][indexPokemonFrom[1]].setTranslateY(currentY);
 
+                // below are the keyframes for animations
                 if(!doneAnimation) {
                     // go forward
                     if (abs(currentX) > abs(outputX) || abs(currentY) > abs(outputY)) {
@@ -486,6 +509,7 @@ public class GameplayPageController {
                     0,
                     (int) Math.floor(Math.random() * cardAmount)
             };
+            // if the index generated are not alive pokemon, regenerate again.
         } while (playersPokemons[indexPokemonFrom[0]][indexPokemonFrom[1]].getHp() <= 0
                 || playersPokemons[indexPokemonTo[0]][indexPokemonTo[1]].getHp() <= 0
         );

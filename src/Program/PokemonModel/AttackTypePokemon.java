@@ -14,8 +14,10 @@ public class AttackTypePokemon extends PokemonBase{
     }
 
     public String attackTypelaunchAttack(PokemonBase target, int attackPoint) {
+        // based on business logic
         attackPoint = flipCoinIsHead()?attackPoint:1;
         String returnString = "";
+
         returnString += super.launchAttack(target,attackPoint);
         if(!returnString.contains("Not enough energy.")) {
             if (attackPoint != 1) {

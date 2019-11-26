@@ -10,14 +10,12 @@ import javafx.scene.layout.*;
 
 public class MenuPageController {
 
+    // initialized variables with fx:id in fxml file
     @FXML
     public VBox MenuPagePane;
     public ImageView menuLogo;
     public Button startButton, settingButton, loadButton, exitButton;
     public ImageView startButtonImage, settingButtonImage, loadButtonImage, exitButtonImage;
-
-    private int vibratePixel = 10;
-    private long lastSecond = -1;
 
     public void navigateToSettingPage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
@@ -39,16 +37,23 @@ public class MenuPageController {
 
     private void vibrateEffect() {
         new AnimationTimer() {
+            // vibrate pixel range
+            private int vibratePixel = 10;
+            // for counting timestamp
+            private long lastSecond = -1;
             @Override
             public void handle(long now) {
+                // for non-blocking javafx thread, create a new runnable.
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (vibratePixel > 5) {
-                            vibratePixel = -5;
-                        }
+                        // initialize
                         if (lastSecond == -1) {
                             lastSecond = now;
+                        }
+
+                        if (vibratePixel > 5) {
+                            vibratePixel = -5;
                         }
                         // update every 0.5s
                         if (now - lastSecond >= 500000000) {

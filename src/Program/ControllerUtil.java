@@ -19,10 +19,12 @@ class ControllerUtil {
     static void switchToScene(URL url){
         Parent root = null;
         try {
+            // setting the Parent class to the url passed.
             root = FXMLLoader.load(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        // use current stage class, and switch the root scene.
         stage.getScene().setRoot(root);
     }
 
