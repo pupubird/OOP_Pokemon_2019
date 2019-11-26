@@ -1,0 +1,12 @@
+Bugs
+----------
+
+1. When a Pokemon attacks, they gain 2 EXP instead of 1. In this example, the attacker also loses 3 energy instead of 2.
+
+2. When a Pokemon attacks with insufficient energy, they continue to lose energy and gain experience. 
+
+3. Poisoned / paralyzed Pokemon can still attack.
+
+4. An attacking Pokemon always loses 2 energy instead of only when weakness is valid.
+
+5. The AI tries to train a Pokemon with insufficient energy, which skips their turn.
