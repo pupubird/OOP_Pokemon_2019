@@ -538,6 +538,9 @@ public class GameplayPageController {
                 if(pokemon.getEffectLeftRound()>0) {
                     pokemon.setEffectLeftRound(pokemon.getEffectLeftRound() - 1);
                 }
+                if(pokemon.getEffectLeftRound() == 0){
+                    pokemon.setStatus("normal");
+                }
             }
         }
     }
