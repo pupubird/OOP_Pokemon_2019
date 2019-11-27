@@ -1212,6 +1212,12 @@ public class GameplayPageController {
             }
         });
 
+        SaveExitButton.addEventFilter( MouseEvent.MOUSE_CLICKED, event -> {
+
+            currentButtonState = currentButtonState.equals("navigateToMenuPage") ? "normal" : "navigateToMenuPage";
+
+            navigateToMenuPage();
+        });
     }
 
 
