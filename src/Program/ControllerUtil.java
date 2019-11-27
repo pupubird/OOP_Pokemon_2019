@@ -16,8 +16,17 @@ import java.net.URL;
  */
 class ControllerUtil {
 
+    /**
+     * The stage class for the javafx window
+     */
     static Stage stage;
+    /**
+     * The MediaPlayer class for playing audio
+     */
     static MediaPlayer audioplayer;
+    /**
+     * To calculate the screen resolution of the user
+     */
     static Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
 
@@ -40,11 +49,16 @@ class ControllerUtil {
     }
 
 
+    /**
+     * @return return the screen width of the user
+     */
     static double getScreenWidth() {
         return primaryScreenBounds.getWidth();
     }
 
-
+    /**
+     * @return return the screen height of the user
+     */
     static double getScreenHeight() {
         return primaryScreenBounds.getHeight();
     }
