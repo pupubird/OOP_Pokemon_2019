@@ -25,29 +25,96 @@ import static java.lang.Math.abs;
  */
 public class GameplayPageController {
 
+    /**
+     * To know current round is which player, true = computer, false = user
+     */
     private boolean currentRoundIsComputer = false;
+    /**
+     * The event queue to record the history of click events, for validation and performing actions
+     */
     public static ArrayList<VBox> buttonEventQueue = new ArrayList<>();
+    /**
+     * The array to store the GUI VBox cards for the pokemon.
+     */
     private VBox[][] playersCards;
+    /**
+     * The pokemon class array to store both players pokemons class, this is a generic array hence
+     * it can store all pokemon types.
+     */
     private PokemonBase[][] playersPokemons;
+    /**
+     * The image for the pokemon, will be display on playersCards VBox.
+     */
     private ImageView[][] playersCardImages;
+    /**
+     * This is the pane on the bottom left of the screen to show individual pokemon details
+     */
     private Label[] pokemonDetailsPaneLabels;
+    /**
+     * The pokemon details (Name, HP), this will be display on playersCards VBox.
+     */
     private Label[][] pokemonHpCardLabels;
+    /**
+     * All actionable buttons
+     */
     private Button[] buttons;
+    /**
+     * To know the current button clicked
+     */
     private String currentButtonState;
 
+    /**
+     * This is the pane for gameplay page window
+     */
     @FXML
     public SplitPane GameplayPagePane;
+    /**
+     * The top/bottom part of the gameplay pane.
+     */
     public VBox gameplayZonePane, ActionButtonPane;
+    /**
+     * The HBox that will include player's pokemons.
+     */
     public HBox player1groupPane, player2groupPane;
+    /**
+     * The grid pane to layout pokemonDetailsPaneLabels.
+     */
     public GridPane PokemonPropertiesPane;
+    /**
+     * The top and bottom of the all actionable buttons in one pane.
+     */
     public HBox ButtonHBox, ButtonHBox2;
+    /**
+     * All actionable buttons
+     */
     public Button AttackButton, RechargeButton, TrainButton, SaveExitButton;
+    /**
+     * Pokemon details label
+     */
     public Label pokemonName, type, stage, experience, energy, energyColor, attackPoint, resistancePoint, status;
+    /**
+     * Player's cards, not the pokemon, it's the GUI card.
+     */
     public VBox player1card1, player1card2, player1card3, player1card4, player1card5, player1card6;
+    /**
+     * Player's cards, not the pokemon, it's the GUI card.
+     */
     public VBox player2card1, player2card2, player2card3, player2card4, player2card5, player2card6;
+    /**
+     * The label for player pokemon hp
+     */
     public Label player1card1Hp, player1card2Hp, player1card3Hp, player1card4Hp, player1card5Hp, player1card6Hp;
+    /**
+     * The label for player pokemon hp
+     */
     public Label player2card1Hp, player2card2Hp, player2card3Hp, player2card4Hp, player2card5Hp, player2card6Hp;
+    /**
+     * The ImageView for player pokemon image
+     */
     public ImageView player1card1Image, player1card2Image, player1card3Image, player1card4Image, player1card5Image, player1card6Image;
+    /**
+     * The ImageView for player pokemon image
+     */
     public ImageView player2card1Image, player2card2Image, player2card3Image, player2card4Image, player2card5Image, player2card6Image;
 
 
@@ -90,8 +157,8 @@ public class GameplayPageController {
                 clearText(returnedLog);
                 break;
 
-            case "saveExit":
-                saveExit();
+            case "navigateToMenuPage":
+                navigateToMenuPage();
                 break;
 
         }
@@ -638,7 +705,10 @@ public class GameplayPageController {
         }.start();
     }
 
-    private void saveExit(){
+    /**
+     * To navigate to menu page
+     */
+    private void navigateToMenuPage(){
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
         ControllerUtil.playBackgroundMusic(getClass().getResource("resources/fxml/assets/theme.mp3"));
     }
@@ -695,6 +765,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * The animation timer that will do the reveal effect when user first landed the game play page.
+     */
     private void revealEffect() {
 
         new AnimationTimer() {
@@ -818,6 +891,9 @@ public class GameplayPageController {
 
     }
 
+    /**
+     * Perform actions in this function at the end of the game round
+     */
     private void updateOnGameRoundDone() {
 
         for( PokemonBase[] player: playersPokemons ) {
@@ -836,6 +912,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * When there is any action occured (attack, recharge...)
+     */
     private void updateOnGameActionOccured() {
 
         // to check if any player wins
@@ -861,6 +940,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * Refresh all pokemon details on their GUI card
+     */
     private void updatePokemonDetailsOnCard() {
 
         // get every pokemon Hp and set to the respective card Label
@@ -886,6 +968,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * initialize Pokemon Card Image
+     */
     private void initializePokemonCardImage() {
         // if no input is specify, generate it
         for( ImageView[] playersCard: playersCardImages ) {
@@ -901,6 +986,9 @@ public class GameplayPageController {
         }
     }
 
+    /**
+     * initialize Players Pokemons
+     */
     private void initializePlayersPokemons() {
 
         // generate pokemon if not load saved game
@@ -923,6 +1011,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * initialize Players Card VBox class
+     */
     private void initializePlayersCardVBox() {
 
         double width = ControllerUtil.getScreenWidth();
@@ -971,6 +1062,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * initialize Players Card VBox class and add MouseEvent
+     */
     private void initializePlayersCardVBoxMouseEvent() {
 
         double width = ControllerUtil.getScreenWidth();
@@ -1000,6 +1094,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * initialize Players Card VBox class's Image
+     */
     private void initializePlayersCardVBoxImage() {
 
         playersCardImages = new ImageView[][] {
@@ -1017,6 +1114,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * initialize bottom left details pane labels
+     */
     private void initializeLabels() {
 
         pokemonDetailsPaneLabels = new Label[] {
@@ -1040,6 +1140,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * initialize all actionable buttons
+     */
     private void initializeButtons() {
 
         double width = ControllerUtil.getScreenWidth();
@@ -1112,6 +1215,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * Initialize the gameplage page window pane
+     */
     private void initializePane() {
 
         double width = ControllerUtil.getScreenWidth();
@@ -1139,6 +1245,9 @@ public class GameplayPageController {
     }
 
 
+    /**
+     * Initialize gameplay page controller
+     */
     public void initialize() {
 
         currentButtonState = "normal";

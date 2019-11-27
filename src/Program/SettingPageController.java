@@ -13,20 +13,50 @@ import java.net.URL;
  */
 public class SettingPageController {
 
+    /**
+     * Value for background music
+     */
     private double volume = 0.5;
 
+    /**
+     * The VBox class for setting page pane window
+     */
     @FXML
     public VBox SettingPagePane;
+    /**
+     * The pokemon logo that's set to the middle of the window
+     */
     public ImageView menuLogo;
+    /**
+     * The button of volume down
+     */
     public Button volumeDownButton;
+    /**
+     * The button of volume down
+     */
     public Button volumeUpButton;
-    public Label volumeValueLabel;
+    /**
+     * The image beside the button
+     */
     public ImageView returnButtonImage;
+    /**
+     * The label to show current volume
+     */
+    public Label volumeValueLabel;
+    /**
+     * The return button to navigate
+     */
     public Button returnButton;
 
+    /**
+     * The URL of clicking sound effect
+     */
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
 
+    /**
+     * To decrease the volume, call this function
+     */
     public void volumeDown() {
 
         if ( volume > 0.01 ) {
@@ -40,6 +70,9 @@ public class SettingPageController {
     }
 
 
+    /**
+     * To increase the volume, call this function
+     */
     public void volumeUp() {
 
         if ( volume < 1 ) {
@@ -63,15 +96,20 @@ public class SettingPageController {
     }
 
 
+    /**
+     * Navigate to menu page
+     */
     public void navigateToMenuPage() {
 
         ControllerUtil.playEffect(clickingEffect);
-        new MenuPageController();
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
 
     }
 
 
+    /**
+     * To initialize setting page controller
+     */
     public void initialize() {
 
         double widthRatio = 10;
