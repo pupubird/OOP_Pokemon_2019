@@ -5,6 +5,9 @@ package Program.PokemonModel;
  */
 public class DefenseTypePokemon extends PokemonBase {
 
+    /**
+     * The resistance attribute for defense type pokemon
+     */
     private int resistancePoints;
 
     /**
@@ -36,14 +39,20 @@ public class DefenseTypePokemon extends PokemonBase {
 
     }
 
-
-
+    /**
+     * Override pokemon base class stage increase -> resistance attribute *= 2
+     */
     @Override
     public void stageIncrease() {
+        this.resistancePoints *= 2;
         super.stageIncrease();
     }
 
 
+    /**
+     * Resistance points getter
+     * @return resistance points of the defense type pokemon
+     */
     @Override
     public int getResistancePoints() {
         return resistancePoints;

@@ -5,6 +5,9 @@ package Program.PokemonModel;
  */
 public class AttackTypePokemon extends PokemonBase {
 
+    /**
+     * The attack attribute for attack type pokemon
+     */
     private int attackAttribute;
 
 
@@ -43,6 +46,9 @@ public class AttackTypePokemon extends PokemonBase {
     }
 
 
+    /**
+     * Override pokemon base class stage increase -> attack attribute *= 2
+     */
     @Override
     public void stageIncrease() {
         this.attackAttribute *= 2;
@@ -50,6 +56,10 @@ public class AttackTypePokemon extends PokemonBase {
     }
 
 
+    /**
+     * Attack point getter
+     * @return attack attribute of the attack type pokemon
+     */
     @Override
     public int getAttackPoint() {
         return attackAttribute;

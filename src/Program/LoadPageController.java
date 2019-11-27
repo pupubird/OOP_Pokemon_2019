@@ -12,21 +12,45 @@ import java.net.URL;
  */
 public class LoadPageController {
 
+    /**
+     * The VBox class for load page pane window
+     */
     @FXML
     public VBox LoadPagePane;
+    /**
+     * The ImageView class for pokemon logo in the middle of the window
+     */
     public ImageView menuLogo;
+    /**
+     * Coming soon image
+     */
     public ImageView comingSoonImage;
+    /**
+     * The image that's fixed beside the button
+     */
     public ImageView returnButtonImage;
+    /**
+     * The return button
+     */
     public Button returnButton;
+    /**
+     * The URL for clicking sound effect
+     */
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
 
+    /**
+     * A function to navigate to menu
+     */
     public void returnToMenu() {
         ControllerUtil.playEffect(clickingEffect);
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/MenuPage.fxml"));
     }
 
 
+    /**
+     * Initialize load page controller
+     */
     public void initialize() {
 
         double widthRatio = 10;

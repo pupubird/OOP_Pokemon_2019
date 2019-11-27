@@ -12,15 +12,33 @@ import java.net.URL;
  */
 public class GameOverPageController {
 
+    /**
+     * The VBox class for game over page window
+     */
     @FXML
     public VBox GameOverPagePane;
+    /**
+     * The ImageView class for the pokemon logo on the middle of the window
+     */
     public ImageView menuLogo;
+    /**
+     * The ImageView class for image that's fixed behind the button
+     */
     public ImageView returnButtonImage;
+    /**
+     * The button
+     */
     public Button returnButton;
 
+    /**
+     * The URL for clicking sound effect
+     */
     private URL clickingEffect = getClass().getResource("resources/fxml/assets/mouseClick.mp3");
 
 
+    /**
+     * A function to navigate to menu page
+     */
     public void navigateToMenuPage() {
 
         ControllerUtil.playEffect(clickingEffect);
@@ -30,6 +48,9 @@ public class GameOverPageController {
     }
 
 
+    /**
+     * Initialize game over page controller
+     */
     public void initialize() {
 
         double widthRatio = 10;

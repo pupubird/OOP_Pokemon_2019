@@ -9,7 +9,17 @@ import java.util.ArrayList;
  */
 public class PokemonBase {
 
-    private int hp, energy, exp, stage, effectLeftRound;
+    /**
+     * Pokemon details attribute
+     */
+    private int hp, energy, exp, stage;
+    /**
+     * The effect left round for poisoned/ paralysed.
+     */
+    private int effectLeftRound;
+    /**
+     * Pokemon details attribute
+     */
     private String color, status, name;
 
 
@@ -144,31 +154,40 @@ public class PokemonBase {
     }
 
 
+    /**
+     * Pokemon's exp + 1
+     */
     public void expPlus() {
         this.exp += 1;
         if(this.exp == 20){
             stageIncrease();
-
         }
     }
 
 
+    /**
+     * Pokemon stage + 1
+     */
     public void stageIncrease() {
         this.stage += 1;
         this.exp = 0;
         this.hp *= 2;
         this.energy *= 2;
-        // do effect here, call controllerUtil effect
     }
 
 
+    /**
+     * Set this pokemon's status to poisoned and increase effect left round.
+     */
     void setPoisoned() {
         this.setStatus("poisoned");
         // actual + 1 to avoid turning to normal in the current round
         this.setEffectLeftRound(this.getEffectLeftRound()+2);
     }
 
-
+    /**
+     * Set this pokemon's status to paralysed and increase effect left round.
+     */
     void setParalysed() {
         this.setStatus("paralysed");
         // actual + 1 to avoid turning to normal in the current round
@@ -195,119 +214,169 @@ public class PokemonBase {
     }
 
 
+    /**
+     * Random generate function
+     * @return true = head, false = tail
+     */
     boolean flipCoinIsHead() {
         return Math.floor(Math.random()*2)==1;
     }
 
 
+    /**
+     * Name getter
+     * @return Pokemon name
+     */
     public String getName() {
         return name;
     }
 
 
     /**
-     * @param name setter
+     * Name setter
+     * @param name new name for the pokemon
      */
     public void setName(String name) {
         this.name = name;
     }
 
 
+    /**
+     * HP getter
+     * @return pokemon Hp
+     */
     public int getHp() {
         return hp;
     }
 
 
     /**
-     * @param newHp setter
+     * HP setter
+     * @param newHp new HP value
      */
     private void setHp(int newHp) {
         this.hp = newHp;
     }
 
 
+    /**
+     * Energy getter
+     * @return Pokemon energy
+     */
     public int getEnergy() {
         return energy;
     }
 
 
     /**
-     * @param energy setter
+     * Energy setter
+     * @param energy new energy value
      */
     public void setEnergy(int energy) {
         this.energy = energy;
     }
 
 
+    /**
+     * Experience getter
+     * @return Pokemon experiences
+     */
     public int getExp() {
         return exp;
     }
 
 
     /**
-     * @param exp setter
+     * Experience setter
+     * @param exp new exp
      */
     public void setExp(int exp) {
         this.exp = exp;
     }
 
 
+    /**
+     * Stage getter
+     * @return Pokemon stage value
+     */
     public int getStage() {
         return stage;
     }
 
     /**
-     * @param stage setter
+     * Stage setter
+     * @param stage new stage value
      */
     public void setStage(int stage) {
         this.stage = stage;
     }
 
 
+    /**
+     * EffectLeftRound getter
+     * @return Effect left round value
+     */
     public int getEffectLeftRound() {
         return effectLeftRound;
     }
 
 
     /**
-     * @param effectLeftRound setter
+     * EffectLeftRound setter
+     * @param effectLeftRound new effectLeftRound
      */
     public void setEffectLeftRound(int effectLeftRound) {
         this.effectLeftRound = effectLeftRound;
     }
 
 
+    /**
+     * Pokemon color getter
+     * @return Pokemon color
+     */
     public String getColor() {
         return color;
     }
 
 
     /**
-     * @param color setter
+     * Pokemon color setter
+     * @param color new color
      */
     public void setColor(String color) {
         this.color = color;
     }
 
 
+    /**
+     * Pokemon status getter
+     * @return Pokemon's status
+     */
     public String getStatus() {
         return status;
     }
 
 
     /**
-     * @param status setter
+     * Pokemon status setter
+     * @param status new status
      */
     public void setStatus(String status) {
         this.status = status;
     }
 
-    // these will be override for attack and defense type pokemon
+    /**
+     * Attack point getter, this will be override for attack pokemon
+     * @return Pokemon attack point, 0 for default
+     */
     public int getAttackPoint(){
         return 0;
     }
 
-
+    /**
+     * Resistance point getter, this will be override for defense pokemon
+     * @return Pokemon resistance point, 0 for default
+     */
     public int getResistancePoints() {
         return 0;
     }

@@ -14,31 +14,60 @@ import javafx.scene.layout.*;
 public class MenuPageController {
 
     // initialized variables with fx:id in fxml file
+    /**
+     * The VBox class for menu page pane window
+     */
     @FXML
     public VBox MenuPagePane;
+    /**
+     * The ImageView class for pokemon logo on the middle of the window
+     */
     public ImageView menuLogo;
+    /**
+     * The button to navigate to different pages
+     */
     public Button startButton, settingButton, loadButton, exitButton;
+    /**
+     * The image fixed beside each coresponse to each button
+     */
     public ImageView startButtonImage, settingButtonImage, loadButtonImage, exitButtonImage;
 
+    /**
+     * To navigate to setting page
+     */
     public void navigateToSettingPage(){
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/SettingPage.fxml"));
     }
+
+    /**
+     * To navigate to game play page
+     */
     public void navigateToGamePage() {
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/GameplayPage.fxml"));
     }
+
+    /**
+     * To navigate to loading save game page
+     */
     public void navigateToLoadPage() {
         ControllerUtil.playEffect(getClass().getResource("resources/fxml/assets/mouseClick.mp3"));
         ControllerUtil.switchToScene(getClass().getResource("resources/fxml/LoadPage.fxml"));
     }
 
 
+    /**
+     * To exit the program
+     */
     public void exitProgram() {
         System.exit(0);
     }
 
 
+    /**
+     * A function to call animation timer to perform vibrate effect to the buttons
+     */
     private void vibrateEffect() {
 
         new AnimationTimer() {
@@ -74,6 +103,9 @@ public class MenuPageController {
     }
 
 
+    /**
+     * Initialize the menu page controller
+     */
     public void initialize() {
 
         double widthRatio = 10;
