@@ -40,7 +40,7 @@ public class DefenseTypePokemon extends PokemonBase {
     }
 
     /**
-     * Override pokemon base class stage increase -> resistance attribute *= 2
+     * Override pokemon base class stage increase: resistance attribute *= 2
      */
     @Override
     public void stageIncrease() {

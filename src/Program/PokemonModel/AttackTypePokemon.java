@@ -47,7 +47,7 @@ public class AttackTypePokemon extends PokemonBase {
 
 
     /**
-     * Override pokemon base class stage increase -> attack attribute *= 2
+     * Override pokemon base class stage increase: attack attribute *= 2
      */
     @Override
     public void stageIncrease() {
