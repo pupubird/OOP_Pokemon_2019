@@ -164,13 +164,15 @@ public class PokemonBase {
 
     void setPoisoned() {
         this.setStatus("poisoned");
-        this.setEffectLeftRound(this.getEffectLeftRound()+1);
+        // actual + 1 to avoid turning to normal in the current round
+        this.setEffectLeftRound(this.getEffectLeftRound()+2);
     }
 
 
     void setParalysed() {
         this.setStatus("paralysed");
-        this.setEffectLeftRound(this.getEffectLeftRound()+2);
+        // actual + 1 to avoid turning to normal in the current round
+        this.setEffectLeftRound(this.getEffectLeftRound()+3);
     }
 
     /**
